@@ -183,6 +183,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Infrastructure\APIClone\Validation\AutofacValidatorFactory.cs" />
     <Compile Include="Infrastructure\APIClone\WorkContext.cs" />
     <Compile Include="Infrastructure\Enums\MenuTypeEnum.cs" />
@@ -3480,6 +3481,7 @@
     <Folder Include="Content\layout\" />
     <Folder Include="Uploads\exceluploads\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
