@@ -1,0 +1,225 @@
+﻿@*@model IEnumerable<string>
+@using ATS.Web.Infrastructure.Helpers
+@using ATS.Web
+@{
+    ATSRole role = User.Identity.GetRole();
+}
+<div class="site-menubar site-menubar-light">
+    <div class="site-menubar-body">
+        <div>
+            <div>
+                <ul class="site-menu">
+                    <li class="site-menu-category">General</li>
+                    @if (role == ATSRole.Customer)
+                    {
+                        <li class="dropdown site-menu-item has-sub">
+                            <a class="dropdown-toggle" href="@Url.Action("Detail", "Customer", new { id = User.Identity.GetUserID() })" data-dropdown-toggle="false">
+                                <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+                                <span class="site-menu-title">Profile</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        if (role == ATSRole.Admin)
+                        {
+                            <li class="dropdown site-menu-item has-sub">
+                                <a class="dropdown-toggle" href="@Url.Action("Index", "Home")" data-dropdown-toggle="false">
+                                    <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Home</span>
+                                </a>
+                            </li>
+                        }
+
+                        if (Html.CheckPermission(Model, new string[] { NECPermissions.EmployeeRead, NECPermissions.EmployeePaymentRead, NECPermissions.EmployeeChangePassword }))
+                        {
+
+                            <li class="dropdown site-menu-item has-sub">
+                                <a class="dropdown-toggle" href="#" data-dropdown-toggle="false">
+                                    <i class="site-menu-icon wb-file" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Employee</span>
+                                    <span class="site-menu-arrow"></span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="site-menu-scroll-wrap is-list">
+                                        <div>
+                                            <div>
+                                                <ul class="site-menu-sub site-menu-normal-list">
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.EmployeeRead }))
+                                                    {
+
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Index", "Employee")">
+                                                                <span class="site-menu-title">Employees</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.EmployeePaymentRead }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("EmployeePayment", "Employee")">
+                                                                <span class="site-menu-title">Employee Salary</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.EmployeeChangePassword }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.RouteUrl("EmpPasswordReset")">
+                                                                <span class="site-menu-title">Employee Change Password</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                        if (Html.CheckPermission(Model, new string[] { NECPermissions.State, NECPermissions.City, NECPermissions.Zone, NECPermissions.MeterType, NECPermissions.ConnectionCategory, NECPermissions.Group, NECPermissions.Department, NECPermissions.Discount,
+                            NECPermissions.BillPlan, NECPermissions.Deduction, NECPermissions.Charges, NECPermissions.Tax,NECPermissions.SahalMaster ,NECPermissions.EDahabMaster}))
+                        {
+                            <li class="dropdown site-menu-item has-sub">
+                                <a class="dropdown-toggle" href="#" data-dropdown-toggle="false">
+                                    <i class="site-menu-icon wb-extension" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Masters</span>
+                                    <span class="site-menu-arrow"></span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="site-menu-scroll-wrap is-list" style="max-height:450px !important;">
+                                        <div>
+                                            <div>
+                                                <ul class="site-menu-sub site-menu-normal-list">
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.State }))
+                                                    {
+
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Index", "masters")">
+                                                                <span class="site-menu-title">States</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.City }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Cities", "masters")">
+                                                                <span class="site-menu-title">Cities</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Zone }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Zones", "masters")">
+                                                                <span class="site-menu-title">Zone</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.MeterType }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("MeterType", "masters")">
+                                                                <span class="site-menu-title">Meter Types</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.ConnectionCategory }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Categorys", "masters")">
+                                                                <span class="site-menu-title">Connectin Category</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Group }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Groups", "masters")">
+                                                                <span class="site-menu-title">Group</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Department }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Departments", "masters")">
+                                                                <span class="site-menu-title">Department</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Discount }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Discounts", "masters")">
+                                                                <span class="site-menu-title">Discount</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.BillPlan }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("BillPlans", "masters")">
+                                                                <span class="site-menu-title">Bill Plans</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Deduction }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Deductions", "masters")">
+                                                                <span class="site-menu-title">Deduction</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Charges }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Charges", "masters")">
+                                                                <span class="site-menu-title">Charges</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.Tax }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Tax", "masters")">
+                                                                <span class="site-menu-title">Tax</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.SahalMaster }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("SahalMaster", "masters")">
+                                                                <span class="site-menu-title">Sahal Master</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    @if (Html.CheckPermission(Model, new string[] { NECPermissions.EDahabMaster }))
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("EDahabMaster", "masters")">
+                                                                <span class="site-menu-title">E-Dahab Master</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                       
+                    }
+                </ul>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>*@

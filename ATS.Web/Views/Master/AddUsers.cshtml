@@ -1,0 +1,126 @@
+﻿@model ATS.Core.Domain.DTO.UserAccountViewModel
+@{
+    ViewBag.Title = "AddUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="page-title">User Creation</h1>
+</div>
+
+
+<div class="page-content">
+    @using (Html.BeginForm("AddUsers", "Master", FormMethod.Post, new { @autocomplete = "off", enctype = "multipart/form-data", id = "atsuserform" }))
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">* Feilds are Mandatory</h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">User Name</label> *
+                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control empty", @placeholder = "User Name" })
+                            @Html.ValidationMessageFor(x => x.UserName)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Password</label> *
+                            @Html.TextBoxFor(x => x.Password, new { @class = "form-control empty", @placeholder = "Password" })
+                            @Html.ValidationMessageFor(x => x.Password)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Role</label> *
+                            @(Html.EJ().DropDownList("RoleID").Datasource(ds => ds.URL(Url.Action("Roles", "Home")))
+                        .DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Role").Width("100%")
+                        .ClientSideEvents(x => x.ActionComplete("fnRoleID_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.RoleID)
+                        </div>
+                        <div class="form-group form-material" style="text-align:center">
+                            <div class="example">
+                                <button type="submit" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Save</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                                <button type="submit" value="saveandprint" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Cancel</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    }
+</div>
+
+
+
+
+@section ejs{
+    <script>
+
+        function fnRoleID_actioncomplete(sender) {
+            target = $("#RoleID").data("ejDropDownList");
+            target.selectItemByValue(@Model.RoleID);
+        }
+
+        
+        $("#atsuserform").submit(function (event) {
+           
+            if (!$("#RoleID").val()) {
+                $("#RoleID").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#RoleID").css("border", "");
+
+        
+        })
+
+
+
+    </script>
+}
+@section afterscripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+    <script>
+
+        //$(document).ready(function () {
+        //    $('.input-validation-error').parents('.form-group').addClass('has-error');
+        //    $('.field-validation-error').addClass('text-danger');
+        //});
+
+        $(document).ready(function () {
+            var form = $('#atsuserform')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function (label, element) {
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function (label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+    </script>
+
+}

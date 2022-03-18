@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html>
+@{
+    //NECRole role = User.Identity.GetRole();
+    // var username= User.Identity.Name;
+}
+<head>
+    <style>
+        .navbar-brand-logo {
+            height: 65px !important;
+            margin-top: -23px !important;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>ADPMCL</title>
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+   
+    <link href="~/Content/icons/font-awesome/font-awesome.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/core")
+
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>    
+    <script src="@Url.Content("~/global/vendor/modernizr/modernizr.js")"></script>
+    <script src="@Url.Content("~/global/vendor/breakpoints/breakpoints.js")"></script>
+    <script>
+        Breakpoints();
+    </script>
+    <link href="@Url.Content("~/Content/ej/web/Default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+  
+    @Scripts.Render("~/ej")
+</head>
+<body class="site-navbar-small page-profile">
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega navbar-inverse"
+         role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
+                    data-toggle="menubar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+                    data-toggle="collapse">
+                <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+            </button>
+            <a class="navbar-brand navbar-brand-center" href="@Url.Action("Index", "Home")">
+                <img class="navbar-brand-logo navbar-brand-logo-normal" style="" src="~/Images/ATS.png"
+                     title="ADPMCL">
+                @*<img class="navbar-brand-logo navbar-brand-logo-special" src="~/Images/NEC.png"
+                    title="Remark">*@
+                <span class="navbar-brand-text"></span>
+            </a>
+
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
+                    data-toggle="collapse">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon wb-search" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="navbar-container container-fluid">
+            <!-- Navbar Collapse -->
+            <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+                <!-- Navbar Toolbar -->
+                <ul class="nav navbar-toolbar">
+                    <li class="hidden-float" id="toggleMenubar" style="padding-right:42px;">
+                        <a data-toggle="menubar" href="#" role="button">
+                            <i class="icon hamburger hamburger-arrow-left">
+                                <span class="sr-only">Toggle menubar</span>
+                                <span class="hamburger-bar"></span>
+                            </i>
+                        </a>
+                    </li>
+                    @*@if (role != ATSRole.Customer)
+                        {
+                            <li class="hidden-float" style="margin-left: 28px;">
+                                <a class="icon wb-search" data-toggle="collapse" title="Search By MeterNo" href="#" data-target="#site-navbar-search"
+                                   role="button">
+                                    <span class="sr-only">Toggle Search</span>
+                                </a>
+                            </li>
+                        }*@
+                </ul>
+                <!-- End Navbar Toolbar -->
+                <!-- Navbar Toolbar Right -->
+                <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+
+                    <li class="dropdown">
+                        <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                           data-animation="scale-up" role="button">
+                            <span class="avatar avatar-online" style="margin-right:110px">
+                                @User.Identity.Name
+                                @*<img src="../../global/portraits/5.jpg" alt="...">*@
+                                @*<i></i>*@
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-user" aria-hidden="true"></i> Profile</a>
+                            </li>
+                            <li class="divider" role="presentation"></li>
+
+                            @*@if (role == ATSRole.Customer)
+                                {
+                                    <li role="presentation">
+                                        <a href="@Url.RouteUrl("Customerchangepassword")" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> ChangePassword</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li role="presentation">
+                                        <a href="@Url.RouteUrl("Empchangepasssword")" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> ChangePassword</a>
+                                    </li>
+                                }*@
+
+                            <li role="presentation">
+                                <a href="@Url.Action("index","Account")" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li id="toggleChat">
+                        <a href="javascript:void(0)">
+                        </a>
+                    </li>
+                </ul>
+                <!-- End Navbar Toolbar Right -->
+            </div>
+            <!-- End Navbar Collapse -->
+            <!-- Site Navbar Seach -->
+            <div class="collapse navbar-search-overlap" id="site-navbar-search">
+                <form role="search">
+                    <div class="form-group">
+                        <div class="input-search">
+                            <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                            <input type="text" class="form-control" name="" id="siteSearch" placeholder="Enter MeterNo">
+                            <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
+                                    data-toggle="collapse" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- End Site Navbar Seach -->
+        </div>
+    </nav>
+    <div class="site-menubar site-menubar-light">
+        <div class="site-menubar-body">
+            <div>
+                <div>
+                    <ul class="site-menu">
+                        <li class="site-menu-category">General</li>
+                        <li class="dropdown site-menu-item has-sub">
+                            <a class="dropdown-toggle" href="@Url.Action("Index", "Home")" data-dropdown-toggle="false">
+                                <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+                                <span class="site-menu-title">Home</span>
+                            </a>
+                        </li>
+                        <li class="dropdown site-menu-item has-sub">
+                            <a class="dropdown-toggle" href="#" data-dropdown-toggle="false">
+                                <i class="site-menu-icon wb-file" aria-hidden="true"></i>
+                                <span class="site-menu-title">Masters</span>
+                                <span class="site-menu-arrow"></span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="site-menu-scroll-wrap is-list">
+                                    <div>
+                                        <div>
+                                            <ul class="site-menu-sub site-menu-normal-list">
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Index", "Employee")">
+                                                        <span class="site-menu-title">Employees</span>
+                                                    </a>
+                                                </li>
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Departments", "Master")">
+                                                        <span class="site-menu-title">Departments</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Designations", "Master")">
+                                                        <span class="site-menu-title">Designations</span>
+                                                    </a>
+                                                </li>
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Users", "Master")">
+                                                        <span class="site-menu-title">Users</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="dropdown site-menu-item has-sub">
+                            <a class="dropdown-toggle" href="#" data-dropdown-toggle="false">
+                                <i class="site-menu-icon wb-file" aria-hidden="true"></i>
+                                <span class="site-menu-title">Reports</span>
+                                <span class="site-menu-arrow"></span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="site-menu-scroll-wrap is-list">
+                                    <div>
+                                        <div>
+                                            <ul class="site-menu-sub site-menu-normal-list">
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Index", "Employee")">
+                                                        <span class="site-menu-title">Employee Attendance Report</span>
+                                                    </a>
+                                                </li>
+                                                @*<li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Departments", "Master")">
+                                                        <span class="site-menu-title">Departments</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Designations", "Master")">
+                                                        <span class="site-menu-title">Designations</span>
+                                                    </a>
+                                                </li>
+                                                <li class="site-menu-item">
+                                                    <a class="animsition-link" href="@Url.Action("Users", "Master")">
+                                                        <span class="site-menu-title">Users</span>
+                                                    </a>
+                                                </li>*@
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+         </div>
+     </div>
+                    @*@Html.Action("Menu", "Home")*@
+
+                    <!-- Page -->
+                    <div class="page animsition">
+                        @*<div class="page-header">
+                            </div>*@
+                        <div class="page-content">
+                            @Html.Partial("_Notifications")
+
+                            @RenderBody()
+
+                        </div>
+                    </div>
+                    <!-- End Page -->
+                    @Html.EJ().ScriptManager()
+                    @RenderSection("ejs", false)
+                    <!-- Footer -->
+                    <footer class="site-footer">
+                        <div class="site-footer-legal"></div>
+                        <div class="site-footer-right">
+                            Powered by <a href="">Al DHAFRA PAPER MANUFACTURING COMPANY LLC</a>
+                        </div>
+                    </footer>
+
+                  
+                    @Styles.Render("~/Content/core")
+                    @Scripts.Render("~/scripts/js")
+                 
+
+                    <script>
+
+        $(function () {
+            @*$("#siteSearch").keydown(function (event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+
+                    mtrNo = $("#siteSearch").val();
+                    $.post('@Url.Action("GetCustomerByMeterNo", "Home")', { meterNo: mtrNo }, function (response) {
+                        if (response.CustomerID == null) {
+                            alert("Given meter no is not exist or disconnected");
+                        }
+                        else {
+                            var detailurl = "@Url.Action("Detail", "Customer",new {id = string.Empty })" + "?id=" + response.CustomerID + "&meterno=" + response.MeterId;
+                            window.location = detailurl;
+                            //alert(detailurl);
+                        }
+                        //alert(response.Name);
+
+                    });
+                }
+            });*@
+        });
+
+                    </script>
+
+                    @RenderSection("afterscripts", false)
+</body>
+</html>

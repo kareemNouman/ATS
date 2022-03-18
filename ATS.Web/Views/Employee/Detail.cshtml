@@ -1,0 +1,271 @@
+﻿
+@model ATS.Web.Models.EmployeeViewModel
+@{
+    ViewBag.Title = "AddEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Edit Employee</h1>
+</div>
+
+
+<div class="page-content">
+    @using (Html.BeginForm("Detail", "Employee", FormMethod.Post, new { @autocomplete = "off", enctype = "multipart/form-data", id = "atsform" }))
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">* Feilds are Mandatory</h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Employee Name</label> *
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control empty", @placeholder = "Employee Name" })
+                            @Html.ValidationMessageFor(x => x.Name)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Employee Code</label> *
+                            @Html.TextBoxFor(x => x.EmployeeCode, new { @class = "form-control empty", @placeholder = "Employee Code" })
+                            @Html.ValidationMessageFor(x => x.EmployeeCode)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputEmail">Email</label>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "Email", @type = "Email" })
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Department</label> *
+                            @(Html.EJ().DropDownList("DepartmentID").Datasource(ds => ds.URL(Url.Action("Departments", "Home")))
+                        .DropDownListFields(f => f.Text("Name").Value("ID")).CssClass("").WatermarkText("Select a Type").Width("100%")
+                        .ClientSideEvents(x => x.ActionComplete("fnDepertment_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.DepartmentID)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Designation</label> *
+                            @(Html.EJ().DropDownList("DesignationID").Datasource(ds => ds.URL(Url.Action("Designations", "Home")))
+                        .DropDownListFields(f => f.Text("Name").Value("ID")).CssClass("").WatermarkText("Select a Type").Width("100%")
+                        .ClientSideEvents(x => x.ActionComplete("fnDesignation_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.DesignationID)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">OT Eligible</label> *
+                            @(Html.EJ().DropDownList("IsOTEligible").Datasource(ds => ds.URL(Url.Action("OTEligible", "Home")))
+.DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Type").Width("100%").ClientSideEvents(x => x.ActionComplete("fnIsOTEligible_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.IsOTEligible)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Week Off Main</label> *
+                            @(Html.EJ().DropDownList("WeekOffMain").Datasource(ds => ds.URL(Url.Action("WeekOffMain", "Home")))
+.DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Type").Width("100%").ClientSideEvents(x => x.ActionComplete("fnWeekOffMain_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.WeekOffMain)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Weekly Off Alternate</label> *
+                            @(Html.EJ().DropDownList("WeeklyOffAlternate").Datasource(ds => ds.URL(Url.Action("WeekOffMain", "Home")))
+.DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Type").Width("100%").ClientSideEvents(x => x.ActionComplete("fnWeeklyOffAlternate_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.WeeklyOffAlternate)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Date of ReJoinning</label> *
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                                </span>
+                                <input type="text" class="form-control" id="DORJ" name="DORJ" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                @Html.ValidationMessageFor(x => x.DORJ)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Basic</label> *
+                            @Html.TextBoxFor(x => x.Basic, new { @class = "form-control empty", @placeholder = "Basic" })
+                            @Html.ValidationMessageFor(x => x.Basic)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Spl Allowance</label> *
+                            @Html.TextBoxFor(x => x.SplAllowance, new { @class = "form-control empty", @placeholder = "Spl Allowance" })
+                            @Html.ValidationMessageFor(x => x.SplAllowance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Col</label> *
+                            @Html.TextBoxFor(x => x.Col, new { @class = "form-control empty", @placeholder = "Col" })
+                            @Html.ValidationMessageFor(x => x.Col)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Other Allowance</label> *
+                            @Html.TextBoxFor(x => x.OthersAllowance, new { @class = "form-control empty", @placeholder = "Other Allowance" })
+                            @Html.ValidationMessageFor(x => x.OthersAllowance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Conveyance</label> *
+                            @Html.TextBoxFor(x => x.Conveyance, new { @class = "form-control empty", @placeholder = "Conveyance" })
+                            @Html.ValidationMessageFor(x => x.Conveyance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Housing</label> *
+                            @Html.TextBoxFor(x => x.Housing, new { @class = "form-control empty", @placeholder = "Housing" })
+                            @Html.ValidationMessageFor(x => x.Housing)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Gross</label> *
+                            @Html.TextBoxFor(x => x.Gross, new { @class = "form-control empty", @placeholder = "Gross" })
+                            @Html.ValidationMessageFor(x => x.Gross)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">OT Threshold</label> *
+                            @Html.TextBoxFor(x => x.OTThreshold, new { @class = "form-control empty", @placeholder = "OT Threshold" })
+                            @Html.ValidationMessageFor(x => x.OTThreshold)
+                        </div>
+                        <div class="form-group form-material" style="text-align:center">
+                            <div class="example">
+                                <button type="submit" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Update</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                                <button type="submit" value="saveandprint" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Cancel</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>        
+        </div>
+    }
+</div>
+
+
+
+
+@section ejs{
+    <script>
+
+        function fnIsOTEligible_actioncomplete(sender) {
+            target = $("#IsOTEligible").data("ejDropDownList");
+            target.selectItemByValue(@Model.IsOTEligible);
+        }
+
+        function fnWeekOffMain_actioncomplete(sender) {
+            target = $("#WeekOffMain").data("ejDropDownList");
+            target.selectItemByValue(@Model.WeekOffMain);
+        }
+
+
+        function fnWeeklyOffAlternate_actioncomplete(sender) {
+            target = $("#WeeklyOffAlternate").data("ejDropDownList");
+            target.selectItemByValue(@Model.WeeklyOffAlternate);
+        }
+
+        function fnDepertment_actioncomplete(sender) {
+            var target = $("#DepartmentID").data("ejDropDownList");
+            target.selectItemByValue('@Model.DepartmentID');
+        }
+
+        function fnDesignation_actioncomplete(sender) {
+            var target = $("#DesignationID").data("ejDropDownList");
+            target.selectItemByValue('@Model.DesignationID');
+        }
+
+        $("#atsform").submit(function (event) {
+            if (!$("#DORJ").val()) {
+                $("#DORJ").css("border-bottom", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#DORJ").css("border-bottom", "");
+
+            if (!$("#IsOTEligible").val()) {
+                $("#IsOTEligible").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#IsOTEligible").css("border", "");
+
+            if (!$("#WeekOffMain").val()) {
+                $("#WeekOffMain").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#WeekOffMain").css("border", "");
+
+            if (!$("#WeeklyOffAlternate").val()) {
+                $("#WeeklyOffAlternate").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#WeeklyOffAlternate").css("border", "");
+
+            if (!$("#DepartmentID").val()) {
+                $("#DepartmentID").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#DepartmentID").css("border", "");
+
+            if (!$("#DesignationID").val()) {
+                $("#DesignationID").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#DesignationID").css("border", "");
+
+        })
+
+
+
+    </script>
+}
+@section afterscripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+    <script>
+
+        //$(document).ready(function () {
+        //    $('.input-validation-error').parents('.form-group').addClass('has-error');
+        //    $('.field-validation-error').addClass('text-danger');
+        //});
+
+        $(document).ready(function () {
+            var form = $('#atsform')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function (label, element) {
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function (label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+    </script>
+
+}

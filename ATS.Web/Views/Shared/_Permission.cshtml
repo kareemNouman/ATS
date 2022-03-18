@@ -1,0 +1,72 @@
+﻿
+@model List<ATS.Web.Models.PermissionViewModel>
+
+<div class="panel hides">
+    <div class="panel-heading">
+        <h3 class="panel-title">Masters</h3>
+    </div>
+    <div class="panel-body container-fluid">
+
+
+
+        @foreach (var item in Model.Where(x => x.MenuType == ATS.Web.Infrastructure.Enums.MenuTypeEnum.Masters))
+        {
+            <div class="col-md-3">
+                <div class="checkbox-custom checkbox-default">
+                    <input type="checkbox" id="EmployeeAdd" value="@item.SystemName" name="Permission" checked="@item.Checked" autocomplete="on">
+                    <label for="inputBasicRemember">@item.DisplayName</label>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="panel hides">
+    <div class="panel-heading">
+        <h3 class="panel-title">Reports</h3>
+    </div>
+    <div class="panel-body container-fluid">
+
+        @foreach (var item in Model.Where(x => x.MenuType == ATS.Web.Infrastructure.Enums.MenuTypeEnum.Reports))
+        {
+            <div class="col-md-3">
+                <div class="checkbox-custom checkbox-default">
+                    <input type="checkbox" id="EmployeeAdd" value="@item.SystemName" name="Permission" checked="@item.Checked" autocomplete="on">
+                    <label for="inputBasicRemember">@item.DisplayName</label>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+<div class="panel hides">
+    <div class="panel-heading">
+        <h3 class="panel-title">Others</h3>
+    </div>
+    <div class="panel-body container-fluid">
+
+        @foreach (var item in Model.Where(x => x.MenuType == ATS.Web.Infrastructure.Enums.MenuTypeEnum.Transactions))
+        {
+            <div class="col-md-3">
+                <div class="checkbox-custom checkbox-default">
+                    <input type="checkbox" id="EmployeeAdd" value="@item.SystemName" name="Permission" checked="@item.Checked" autocomplete="on">
+                    <label for="inputBasicRemember">@item.DisplayName</label>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+<div class="example example-buttons" style="text-align:center">
+    <button type="submit" id="saveBtn" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+        <span class="ladda-label">Save</span>
+        <span class="ladda-spinner"></span>
+    </button>
+</div>
+
+

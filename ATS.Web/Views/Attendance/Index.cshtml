@@ -1,0 +1,94 @@
+﻿
+@using Syncfusion.JavaScript
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+
+
+<div class="page-content container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> ATTENDANCE GENERATION</h3>
+                </div>
+                <div class="panel-body container-fluid">
+
+                    <!-- Example Vertical -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div class="steps steps-vertical">
+
+                                <div class="step ">
+                                    <form action="@Url.Action("UploadExcel","Attendance")" method="post" enctype="multipart/form-data">
+                                        <div class="step-desc">
+                                            <span class="step-title">Upload attendance in excel format</span>
+                                            <h4 class="example-title">Upload File</h4>
+                                            <div class="form-group">
+                                                <div class="input-group input-group-file">
+                                                    <span class="input-group-btn">
+                                                        <span class="btn btn-success btn-file">
+                                                            <i class="icon wb-upload" aria-hidden="true"></i>
+                                                            <input type="file" name="excelfile" value="Upload Attendance" />
+                                                        </span>
+                                                    </span>
+                                                    <button type="submit" class="btn btn-primary ladda-button" style="margin-left:25px;" data-style="expand-left" data-plugin="ladda">
+                                                        <span class="ladda-label">Submit</span>
+                                                        <span class="ladda-spinner"></span>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Example Vertical -->
+
+                </div>
+            </div>
+        </div>
+        @*<div class="col-sm-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        @(Html.EJ().Grid<ATS.Web.Models.ChargesViewModel>("FlatGrid")
+                            .Datasource(ds => ds.URL    (Url.Action("ChargesData", "Billing")).Adaptor("UrlAdaptor"))
+                    .AllowSorting()
+                    .AllowPaging()
+                    .PageSettings(x => x.PageSize(10))
+                     .AllowSelection()
+                  .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
+                    .Columns(col =>
+                    {
+                        col.Field("ID").HeaderText("Charges ID").Width(40).IsPrimaryKey(true).IsIdentity(true).DefaultValue(0).TextAlign(TextAlign.Left).ValidationRules(v => v.AddRule("required", true).AddRule("number", true)).Add();
+                        col.Field("Name").HeaderText("Charges Type").Width(40).ValidationRules(v => v.AddRule("required", true)).Add();
+                    }))
+
+
+                    </div>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<script>
+
+    @*function fn_excel() {
+        var target = $("#zone").data("ejDropDownList");
+        var zone = target.getSelectedValue();
+
+        window.location.href = "@Url.Action("DownloadExcelFormat", "Billing")" + "?zoneid=" + zone;
+
+    }*@
+
+</script>

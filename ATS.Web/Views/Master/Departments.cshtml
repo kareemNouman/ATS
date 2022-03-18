@@ -1,0 +1,122 @@
+﻿
+@model List<ATS.Web.Models.DepartmentViewModel>
+@using Syncfusion.JavaScript
+
+@{
+    ViewBag.Title = "Departments";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+
+
+@(Html.EJ().Grid<ATS.Web.Models.DepartmentViewModel>("Editing")
+                            .Datasource(ds => ds.Json((IEnumerable<object>)Model)
+                                        .UpdateURL(Url.Action("DepartmentUpdate", "Master"))
+                                        .InsertURL(Url.Action("DepartmentAdd", "Master"))
+                                .RemoveURL(Url.Action("DepartmentDelete", "Master"))
+                                .Adaptor(Syncfusion.JavaScript.AdaptorType.RemoteSaveAdaptor))
+        .EnableAltRow()
+            .EditSettings(edit => { edit.AllowAdding().AllowDeleting().AllowEditing().EditMode(Syncfusion.JavaScript.EditMode.InlineFormTemplate).InlineFormTemplateID("#template"); })
+        .AllowPaging()
+
+        .ToolbarSettings(toolbar =>
+        {
+            toolbar.ShowToolbar().ToolbarItems(items =>
+            {
+                items.AddTool(ToolBarItems.Add);
+                items.AddTool(ToolBarItems.Edit);
+                items.AddTool(ToolBarItems.Delete);
+                items.AddTool(ToolBarItems.Update);
+                items.AddTool(ToolBarItems.Cancel);
+            });
+        })
+        .Columns(col =>
+        {
+            col.Field("ID").HeaderText("Department ID").Width(40).IsPrimaryKey(true).IsIdentity(true).DefaultValue(0).TextAlign(TextAlign.Left).ValidationRules(v => v.AddRule("required", true).AddRule("number", true)).Add();
+            col.Field("Name").HeaderText("Department Name").Width(40).Add();
+        })
+            .ClientSideEvents(eve => { eve.ActionComplete("complete"); eve.ActionFailure("add"); })
+)
+
+<script id="template" type="text/template">
+    <b></b>
+    <table cellspacing="10">
+        <tr>
+
+            <td style="text-align: right;">
+                Department ID
+            </td>
+            <td style="text-align: left">
+                <input id="ID" name="ID" value="{{: ID}}" c class="e-field e-ejinputtext valid"
+                       style="width: 116px; height: 28px;" />
+            </td>
+
+            <td style="text-align: right;">
+                Department Name
+            </td>
+            <td style="text-align: left">
+                <input id="Name" name="Name" value="{{: Name}}" class="e-field e-ejinputtext valid"
+                       style="width: 116px; height: 28px" />
+            </td>
+        </tr>
+    </table>
+</script>
+<script type="text/javascript">
+    function complete(args) {
+        var selectedObj;
+        if ((args.requestType == "beginedit" || args.requestType == "add") && args.model.editSettings.editMode == "inlineformtemplate") {
+            if (args.requestType == "beginedit") {
+                selectedObj = { ID: args.model.selectedRecords[0].ID, Name: args.model.selectedRecords[0].Name };
+            }
+            $("#ID").attr("disabled", "disabled");
+            $(".e-field").css({ 'width': '116px', 'text-align': 'left' });
+        } else if (args.requestType == "cancel") {
+
+            var grid = $("#Editing").ejGrid("instance");
+            if (selectedObj != null) {
+                for (var i = 0; i < args.model.currentViewData.length; i++) {
+
+                    if (args.model.currentViewData[i].ID == selectedObj.ID) {
+                        args.model.currentViewData[i].Name = selectedObj.Name;
+                    }
+                }
+                grid.refreshContent();
+            }
+
+            var index = -1;
+            for (var i = 0; i < grid.model.dataSource.dataSource.json.length; i++) {
+                if (grid.model.dataSource.dataSource.json[i].ID == 0) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1) {
+                grid.model.dataSource.dataSource.json.splice(grid.model.dataSource.dataSource.json[index], 1);
+                grid._currentJsonData.splice(grid._currentJsonData[index], 1);
+            }
+
+            selectedObj = null;
+        }
+
+    }
+    function add(args) {
+        if (args.error.responseJSON.Errors) {
+            var toastr = $('#exampleCloseButton');
+
+            for (var i = 0; i < args.error.responseJSON.Errors.length; i++) {
+                toastr.data('message', args.error.responseJSON.Errors[i]).click();
+            }
+            args.cancel = true;
+            var popupObj = $("#Editing").data("ejWaitingPopup");
+            popupObj.hide();
+        }
+    }
+</script>
+<a class="btn btn-primary btn-outline" id="exampleCloseButton" data-plugin="toastr" style="display:none;"
+   data-message=""
+   data-title="Error" data-container-id="toast-top-right" data-close-button="true"
+   data-tap-to-dismiss="true" data-icon-class="toast-just-text toast-danger toast-shadow"
+   href="javascript:void(0)" role="button">Generate</a>
+

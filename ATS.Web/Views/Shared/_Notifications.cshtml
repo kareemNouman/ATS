@@ -1,0 +1,60 @@
+﻿@{
+    //success messages
+    var successMessages = new List<string>();
+    if (TempData[string.Format("ats.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(TempData[string.Format("ats.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+    if (ViewData[string.Format("ats.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(ViewData[string.Format("ats.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+
+
+    //error messages
+    var errorMessages = new List<string>();
+    if (TempData[string.Format("ats.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(TempData[string.Format("ats.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+    if (ViewData[string.Format("ats.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(ViewData[string.Format("ats.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+}
+
+@if (successMessages.Count > 0 || errorMessages.Count > 0)
+{
+    <div class="row">
+        <div class="col-sm-12">
+
+            @foreach (var message in successMessages)
+            {
+                <div class="alert dark alert-icon alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i class="icon wb-check" aria-hidden="true"></i>
+                    @message
+                </div>
+            }
+
+            @foreach (var message in errorMessages)
+            {
+                <div class="alert dark alert-icon alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i class="icon wb-close" aria-hidden="true"></i>
+                    @message
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+
+
+
+

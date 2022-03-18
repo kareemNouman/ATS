@@ -1,0 +1,75 @@
+﻿
+@model ATS.Core.Domain.DTO.UserAccountViewModel
+
+@using Syncfusion.MVC.EJ
+@using Syncfusion.JavaScript.Web
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel">
+    <header class="panel-heading">
+        <h3 class="panel-title">Users</h3>
+    </header>
+    <div class="panel-body">
+        <div class="row">
+            <div class="example-wrap">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-4 col-lg-2">
+                        <div class="example">
+                            <ul class="list-unstyled">
+                                <li class="margin-bottom-20">
+                                    <a href="/Master/AddUsers" class="btn btn-block btn-primary">ADD USER</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script type="text/x-jsrender" id="columnTemplateEdit">
+                    <a href="/Master/UserDetail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
+                </script>
+                <script type="text/x-jsrender" id="columnTemplateDelete">
+                    <a href="/Master/UserDelete/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
+                </script>
+                <script type="text/x-jsrender" id="typeTemplate">
+                    <a>
+                        {{if RoleID=="1"}}
+                        Admin
+                        {{/if}}
+                        {{if RoleID=="2"}}
+                        Attendance Tracker
+                        {{/if}}                      
+                    </a>
+
+              </script>
+
+                @(Html.EJ().Grid<ATS.Core.Domain.DTO.UserAccountViewModel>("FlatGrid")
+                .Datasource(ds => ds.URL(Url.Action("UserData", "Master")).Adaptor("UrlAdaptor"))
+                 .AllowSorting()
+                  .AllowPaging()
+                  .PageSettings(x => x.PageSize(10))
+         .AllowSelection()
+         .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
+                .Columns(col =>
+                {
+                    col.Field("UserName").HeaderText("User Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+                    col.Field("RoleName").HeaderText("Role").Template(true).TemplateID("#typeTemplate").Width(80).Width(100).Add();
+                    col.Field("").HeaderText("Manage").Template(true).TemplateID("#columnTemplateEdit").Width(80).Add();
+                    col.Field("").HeaderText("Delete").Template(true).TemplateID("#columnTemplateDelete").Width(80).Add();
+                }))
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
