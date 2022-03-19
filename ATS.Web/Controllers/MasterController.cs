@@ -11,6 +11,7 @@ using Syncfusion.JavaScript;
 
 namespace ATS.Web.Controllers
 {
+    [Authorize]
     public class MasterController : BaseController
     {
         private readonly IMasterService _masterService;

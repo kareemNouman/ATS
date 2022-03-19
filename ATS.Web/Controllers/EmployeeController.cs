@@ -15,6 +15,7 @@ using System.Web.Routing;
 
 namespace ATS.Web.Controllers
 {
+    [Authorize]
     public class EmployeeController : BaseController
     {
       

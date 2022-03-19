@@ -14,6 +14,7 @@ using Syncfusion.JavaScript;
 
 namespace ATS.Web.Controllers
 {
+    [Authorize]
     public class AttendanceController : BaseController
     {
         // GET: Attendance

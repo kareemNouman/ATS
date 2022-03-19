@@ -388,6 +388,7 @@
     <Content Include="assets\examples\images\navbar\fixed-to-bottom.png" />
     <Content Include="assets\examples\images\navbar\fixed-to-top.png" />
     <Content Include="assets\examples\images\necsom.jpg" />
+    <Content Include="assets\examples\images\paperManufacture.jpg" />
     <Content Include="assets\examples\images\poster.jpg" />
     <Content Include="assets\examples\images\txt.png" />
     <Content Include="assets\examples\js\advanced\animation.js" />

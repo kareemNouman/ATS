@@ -6,7 +6,8 @@ using System.Web.Mvc;
 
 namespace ATS.Web.Controllers
 {
-    public class ReportsController : Controller
+    [Authorize]
+    public class ReportsController : BaseController
     {
         // GET: Reports
         public ActionResult Index()
