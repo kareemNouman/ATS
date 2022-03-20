@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ATS.Service.DailyAttendance;
+using ATS.Service.Employees;
 using ATS.Service.Masters;
 using ATS.Service.Messages;
 using Newtonsoft.Json;
@@ -18,11 +19,13 @@ namespace ATS.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly IMasterService _masterService;
+        private readonly IEmployeeService _employeeService;
         private readonly IDailyAttendanceService _dailyAttendanceService;
         private readonly INotify _notify;
-        public HomeController(IMasterService masterService, IDailyAttendanceService dailyAttendanceService, INotify notify)
+        public HomeController(IMasterService masterService, IDailyAttendanceService dailyAttendanceService, IEmployeeService employeeService, INotify notify)
         {
             _masterService = masterService;
+            _employeeService = employeeService;
             _dailyAttendanceService = dailyAttendanceService;
             _notify = notify;
         }
@@ -148,6 +151,29 @@ namespace ATS.Web.Controllers
                 departmentViewModel.Add(model);
             }
             return Json(departmentViewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Employees(DataManager dm)
+        {
+
+            var searchText = "";
+
+            if (dm.Where == null ? false : dm.Where.Count > 0)
+                searchText = Convert.ToString(dm.Where[0].value);
+            var employees = _employeeService.GetAllEmployee();          
+
+            if (string.IsNullOrWhiteSpace(searchText))
+                return Json(employees, JsonRequestBehavior.AllowGet);
+
+            var list = employees.Where(x =>
+            {
+                if (string.IsNullOrWhiteSpace(x.Name))
+                    return false;
+
+                return x.Name.ToLower().Contains(searchText.ToLower());
+            }).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Designations()

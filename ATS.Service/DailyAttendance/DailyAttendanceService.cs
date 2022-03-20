@@ -146,6 +146,27 @@ namespace ATS.Service.DailyAttendance
             }).FirstOrDefault();
         }
 
+        public PayToAttendanceViewModel GetPayToByEmpCode(long empCode)
+        {
+
+            var attendancePayToData = _attendanceRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).Select(x => new AttendanceViewModel
+            {                
+                OT1 = x.OT1,
+                OT2 = x.OT2,
+                OT3 = x.OT3,
+                OT4 = x.OT4,                
+                Status = x.Status,
+            }).ToList();
+
+            PayToAttendanceViewModel payToAttendanceViewModel = new PayToAttendanceViewModel();
+            payToAttendanceViewModel.TotalPayToDays = attendancePayToData.Where(x => x.Status == "").Count();
+            payToAttendanceViewModel.TotalOT1 = attendancePayToData.Sum(x => x.OT1);
+            payToAttendanceViewModel.TotalOT2 = attendancePayToData.Sum(x => x.OT2);
+            payToAttendanceViewModel.TotalOT3 = attendancePayToData.Sum(x => x.OT3);
+            payToAttendanceViewModel.TotalOT4 = attendancePayToData.Sum(x => x.OT4);
+            return payToAttendanceViewModel;
+        }
+
         public bool Delete(long ID)
         {
             bool result = false;

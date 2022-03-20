@@ -1,0 +1,206 @@
+﻿
+@model List<ATS.Core.Domain.DTO.AttendanceViewModel>
+
+@{
+    Layout = null;
+}
+@if (ViewBag.IsPDF == true)
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        table, th {
+            height: 50px;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    </style>
+
+    <div>
+        <div style="text-align:center;margin-bottom:10px;">
+            <img src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+            <h3>Single Employee Report</h3>
+        </div>
+        <div>
+            <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>
+        </div>
+        <table cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Time In
+                    </th>
+                    <th>
+                        Time Out
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Normal (OT1)
+                    </th>
+                    <th>
+                        Weekly Off (OT2)
+                    </th>
+                    <th>
+                        Public Holiday (OT3)
+                    </th>
+                    <th>
+                        Night OT (OT4)
+                    </th>
+                    <th>
+                        Total OT
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                    <td>@item.TimeIn</td>
+                    <td>@item.TimeOut</td>
+                    <td>@item.Status</td>
+                    <td>@item.OT1</td>
+                    <td>@item.OT2</td>
+                    <td>@item.OT3</td>
+                    <td>@item.OT4</td>
+                    <td>@item.TotalOT</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+
+    <link href="@Url.Content("~/Content/ej/web/Default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+
+    <style type="text/css" media="print">
+        @@page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+        }
+    </style>
+
+    <div style="text-align:center;margin-bottom:10px;">
+        <img src="~/Images/ATS.png" alt="Alternate Text" />
+        <h3>Single Employee Report</h3>
+    </div>
+    <div>
+        <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault()</b></label>
+    </div>
+
+    <div class="e-grid e-js ">
+        <div class="e-gridheader">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col style="width: 120px;">
+                        <col style="width: 75px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                    </colgroup>
+                    <thead>
+                        <tr class="e-columnheader">
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Date" style="text-align: right;">Date</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TimeIn" style="text-align: right;">Time In</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TimeOut" style="text-align: left;">Time Out</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Status" style="text-align: right;">Status</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT1" style="text-align: right;">Normal (OT1)</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT2" style="text-align: right;">Weekly Off (OT2)</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT3" style="text-align: right;">Public Holiday (OT3)</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT4" style="text-align: right;">Night OT (OT4)</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TotalOT" style="text-align: right;">Total OT</div></th>
+                        </tr>
+                    </thead>
+                    <tbody class="e-hide">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="e-gridcontent">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col style="width: 120px;">
+                        <col style="width: 75px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                    </colgroup>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                        <tr class="e-row" role="row">
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.Date</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.TimeIn</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: left;">@item.TimeOut</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.Status</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.OT1</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.OT2</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.OT3</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.OT4</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: right;">@item.TotalOT</td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

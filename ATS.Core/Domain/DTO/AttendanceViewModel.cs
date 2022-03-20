@@ -20,11 +20,19 @@ namespace ATS.Core.Domain.DTO
         public string TimeOut { get; set; }
 
         public Nullable<decimal> TotalHours { get; set; }
+        public Nullable<decimal> SickLeaves { get; set; }
+        public Nullable<decimal> AdjustAnnLeaves { get; set; }
 
+        public Nullable<decimal> Absent { get; set; }
+
+        public Nullable<decimal> ToPay { get; set; }
         public Nullable<decimal> OT1 { get; set; }
         public Nullable<decimal> OT2 { get; set; }
         public Nullable<decimal> OT3 { get; set; }
         public Nullable<decimal> OT4 { get; set; }
+
+        public Nullable<decimal> TotalOT { get; set; }
+        public Nullable<decimal> Total { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public string Status { get; set; }
         public bool? IsActive { get; set; }
@@ -32,5 +40,7 @@ namespace ATS.Core.Domain.DTO
         public Nullable<DateTime> CreatedOn { get; set; }
 
         public Nullable<long> CreatedBy { get; set; }
+
+        public PayToAttendanceViewModel PayToAttendance { get; set; }
     }
 }

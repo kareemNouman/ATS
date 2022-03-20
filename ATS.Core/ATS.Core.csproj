@@ -60,6 +60,7 @@
     <Compile Include="Domain\DTO\DesignationViewModel.cs" />
     <Compile Include="Domain\DTO\EmployeeViewModel.cs" />
     <Compile Include="Domain\DTO\PaymentViewModel.cs" />
+    <Compile Include="Domain\DTO\PayToAttendanceViewModel.cs" />
     <Compile Include="Domain\DTO\UserAccountViewModel.cs" />
     <Compile Include="Domain\ResponseModels\ATSGridResponseModel.cs" />
     <Compile Include="Enums\ATSRole.cs" />

@@ -90,6 +90,9 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.6.4\lib\net40\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.EJ">
       <HintPath>..\ExternalDLL\Syncfusion.EJ.dll</HintPath>
     </Reference>
@@ -2735,6 +2738,7 @@
     <Content Include="global\vendor\x-editable\x-editable.css" />
     <Content Include="global\vendor\x-editable\x-editable.min.css" />
     <Content Include="Images\ATS.png" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -3400,6 +3404,7 @@
     <Content Include="global\vendor\slick-carousel\fonts\slick.woff" />
     <Content Include="global\vendor\toastr\toastr.js.map" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\ej\ej.autocomplete.min.js" />
     <Content Include="Scripts\ej\ej.button.min.js" />
@@ -3475,6 +3480,9 @@
     <Content Include="Views\Master\Users.cshtml" />
     <Content Include="Views\Master\UserDetail.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Reports\SingleEmployeeReport.cshtml" />
+    <Content Include="Views\Reports\_singleEmployeeReportsPartial.cshtml" />
+    <Content Include="Views\Reports\AllEmployeesReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3482,7 +3490,6 @@
     <Folder Include="Content\layout\" />
     <Folder Include="Uploads\exceluploads\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
