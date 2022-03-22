@@ -25,6 +25,7 @@ namespace ATS.Service.DailyAttendance
         void UpdateAttendance(Attendance attendance);
 
         PayToAttendanceViewModel GetPayToByEmpCode(long empCode);
+        PagedResults<AttendanceViewModel> AttendanceDataRequest(GridRequestModel request);
 
         bool Delete(long ID);
     }

@@ -65,7 +65,7 @@ namespace ATS.Web
                         "~/Scripts/ej/ej.datepicker.min.js",
                         "~/Scripts/ej/ej.datetimepicker.min.js",
                         "~/Scripts/ej/ej.editor.min.js",
-                        //"~/Scripts/ej/ej.web.all.min.js",
+                        "~/Scripts/ej/ej.web.all.min.js",
                         "~/Scripts/ej/ej.unobtrusive.min.js"));
 
 

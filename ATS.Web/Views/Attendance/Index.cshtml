@@ -1,5 +1,6 @@
 ﻿
 @using Syncfusion.JavaScript
+@model ATS.Core.Domain.DTO.AttendanceViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,87 +9,272 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 
+<style>
+    .datepicker-orient-top {
+        top: 337px !important;
+    }
+</style>
 
-<div class="page-content container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h3 class="panel-title"> ATTENDANCE GENERATION</h3>
-                </div>
-                <div class="panel-body container-fluid">
+<div class="panel" id="salaryLoad">
+    <header class="panel-heading">
+        <h3 class="panel-title">Attendance</h3>
+    </header>
 
-                    <!-- Example Vertical -->
-                    <div class="example-wrap">
-                        <div class="example">
-                            <div class="steps steps-vertical">
+    <div class="panel-body">
 
-                                <div class="step ">
-                                    <form action="@Url.Action("UploadExcel","Attendance")" method="post" enctype="multipart/form-data">
-                                        <div class="step-desc">
-                                            <span class="step-title">Upload attendance in excel format</span>
-                                            <h4 class="example-title">Upload File</h4>
-                                            <div class="form-group">
-                                                <div class="input-group input-group-file">
-                                                    <span class="input-group-btn">
-                                                        <span class="btn btn-success btn-file">
-                                                            <i class="icon wb-upload" aria-hidden="true"></i>
-                                                            <input type="file" name="excelfile" value="Upload Attendance" />
-                                                        </span>
-                                                    </span>
-                                                    <button type="submit" class="btn btn-primary ladda-button" style="margin-left:25px;" data-style="expand-left" data-plugin="ladda">
-                                                        <span class="ladda-label">Submit</span>
-                                                        <span class="ladda-spinner"></span>
-                                                    </button>
-                                                </div>
+        <div class="row">
 
-                                            </div>
+            <div class="row col-lg-6">
+                <form action="@Url.Action("AttendanceDataSource", "Attendance")" method="get" id="frmsingleEmployeeReport" target="_blank">
+                    @Html.HiddenFor(x => x.Name)                    
+                    @*<input type="hidden" name="startdate" id="hdstartdate" />
+                    <input type="hidden" name="enddate" id="hdenddate" />
+                    <input type="hidden" id="pdf" name="pdf" value="true" />*@
+                    <div class="col-lg-6">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Employee Name</label>
+                            @{
 
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                                Html.EJ()
+                                .Autocomplete("Employee").CssClass("form-control")
+                                .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                .AutocompleteFields(e => e.Text("Name").Key("Id"))
+                                .ShowPopupButton(true).WatermarkText("Search Employee").Width("100%")
+                                .ClientSideEvents(e => e.Change("EmployeeChange").FocusOut("focusOut").ActionComplete("EmployeeSelected"))
+                                .Render();
+
+                            }
                         </div>
                     </div>
-                    <!-- End Example Vertical -->
+                    @*<div class="col-lg-6">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Employee Code</label>
+                            @{
 
-                </div>
+                                Html.EJ()
+                                .Autocomplete("EmpCode").CssClass("form-control")
+                                .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                .AutocompleteFields(e => e.Text("EmployeeCode").Key("Id"))
+                                .ShowPopupButton(true).WatermarkText("Search EmployeeCode").Width("100%")
+                                .ClientSideEvents(e => e.Change("EmployeeCodeChange").FocusOut("focusOut").ActionComplete("EmployeeCodeSelected"))
+                                .Render();
+
+                            }
+                        </div>
+                    </div>*@
+                    @*<div class="form-group col-sm-6">
+                        <label class="control-label" for="inputBasicFirstName">Start Date</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" id="startdate" class="form-control" name="ConnectionDate" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                        </div>
+                    </div>
+
+                    <div class="row form-group col-sm-6">
+                        <label class="control-label" for="inputBasicFirstName">End Date</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" id="enddate" class="form-control" name="ConnectionDate" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-5">
+                            <button type="button" onclick="fn_search()" class="btn btn-primary">Submit </button>
+                            <button type="reset" onclick="fn_reset()" class="btn btn-default btn-outline">Reset</button>
+                            @*<button type="button" id="btnpdf" class="btn btn-primary">PDF</button>*@
+                        </div>
+                    </div>
+                </form>
+            </div>     
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+
             </div>
         </div>
-        @*<div class="col-sm-12">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
-                    </div>
-                    <div class="panel-body container-fluid">
-                        @(Html.EJ().Grid<ATS.Web.Models.ChargesViewModel>("FlatGrid")
-                            .Datasource(ds => ds.URL    (Url.Action("ChargesData", "Billing")).Adaptor("UrlAdaptor"))
-                    .AllowSorting()
-                    .AllowPaging()
-                    .PageSettings(x => x.PageSize(10))
-                     .AllowSelection()
-                  .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
-                    .Columns(col =>
-                    {
-                        col.Field("ID").HeaderText("Charges ID").Width(40).IsPrimaryKey(true).IsIdentity(true).DefaultValue(0).TextAlign(TextAlign.Left).ValidationRules(v => v.AddRule("required", true).AddRule("number", true)).Add();
-                        col.Field("Name").HeaderText("Charges Type").Width(40).ValidationRules(v => v.AddRule("required", true)).Add();
-                    }))
-
-
-                    </div>
+        <div class="row col-lg-12">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5 loaderhides" id="id_loader">
+                    <img src="~/Images/ajax-loader.gif" />
                 </div>
-            </div>*@
+            </div>
+        </div>       
+        <div class="row height-50">
+
+        </div>
+
+
+        <div class="row">
+
+            <script type="text/x-jsrender" id="columnTemplateEdit">
+                <a href="/Attendance/Detail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
+            </script>
+            @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
+
+         .Datasource(ds => ds.URL(Url.Action("AttendanceDataSource", "Attendance")).Adaptor("UrlAdaptor"))
+        .AllowSorting()
+        .AllowPaging()
+        .ToolbarSettings(toolbar =>
+        {
+            toolbar.ShowToolbar(true).CustomToolbarItems(new List<object>() { new Syncfusion.JavaScript.Models.CustomToolbarItem() { TemplateID = "#print" } });
+        })
+        .Columns(col =>
+        {
+            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("TimeIn").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("TimeOut").HeaderText("Time Out").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Add();
+            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(85).Add();
+            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("").HeaderText("Manage").Template(true).TemplateID("#columnTemplateEdit").Width(80).Add();
+        }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
+        </div>
+
+
     </div>
 </div>
 
+<script id="print" type="text/x-jsrender">
+    @*<a class="e-print e-toolbaricons e-icon"></a>*@
+</script>
+
+
 <script>
 
-    @*function fn_excel() {
-        var target = $("#zone").data("ejDropDownList");
-        var zone = target.getSelectedValue();
+    $(function () {
+        //$("#btnpdf").click(function () {
+        //    $("#hdstartdate").val($("#startdate").val());
+        //    $("#hdenddate").val($("#enddate").val());
+        //    $("#frmsingleEmployeeReport").submit();
+        //});
+    });
 
-        window.location.href = "@Url.Action("DownloadExcelFormat", "Billing")" + "?zoneid=" + zone;
+    function fn_begin(args) {
 
-    }*@
+        var Name = $("#Name").val();
+        //var EmployeeCode = $("#EmployeeCode").val();
+        //this.model.query.addParams("startdate", $('#startdate').val());
+        //this.model.query.addParams("enddate", $('#enddate').val());
+        this.model.query.addParams("employeename", Name);
+        //this.model.query.addParams("employeecode", EmployeeCode);
+    }
+
+    function complete(args) {
+        //var total = ej.sum(args.model.dataSource, "Amount");
+        //if (args.model.currentViewData.length > 0) {
+        //    var defaultValue = args.model.currentViewData[0].Total;
+        //    $("#total").html(defaultValue);
+        //}
+        //else {
+        //    $("#total").html(0);
+        //}
+    }
+
+    function fn_search() {
+        var gridObj = $("#FlatGrid").ejGrid("instance");
+        gridObj.refreshContent();
+    }
+
+    function fn_reset() {
+        //$('#startdate').val('');
+        //$('#enddate').val('');
+        $('#Employee').val('');
+        //$('#EmpCode').val('');
+        $("#Name").val('');
+        //$('#EmployeeCode').val('');
+
+        var gridObj = $("#FlatGrid").ejGrid("instance");
+        gridObj.refreshContent();
+    }
+
+    function EmployeeChange(args) {
+        var utocompleteObj = $("#Employee").data("Employee");
+        var id = args.model.value;
+        $("#Name").val(id);
+    };
+
+    function EmployeeCodeChange(args) {
+        //var utocompleteObj = $("#EmpCode").data("EmpCode");
+        //var id = args.model.value;
+        //$("#EmployeeCode").val(id);
+    };
+</script>
+
+
+<script>
+
+    function onToolBarClick(sender) {
+        $("#id_loader").removeClass("loaderhides").addClass("loadershows");
+        $("#salaryLoad").addClass("loaderblur-filter");
+        //atsApp.print();
+    }
+
+    var atsApp;
+    atsApp = (function (app) {
+
+
+
+        app.print = function () {
+            var data = {};
+            //data.startdate = $('#startdate').val();
+            //data.enddate = $('#enddate').val();
+            data.employeename = $("#Name").val();
+            //data.employeecode = $("#EmployeeCode").val();
+
+
+            var url = '@Url.Action("AttendanceDataSource", "Attendance")';
+
+            url = url + "?employeename=" + $("#Name").val();
+            //url = url + "&skip=0&take=10&print=1";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    $("#id_loader").removeClass("loadershows").addClass("loaderhides");
+                    $("#salaryLoad").removeClass("loaderblur-filter");
+
+                    var myWindow = window.open('', '', 'width=800,height=800,top=200,left=200,toolbars=no,scrollbars=no,status=no,resizable=no');
+                    myWindow.document.write(data);
+                    myWindow.document.close(); //missing code
+
+
+                    myWindow.focus();
+
+                    $(myWindow.document).ready(function () {
+
+                        //ej.widget.init($("#FlatGrid"));
+
+                        //$("#FlatGrid").ejGrid("print");
+
+                        setTimeout(function () {
+                            myWindow.print();
+                            myWindow.close();
+                        }, 1000);
+
+                    });
+
+                },
+                error: function () {
+                    alert('Error');
+                }
+            });
+        };
+
+        return app;
+    })(window.atsApp || {})
 
 </script>
+
+
+
+

@@ -1,0 +1,190 @@
+﻿
+@model ATS.Core.Domain.DTO.AttendanceViewModel
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Edit Attendance</h1>
+</div>
+
+
+<div class="page-content">
+    @using (Html.BeginForm("Detail", "Attendance", FormMethod.Post, new { @autocomplete = "off", enctype = "multipart/form-data", id = "atsform" }))
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">* Feilds are Mandatory</h3>
+                    </div>
+                    @Html.HiddenFor(x => x.TimeIn)
+                    @Html.HiddenFor(x => x.TimeOut)
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Employee Name</label> *
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control empty", @placeholder = "Employee Name", @readonly = true })
+                            @Html.ValidationMessageFor(x => x.Name)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Employee Code</label> *
+                            @Html.TextBoxFor(x => x.EmployeeCode, new { @class = "form-control empty", @placeholder = "Employee Code", @readonly = true })
+                            @Html.ValidationMessageFor(x => x.EmployeeCode)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label">In Time</label>
+                            @Html.EJ().TimePicker("TimeInPicker").TimeFormat("HH:mm tt").Interval(5).Value(Model.TimeIn).Width("100%").ClientSideEvents(e => e.Change("TimeInChange"))
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label">Out Time</label>
+                            @Html.EJ().TimePicker("TimeOutPicker").TimeFormat("HH:mm tt").Interval(5).Value(Model.TimeOut).Width("100%").ClientSideEvents(e => e.Change("TimeOutChange"))
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Total Hours</label> *
+                            @Html.TextBoxFor(x => x.TotalHours, new { @class = "form-control empty", @placeholder = "Total", @readonly = true })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body container-fluid">                       
+                        <div class="form-group form-material">
+                            <div class="form-group form-material">
+                                <label class="control-label" for="inputText">Normal (OT1)</label>
+                                @Html.TextBoxFor(x => x.OT1, new { @class = "form-control empty", @placeholder = "Normal (OT1)"})
+                                @Html.ValidationMessageFor(x => x.OT1)
+                            </div>
+                            <div class="form-group form-material">
+                                <label class="control-label" for="inputText">Weekly Off (OT2)</label>
+                                @Html.TextBoxFor(x => x.OT2, new { @class = "form-control empty", @placeholder = "Weekly Off (OT2)" })
+                                @Html.ValidationMessageFor(x => x.OT2)
+                            </div>
+                            <div class="form-group form-material">
+                                <label class="control-label" for="inputText">Public Holiday (OT3)</label>
+                                @Html.TextBoxFor(x => x.OT3, new { @class = "form-control empty", @placeholder = "Public Holiday (OT3)" })
+                                @Html.ValidationMessageFor(x => x.OT3)
+                            </div>
+                            <div class="form-group form-material">
+                                <label class="control-label" for="inputText">Night OT (OT4)</label> 
+                                @Html.TextBoxFor(x => x.OT4, new { @class = "form-control empty", @placeholder = "Night OT (OT4)" })
+                                @Html.ValidationMessageFor(x => x.OT4)
+                            </div>
+                            <div class="example">
+                                <button type="submit" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Update</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                                <button type="submit" value="saveandprint" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Cancel</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@section ejs{
+    <script>
+
+        $(function () {
+            var inTime = $("#TimeIn").val();
+            var outTime = $("#TimeOut").val();
+        });
+        $("#atsform").submit(function (event) {
+            //if (!$("#DORJ").val()) {
+            //    $("#DORJ").css("border-bottom", "1px solid red");
+            //    event.preventDefault();
+            //}
+            //else
+            //    $("#DORJ").css("border-bottom", "");
+            var TimeIn = $("#TimeInPicker").val().split(" ")[0].replace(':', '.');
+            var TimeOut = $("#TimeOutPicker").val().split(" ")[0].replace(':', '.');
+            @*@Model.TimeIn = TimeIn;
+            @Model.TimeOut = TimeOut;*@
+        })
+
+        function TimeInChange(args) {
+            var utocompleteObj = $("#TimeInPicker").data("TimeInPicker");
+            var id = args.model.value.split(" ")[0].replace(':', '.');
+            var totalHr = 0;
+            $("#TimeIn").val(id);
+            if ($("#TimeOut").val()) {
+                totalHr = parseFloat($("#TimeOut").val()) - parseFloat($("#TimeIn").val());
+            } else {
+                totalHr = parseFloat($("#TimeOutPicker").val().split(" ")[0].replace(':', '.')) - parseFloat($("#TimeIn").val());
+            }
+            $("#TotalHours").val(totalHr.toFixed(2));
+        };
+
+        function TimeOutChange(args) {
+            var utocompleteObj = $("#TimeOutPicker").data("TimeOutPicker");
+            var id = args.model.value.split(" ")[0].replace(':', '.');
+            var totalHr = 0;
+            $("#TimeOut").val(id);
+            if ($("#TimeIn").val()) {
+                totalHr = parseFloat(id) - parseFloat($("#TimeIn").val());
+            } else {
+                totalHr = parseFloat(id) - parseFloat($("#TimeInPicker").val().split(" ")[0].replace(':', '.'));
+            }
+            $("#TotalHours").val(totalHr.toFixed(2));
+        };
+
+
+    </script>
+}
+@section afterscripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+    <script>
+
+        //$(document).ready(function () {
+        //    $('.input-validation-error').parents('.form-group').addClass('has-error');
+        //    $('.field-validation-error').addClass('text-danger');
+        //});
+
+        $(document).ready(function () {
+            var form = $('#atsform')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function (label, element) {
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function (label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+    </script>
+
+}

@@ -19,7 +19,7 @@ namespace ATS.Core.Domain.DTO
 
         public string TimeOut { get; set; }
 
-        public Nullable<decimal> TotalHours { get; set; }
+        public double TotalHours { get; set; }
         public Nullable<decimal> SickLeaves { get; set; }
         public Nullable<decimal> AdjustAnnLeaves { get; set; }
 

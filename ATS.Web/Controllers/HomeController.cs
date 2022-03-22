@@ -78,7 +78,7 @@ namespace ATS.Web.Controllers
                             Designation = Convert.ToString(workSheet.Cells[i, 4].Value),
                             TimeIn = Convert.ToString(workSheet.Cells[i, 5].Value),
                             TimeOut = Convert.ToString(workSheet.Cells[i, 6].Value),
-                            TotalHours = Convert.ToDecimal(workSheet.Cells[i, 7].Value),
+                            TotalHours = Convert.ToDouble(workSheet.Cells[i, 7].Value),
                             OT1 = Convert.ToDecimal(workSheet.Cells[i, 8].Value),
                             OT2 = Convert.ToDecimal(workSheet.Cells[i, 9].Value),
                             OT3 = Convert.ToDecimal(workSheet.Cells[i, 10].Value),

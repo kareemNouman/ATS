@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using ATS.Service.Messages;
 
 namespace ATS.Service.DailyAttendance
 {
-    public class DailyAttendanceService: IDailyAttendanceService
+    public class DailyAttendanceService:BaseService, IDailyAttendanceService
     {
         private readonly IGenericRepository<Attendance> _attendanceRepository;
         private readonly IUnitOfWork _unitOfWrk;
@@ -165,6 +166,66 @@ namespace ATS.Service.DailyAttendance
             payToAttendanceViewModel.TotalOT3 = attendancePayToData.Sum(x => x.OT3);
             payToAttendanceViewModel.TotalOT4 = attendancePayToData.Sum(x => x.OT4);
             return payToAttendanceViewModel;
+        }
+
+        public PagedResults<AttendanceViewModel> AttendanceDataRequest(GridRequestModel request)
+        {
+
+            var query = _attendanceRepository.ReadOnly();
+            //var startdate = "";
+            //var enddate = "";
+            //var departmentid = "";
+            //var employeecode = "";
+            var employeename = "";
+
+            //request.Filters.TryGetValue("startdate", out startdate);
+            //request.Filters.TryGetValue("enddate", out enddate);
+            //request.Filters.TryGetValue("departmentid", out departmentid);
+            //request.Filters.TryGetValue("employeecode", out employeecode);
+            request.Filters.TryGetValue("employeename", out employeename);
+
+            //DateTime startDate;
+            //DateTime endDate;
+            //long departmentID;
+            long employeeCode;
+
+            //if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
+            //{
+            //    if (startdate == enddate)
+            //    {
+            //        query = query.Where(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(endDate));
+            //    }
+            //    else
+            //        query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
+            //}
+
+            //if (long.TryParse(departmentid, out departmentID))
+            //    query = query.Where(x => x.Designation == departmentid);
+
+            //if (long.TryParse(employeecode, out employeeCode))
+            //    query = query.Where(x => x.EmployeeCode == employeeCode);
+
+            if (!string.IsNullOrWhiteSpace(employeename))
+            {
+                query = query.Where(x => x.Name.ToLower() == employeename.ToLower());
+            }
+
+            var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
+            {
+                Id =x.ID,
+                Date = x.Date,
+                TimeIn = x.TimeIn,
+                TimeOut = x.TimeOut,
+                Status = x.Status,
+                OT1 = x.OT1,
+                OT2 = x.OT2,
+                OT3 = x.OT3,
+                OT4 = x.OT4,
+                TotalOT = x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                Total = total
+            });
+
         }
 
         public bool Delete(long ID)

@@ -18,7 +18,7 @@ namespace ATS.Core.Domain.DomainModels
 
         public string TimeOut { get; set; }
 
-        public Nullable<decimal> TotalHours { get; set; }
+        public double TotalHours { get; set; }
 
         public Nullable<System.DateTime> Date { get; set; }
  
