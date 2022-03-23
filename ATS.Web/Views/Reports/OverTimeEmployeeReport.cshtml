@@ -1,0 +1,258 @@
+﻿@model ATS.Core.Domain.DTO.AttendanceViewModel
+
+@{
+    ViewBag.Title = "OverTimeEmployeeReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .datepicker-orient-top {
+        top: 337px !important;
+    }
+</style>
+
+<div class="panel" id="salaryLoad">
+    <header class="panel-heading">
+        <h3 class="panel-title">OverTime Employee Report</h3>
+    </header>
+
+    <div class="panel-body">
+
+        <div class="row">
+
+            <div class="row col-lg-6">
+                <form action="@Url.Action("OverTimeEmployeeReportDataSource", "Reports")" method="get" id="frmovertimeEmployeeReport" target="_blank">
+                    @Html.HiddenFor(x => x.DepartmentId)                    
+                    <input type="hidden" name="startdate" id="hdstartdate" />
+                    <input type="hidden" name="enddate" id="hdenddate" />
+                    <input type="hidden" id="pdf" name="pdf" value="true" />
+                    <div class="col-lg-12">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Department Name</label>
+                            @{
+
+                                Html.EJ()
+                                .Autocomplete("Dept").CssClass("form-control")
+                                .Datasource(ds => ds.URL(Url.Action("AllDepartments", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                .AutocompleteFields(e => e.Text("Name").Key("ID"))
+                                .ShowPopupButton(true).WatermarkText("Search Department").Width("100%")
+                                .ClientSideEvents(e => e.Change("DeptChange").FocusOut("focusOut").ActionComplete("DeptSelected"))
+                                .Render();
+
+                            }
+                        </div>
+                    </div>                 
+                    <div class="form-group col-sm-6">
+                        <label class="control-label" for="inputBasicFirstName">Start Date</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" id="startdate" class="form-control" name="ConnectionDate" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                        </div>
+                    </div>
+
+                    <div class="row form-group col-sm-6">
+                        <label class="control-label" for="inputBasicFirstName">End Date</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" id="enddate" class="form-control" name="ConnectionDate" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-5">
+                            <button type="button" onclick="fn_search()" class="btn btn-primary">Submit </button>
+                            <button type="reset" onclick="fn_reset()" class="btn btn-default btn-outline">Reset</button>
+                            <button type="button" id="btnpdf" class="btn btn-primary">PDF</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-lg-8">
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+
+            </div>
+        </div>
+        <div class="row col-lg-12">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5 loaderhides" id="id_loader">
+                    <img src="~/Images/ajax-loader.gif" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-lg-12">
+                <label>Total OT Hrs:<b id="total"></b></label>
+            </div>*@
+        </div>
+
+        <div class="row height-50">
+
+        </div>
+
+
+        <div class="row">
+            @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
+
+         .Datasource(ds => ds.URL(Url.Action("OverTimeEmployeeReportDataSource", "Reports")).Adaptor("UrlAdaptor"))
+        .AllowSorting()
+        .AllowPaging()
+        .ToolbarSettings(toolbar =>
+        {
+            toolbar.ShowToolbar(true).CustomToolbarItems(new List<object>() { new Syncfusion.JavaScript.Models.CustomToolbarItem() { TemplateID = "#print" } });
+        })
+        .Columns(col =>
+        {
+            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("EmployeeCode").HeaderText("E/C").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("Name").HeaderText("Name").Width(80).Add();
+            col.Field("TimeIn").HeaderText("Check-in").Width(80).Add();
+            col.Field("TimeOut").HeaderText("Check-out").Width(80).Add();
+            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+
+        }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
+        </div>
+
+
+    </div>
+</div>
+
+<script id="print" type="text/x-jsrender">
+    <a class="e-print e-toolbaricons e-icon"></a>
+</script>
+
+
+<script>
+
+    $(function () {
+        $("#btnpdf").click(function () {
+            $("#hdstartdate").val($("#startdate").val());
+            $("#hdenddate").val($("#enddate").val());
+            $("#frmovertimeEmployeeReport").submit();
+        });
+    });
+
+    function fn_begin(args) {
+        var DepartmentId = $("#DepartmentId").val();       
+        this.model.query.addParams("startdate", $('#startdate').val());
+        this.model.query.addParams("enddate", $('#enddate').val());
+        this.model.query.addParams("departmentid", DepartmentId);       
+    }
+
+    function complete(args) {
+        // var total = ej.sum(args.model.dataSource, "Amount");
+        //if (args.model.currentViewData.length > 0) {
+        //    var defaultValue = args.model.currentViewData[0].Total;
+        //    $("#total").html(defaultValue);
+        //}
+        //else {
+        //    $("#total").html(0);
+        //}
+    }
+
+    function fn_search() {
+        var gridObj = $("#FlatGrid").ejGrid("instance");
+        gridObj.refreshContent();
+    }
+
+    function fn_reset() {
+        $('#startdate').val('');
+        $('#enddate').val('');
+        $('#Departments').val('');     
+        $('#DepartmentId').val('');
+
+        var gridObj = $("#FlatGrid").ejGrid("instance");
+        gridObj.refreshContent();
+    }
+
+    function DeptChange(args) {
+        var utocompleteObj = $("#Departments").data("Departments");
+        var id = args.model.value;
+        $("#DepartmentId").val(id);
+    };
+
+</script>
+
+
+<script>
+
+    function onToolBarClick(sender) {
+        $("#id_loader").removeClass("loaderhides").addClass("loadershows");
+        $("#salaryLoad").addClass("loaderblur-filter");
+        atsApp.print();
+    }
+
+    var atsApp;
+    atsApp = (function (app) {
+
+
+
+        app.print = function () {
+            var data = {};
+            data.startdate = $('#startdate').val();
+            data.enddate = $('#enddate').val();
+            data.departmentid = $("#DepartmentId").val();
+          
+            var url = '@Url.Action("OverTimeEmployeeReportDataSource", "Reports")';
+
+            url = url + "?startdate=" + $('#startdate').val() + "&enddate=" + $('#enddate').val() + "&departmentid=" + $("#DepartmentId").val();
+            url = url + "&skip=0&take=10&print=1";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    $("#id_loader").removeClass("loadershows").addClass("loaderhides");
+                    $("#salaryLoad").removeClass("loaderblur-filter");
+
+                    var myWindow = window.open('', '', 'width=800,height=800,top=200,left=200,toolbars=no,scrollbars=no,status=no,resizable=no');
+                    myWindow.document.write(data);
+                    myWindow.document.close(); //missing code
+
+
+                    myWindow.focus();
+
+                    $(myWindow.document).ready(function () {
+
+                        //ej.widget.init($("#FlatGrid"));
+
+                        //$("#FlatGrid").ejGrid("print");
+
+                        setTimeout(function () {
+                            myWindow.print();
+                            myWindow.close();
+                        }, 1000);
+
+                    });
+
+                },
+                error: function () {
+                    alert('Error');
+                }
+            });
+        };
+
+        return app;
+    })(window.atsApp || {})
+
+</script>
+
+
+
+
+

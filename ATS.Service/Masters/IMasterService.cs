@@ -14,6 +14,8 @@ namespace ATS.Service.Masters
         #region Departments
         IEnumerable<Department> GetAllDepartments();
 
+        IEnumerable<DepartmentViewModel> GetAllDepartmentsForAutoSearch();
+
         Department GetDepartment(Int64 id);
 
         long AddDepartment(Department department);

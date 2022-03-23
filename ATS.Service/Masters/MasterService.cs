@@ -47,6 +47,14 @@ namespace ATS.Service.Masters
 
         #region Department
 
+        public IEnumerable<DepartmentViewModel> GetAllDepartmentsForAutoSearch()
+        {
+            return _departmentRepository.GetAll().Where(x => x.IsDelete == false).Select(x=> new DepartmentViewModel {
+                ID= x.ID,
+                Name= x.Name
+            });
+        }
+
         public IEnumerable<Department> GetAllDepartments()
         {
             return _departmentRepository.GetAll().Where(x => x.IsDelete == false);

@@ -10,7 +10,7 @@ namespace ATS.Core.Domain.DTO
     {
         public Int64 Id { get; set; }
         public Nullable<long> EmployeeCode { get; set; }
-
+        public Nullable<long> DepartmentId { get; set; }
         public string Name { get; set; }
 
         public string Designation { get; set; }

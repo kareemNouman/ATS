@@ -153,6 +153,29 @@ namespace ATS.Web.Controllers
             return Json(departmentViewModel, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AllDepartments(DataManager dm)
+        {
+
+            var searchText = "";
+
+            if (dm.Where == null ? false : dm.Where.Count > 0)
+                searchText = Convert.ToString(dm.Where[0].value);
+            var departments = _masterService.GetAllDepartmentsForAutoSearch();          
+
+            if (string.IsNullOrWhiteSpace(searchText))
+                return Json(departments, JsonRequestBehavior.AllowGet);
+
+            var list = departments.Where(x =>
+            {
+                if (string.IsNullOrWhiteSpace(x.Name))
+                    return false;
+
+                return x.Name.ToLower().Contains(searchText.ToLower());
+            }).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Employees(DataManager dm)
         {
 
@@ -160,7 +183,7 @@ namespace ATS.Web.Controllers
 
             if (dm.Where == null ? false : dm.Where.Count > 0)
                 searchText = Convert.ToString(dm.Where[0].value);
-            var employees = _employeeService.GetAllEmployee();          
+            var employees = _employeeService.GetAllEmployee();
 
             if (string.IsNullOrWhiteSpace(searchText))
                 return Json(employees, JsonRequestBehavior.AllowGet);

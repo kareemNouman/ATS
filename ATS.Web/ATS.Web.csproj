@@ -3484,6 +3484,7 @@
     <Content Include="Views\Reports\_singleEmployeeReportsPartial.cshtml" />
     <Content Include="Views\Reports\AllEmployeesReport.cshtml" />
     <Content Include="Views\Attendance\Detail.cshtml" />
+    <Content Include="Views\Reports\OverTimeEmployeeReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
