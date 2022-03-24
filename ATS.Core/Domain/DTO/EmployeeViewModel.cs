@@ -31,6 +31,7 @@ namespace ATS.Core.Domain.DTO
 
         public Nullable<decimal> OTThreshold { get; set; }
         public int WeekOffMain { get; set; }
+        public int ShiftCode { get; set; }
         public int WeeklyOffAlternate { get; set; }
 
         public bool? IsOTEligible { get; set; }
@@ -38,6 +39,27 @@ namespace ATS.Core.Domain.DTO
 
         public bool? IsActive { get; set; }
 
+        public Nullable<decimal> OT1 { get; set; }
+        public Nullable<decimal> OT2 { get; set; }
+        public Nullable<decimal> OT3 { get; set; }
+        public Nullable<decimal> OT4 { get; set; }
+
+        public Nullable<decimal> OT1Amount { get; set; }
+        public Nullable<decimal> OT2Amount { get; set; }
+        public Nullable<decimal> OT3Amount { get; set; }
+        public Nullable<decimal> OT4Amount { get; set; }
+        public Nullable<decimal> OTTotalHours { get; set; }
+        public Nullable<decimal> OTTotalAmount { get; set; }
+
+        public Nullable<decimal> OthersAmount { get; set; }
+        public Nullable<decimal> BonusAmount { get; set; }
+
+        public Nullable<decimal> GrandTotal { get; set; }   
+        public Nullable<decimal> Deduction { get; set; }
+        public Nullable<decimal> AdvanceAmount { get; set; }
+        public Nullable<decimal> NetAmount { get; set; }
+
+        public int? TotalRecords { get; set; }
         public Nullable<DateTime> CreatedOn { get; set; }
         
         public Nullable<long> CreatedBy { get; set; }

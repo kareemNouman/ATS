@@ -20,7 +20,7 @@ namespace ATS.Service.Employees
         Employee GetEmployee(Int64 id);
 
 
-        EmployeeViewModel GetEmployeeByID(Int64 id);
+        EmployeeViewModel GetEmployeeByID(Int64 id);      
 
         void UpdateEmployee(Employee employee);
 

@@ -29,6 +29,7 @@ namespace ATS.Data.EF.Mappings
             this.Property(x => x.Gross).HasColumnName("Gross");
             this.Property(x => x.OTThreshold).HasColumnName("OTThreshold");
             this.Property(x => x.WeekOffMain).HasColumnName("WeekOffMain");
+            this.Property(x => x.ShiftCode).HasColumnName("ShiftCode");
             this.Property(x => x.WeeklyOffAlternate).HasColumnName("WeeklyOffAlternate");
             this.Property(x => x.IsOTEligible).HasColumnName("IsOTEligible");
             this.Property(x => x.DORJ).HasColumnName("DORJ");

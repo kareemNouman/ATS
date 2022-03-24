@@ -272,7 +272,78 @@ namespace ATS.Web.Controllers
 
         #endregion
 
+        #region Department
+        //[NECAuthorize(Key = new string[] { NECPermissions.Department })]
+        public ActionResult LeavesType()
 
+        {
+            var leaves = _masterService.GetAllLeaves();
+            List<ATS.Core.Domain.DTO.LeavesViewModel> leaveViewModel = new List<ATS.Core.Domain.DTO.LeavesViewModel>();
+            foreach (var item in leaves)
+            {
+                ATS.Core.Domain.DTO.LeavesViewModel model = new ATS.Core.Domain.DTO.LeavesViewModel();
+                model.ID = item.ID;
+                model.Name = item.Name;
+                model.IsDelete = item.IsDelete;
+                leaveViewModel.Add(model);
+            }
+            return View(leaveViewModel);
+        }
+
+        public ActionResult LeavesAdd(LeavesViewModel value)
+        {
+            var leaves = new Leaves
+            {
+                Name = value.Name,
+                IsDelete = false
+            };
+            var data = _masterService.AddLeave(leaves);
+            if (data != 0)
+            {
+                //var department = data;
+                value.ID = leaves.ID;
+                return Json(value, JsonRequestBehavior.AllowGet);
+            }
+
+            //Response.AddHeader("exception", "Error");
+
+            Response.StatusCode = 404;
+            Response.TrySkipIisCustomErrors = true;
+            return Json(new ATSServiceResponse { IsSuccess = false, Errors = _notify.GetMessage() });
+        }
+
+
+        public ActionResult LeaveUpdate(DepartmentViewModel value)
+        {
+            var leaves = new Leaves
+            {
+                ID = value.ID,
+                Name = value.Name,
+                IsDelete = false,
+            };
+            var data = _masterService.UpdateLeaveType(leaves);
+            if (data == 0)
+            {
+                Response.StatusCode = 404;
+                Response.TrySkipIisCustomErrors = true;
+                return Json(new ATSServiceResponse { IsSuccess = false, Errors = _notify.GetMessage() });
+            }
+            return Json(data);
+        }
+
+        public ActionResult LeaveDelete(Int64 key)
+        {
+            var dbLeave = _masterService.GetLeave(key);
+            dbLeave.IsDelete = true;
+            var data = _masterService.UpdateLeaveType(dbLeave);
+            if (data == 0)
+            {
+                Response.StatusCode = 404;
+                Response.TrySkipIisCustomErrors = true;
+            }
+            return Json(dbLeave, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
 
     }
 }

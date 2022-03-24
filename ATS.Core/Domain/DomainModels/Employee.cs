@@ -30,6 +30,8 @@ namespace ATS.Core.Domain.DomainModels
 
         public Nullable<decimal> OTThreshold { get; set; }
         public int WeekOffMain { get; set; }
+
+        public int ShiftCode { get; set; }
         public int WeeklyOffAlternate { get; set; }
 
         public bool? IsOTEligible { get; set; }

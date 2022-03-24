@@ -219,17 +219,17 @@ namespace ATS.Web.Controllers
 
         public ActionResult EmployeePayrollReport()
         {
-            AttendanceViewModel model = new AttendanceViewModel();
+            EmployeeViewModel model = new EmployeeViewModel();
             return View(model);
         }
 
-        public ActionResult EmployeePayrollReportDataSource(DataManager dm, string startdate, string enddate, string departmentid, string print, string pdf)
+        public ActionResult EmployeePayrollReportDataSource(DataManager dm, string startdate, string enddate,string print, string pdf)
         {
             GridRequestModel request = new GridRequestModel();
 
             startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
             enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
-            departmentid = string.IsNullOrWhiteSpace(departmentid) ? null : departmentid;
+            
 
             if (pdf == "true")
             {
@@ -243,19 +243,18 @@ namespace ATS.Web.Controllers
             }
             request.Filters.Add("startdate", startdate);
             request.Filters.Add("enddate", enddate);
-            request.Filters.Add("departmentid", departmentid);
+         
 
-
-            var response = _reportService.OverTimeEmployeeAttendanceReport(request);
+            var response = _reportService.EmployeePayrollReport(request);
 
             if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
-                return Json(new { result = response.Results, count = response.TotalNumberOfRecords });
+                return Json(new { result = response, count = response.Select(x=>x.TotalRecords).FirstOrDefault() });
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response);
             }
-            return PartialView("_singleEmployeeReportsPartial", response.Results);
+            return PartialView("_singleEmployeeReportsPartial", response);
         }
 
 

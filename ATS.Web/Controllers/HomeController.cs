@@ -248,8 +248,19 @@ namespace ATS.Web.Controllers
             var attendancedata = _dailyAttendanceService.GetAllAttendance(dm.Skip, dm.Take);
             return Json(new { result = attendancedata.Data, count = attendancedata.Count }, JsonRequestBehavior.AllowGet);
         }
-        
 
+        public ActionResult EmployeeShifts()
+        {
+            var weekOffMain = new List<SelectListItem>
+                                    {
+                              //new SelectListItem{ Text="Select", Value = "0" },
+                            new SelectListItem{ Text="A shift (6am to 2pm)", Value = "1" },
+                            new SelectListItem{ Text="B shift (2pm to 10pm)", Value = "2" },
+                            new SelectListItem{ Text="C shift (10pm to 6am)", Value = "3" },
+                            new SelectListItem{ Text="G shift (8am to 5pm)", Value = "4" },                            
+                                    };
+            return Json(weekOffMain, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Roles()
         {
             var roles = new List<SelectListItem>

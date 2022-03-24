@@ -13,12 +13,14 @@ using FluentValidation;
 
 namespace ATS.Service.Masters
 {
-    public class MasterService:IMasterService
+    public class MasterService : IMasterService
     {
         private readonly IGenericRepository<Department> _departmentRepository;
         private readonly IGenericRepository<Designation> _designationRepository;
-        private readonly IGenericRepository<Role> _roleRepository;      
+        private readonly IGenericRepository<Role> _roleRepository;
         private readonly IGenericRepository<UserAccount> _accountRepository;
+        private readonly IGenericRepository<Leaves> _leavesRepository;
+        private readonly IGenericRepository<EmployeeLeave> _employeeLeaveRepository;
         private readonly IEncryptionService _encryptionService;
         private readonly IUnitOfWork _unitOfWrk;
 
@@ -26,17 +28,20 @@ namespace ATS.Service.Masters
         private readonly IValidatorFactory _validatorFactory;
         private readonly INotify _notify;
 
-        public MasterService(IGenericRepository<Department> departmentRepository, 
+        public MasterService(IGenericRepository<Department> departmentRepository,
             IGenericRepository<Designation> designationRepository,
-            IGenericRepository<Role> roleRepository, IGenericRepository<UserAccount> accountRepository, 
-            IEncryptionService encryptionService,
-            IUnitOfWork unitOfWrk, IValidatorFactory validatorFactory, INotify notify)
+            IGenericRepository<Role> roleRepository, IGenericRepository<UserAccount> accountRepository,
+            IEncryptionService encryptionService, IGenericRepository<Leaves> leavesRepository,
+            IGenericRepository<EmployeeLeave> employeeLeaveRepository,
+        IUnitOfWork unitOfWrk, IValidatorFactory validatorFactory, INotify notify)
         {
 
             this._departmentRepository = departmentRepository;
             this._designationRepository = designationRepository;
-            this._roleRepository = roleRepository;            
+            this._roleRepository = roleRepository;
             this._accountRepository = accountRepository;
+            this._leavesRepository = leavesRepository;
+            this._employeeLeaveRepository = employeeLeaveRepository;
             this._encryptionService = encryptionService;
             this._unitOfWrk = unitOfWrk;
 
@@ -49,9 +54,10 @@ namespace ATS.Service.Masters
 
         public IEnumerable<DepartmentViewModel> GetAllDepartmentsForAutoSearch()
         {
-            return _departmentRepository.GetAll().Where(x => x.IsDelete == false).Select(x=> new DepartmentViewModel {
-                ID= x.ID,
-                Name= x.Name
+            return _departmentRepository.GetAll().Where(x => x.IsDelete == false).Select(x => new DepartmentViewModel
+            {
+                ID = x.ID,
+                Name = x.Name
             });
         }
 
@@ -70,7 +76,7 @@ namespace ATS.Service.Masters
             return _departmentRepository.GetQueryable().FirstOrDefault(x => x.Name.ToLower() == name.ToLower() && x.IsDelete == false);
         }
         public long AddDepartment(Department department)
-        {            
+        {
             var validator = _validatorFactory.GetValidator<Department>();
             //validator.ValidateAndThrow(state);
 
@@ -181,7 +187,7 @@ namespace ATS.Service.Masters
                     UserName = x.UserName,
                     RoleID = x.RoleID
                     //Password= _encryptionService.DecryptText,
-                    
+
                 }).OrderByDescending(x => x.Id).Skip(skip).Take(take).ToList();
 
                 res.Count = user.Count();
@@ -201,7 +207,7 @@ namespace ATS.Service.Masters
                 CreatedBy = 1,
                 CreatedOn = DateTime.Now,
                 IsActive = true,
-                RoleID = account.RoleID                
+                RoleID = account.RoleID
             };
             _accountRepository.Insert(user);
             _unitOfWrk.Save();
@@ -228,7 +234,7 @@ namespace ATS.Service.Masters
                 IsActive = true,
                 RoleID = account.RoleID
             };
-           
+
             _accountRepository.Update(user);
             _unitOfWrk.Save();
             return user.ID;
@@ -272,6 +278,164 @@ namespace ATS.Service.Masters
             _roleRepository.Update(role);
             _unitOfWrk.Save();
         }
+        #endregion
+
+        #region Leaves
+
+        public IEnumerable<LeavesViewModel> GetAllLeavesTypeForAutoSearch()
+        {
+            return _leavesRepository.GetAll().Where(x => x.IsDelete == false).Select(x => new LeavesViewModel
+            {
+                ID = x.ID,
+                Name = x.Name
+            });
+        }
+
+        public IEnumerable<Leaves> GetAllLeaves()
+        {
+            return _leavesRepository.GetAll().Where(x => x.IsDelete == false);
+        }
+
+        public Leaves GetLeave(Int64 id)
+        {
+            return _leavesRepository.FirstOrDefault(x => x.ID == id);
+        }
+
+        public Leaves GetLeaves(string name)
+        {
+            return _leavesRepository.GetQueryable().FirstOrDefault(x => x.Name.ToLower() == name.ToLower() && x.IsDelete == false);
+        }
+        public long AddLeave(Leaves leave)
+        {
+            var validator = _validatorFactory.GetValidator<Leaves>();
+            //validator.ValidateAndThrow(state);
+
+            var res = validator.Validate(leave, ruleSet: "Add");
+            if (!res.IsValid)
+            {
+                foreach (var item in res.Errors)
+                    _notify.AddMessage(item.ErrorMessage);
+                return 0;
+            }
+
+            _leavesRepository.Insert(leave);
+            _unitOfWrk.Save();
+
+            return leave.ID;
+        }
+
+        public long UpdateLeaveType(Leaves leave)
+        {
+            var validator = _validatorFactory.GetValidator<Leaves>();
+
+            var res = validator.Validate(leave, ruleSet: "Update");
+            if (!res.IsValid)
+            {
+                foreach (var item in res.Errors)
+                    _notify.AddMessage(item.ErrorMessage);
+                return 0;
+            }
+            _leavesRepository.Update(leave);
+            _unitOfWrk.Save();
+            return leave.ID;
+        }
+
+        #endregion
+
+
+        #region EmployeeLeaves
+
+        public IEnumerable<EmployeeLeave> GetAllEmpLeaves()
+        {
+            return _employeeLeaveRepository.GetAll().Where(x => x.IsActive == false);
+        }
+
+        public ATSGridResponseModel<EmployeeLeaveViewModel> GetAllEmpLeaves(int skip, int take)
+        {
+            ATSGridResponseModel<EmployeeLeaveViewModel> res = new ATSGridResponseModel<EmployeeLeaveViewModel>();
+
+            var user = _employeeLeaveRepository.GetQueryable().Where(x => x.IsActive == true);
+
+            if (user != null)
+            {
+                res.Data = user.Select(x => new EmployeeLeaveViewModel
+                {
+                    Id = x.ID,
+                    Name = x.Name,
+                    EmployeeCode = x.EmployeeCode,
+                    LeaveStart = x.LeaveStart,
+                    LeaveEnd = x.LeaveEnd,
+                    LeaveType = x.LeaveType,
+                    ExceedingDays = x.ExceedingDays,
+                    Remark = x.Remark
+
+                }).OrderByDescending(x => x.Id).Skip(skip).Take(take).ToList();
+
+                res.Count = user.Count();
+            }
+            return res;
+        }
+        public long AddEmployeeLeaves(EmployeeLeaveViewModel empLeave)
+        {
+            var emp = new EmployeeLeave
+            {
+                EmployeeCode = empLeave.EmployeeCode,
+                Name = empLeave.Name,
+                LeaveStart = empLeave.LeaveStart,
+                LeaveEnd= empLeave.LeaveEnd,
+                ExceedingDays = empLeave.ExceedingDays,
+                LeaveType = empLeave.LeaveType,
+                Remark = empLeave.Remark,
+                CreatedBy = 1,
+                CreatedOn = DateTime.Now,
+                IsActive = true,                
+            };
+            _employeeLeaveRepository.Insert(emp);
+            _unitOfWrk.Save();
+            return emp.ID;
+        }
+
+        public EmployeeLeave GetEmployeeLeave(Int64 id)
+        {
+            return _employeeLeaveRepository.FirstOrDefault(x => x.ID == id);
+        }
+
+        public long UpdateEmployeeLeave(EmployeeLeaveViewModel empLeave)
+        {
+            var emp = new EmployeeLeave
+            {
+                EmployeeCode = empLeave.EmployeeCode,
+                Name = empLeave.Name,
+                LeaveStart = empLeave.LeaveStart,
+                LeaveEnd = empLeave.LeaveEnd,
+                ExceedingDays = empLeave.ExceedingDays,
+                LeaveType = empLeave.LeaveType,
+                Remark = empLeave.Remark,
+                CreatedBy = 1,
+                CreatedOn = DateTime.Now,
+                IsActive = true,
+            };
+
+            _employeeLeaveRepository.Update(emp);
+            _unitOfWrk.Save();
+            return emp.ID;
+        }
+
+        public bool DeleteEmpLeave(long ID)
+        {
+            bool result = false;
+            var user = _employeeLeaveRepository.GetWithInclude(x => x.ID == ID && x.IsActive == true).FirstOrDefault();
+            if (user != null)
+            {
+                user.IsActive = false;
+                _employeeLeaveRepository.Update(user);
+                _unitOfWrk.Save();
+                result = true;
+
+            }
+            return result;
+        }
+
         #endregion
     }
 }

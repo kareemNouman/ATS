@@ -62,5 +62,23 @@ namespace ATS.Service.Masters
         void UpdateRole(Role role);
 
         #endregion
+
+        #region Leaves
+        IEnumerable<LeavesViewModel> GetAllLeavesTypeForAutoSearch();
+        IEnumerable<Leaves> GetAllLeaves();
+        Leaves GetLeave(Int64 id);
+        Leaves GetLeaves(string name);
+        long AddLeave(Leaves leave);
+        long UpdateLeaveType(Leaves leave);
+        #endregion
+
+        #region EmployeeLeaves
+        bool DeleteEmpLeave(long ID);
+        long UpdateEmployeeLeave(EmployeeLeaveViewModel empLeave);
+        EmployeeLeave GetEmployeeLeave(Int64 id);
+        long AddEmployeeLeaves(EmployeeLeaveViewModel empLeave);
+        ATSGridResponseModel<EmployeeLeaveViewModel> GetAllEmpLeaves(int skip, int take);
+        IEnumerable<EmployeeLeave> GetAllEmpLeaves();
+        #endregion
     }
 }

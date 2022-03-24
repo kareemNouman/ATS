@@ -67,6 +67,12 @@
                             @Html.ValidationMessageFor(x => x.WeeklyOffAlternate)
                         </div>
                         <div class="form-group form-material">
+                            <label class="control-label" for="select">Employee Shift Code</label> *
+                            @(Html.EJ().DropDownList("EmployeeShiftsCode").Datasource(ds => ds.URL(Url.Action("EmployeeShifts", "Home")))
+.DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Shift Code").Width("100%").ClientSideEvents(x => x.ActionComplete("fnEmployeeShiftsCode_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.ShiftCode)
+                        </div>
+                        <div class="form-group form-material">
                             <label class="control-label" for="select">Date of ReJoinning</label> *
                             <div class="input-group">
                                 <span class="input-group-addon">
@@ -169,6 +175,11 @@
             target.selectItemByValue(@Model.WeeklyOffAlternate);
         }
 
+         function fnEmployeeShiftsCode_actioncomplete(sender) {
+            target = $("#EmployeeShiftsCode").data("ejDropDownList");
+            target.selectItemByValue(@Model.ShiftCode);
+        }
+
         function fnDepertment_actioncomplete(sender) {
             var target = $("#DepartmentID").data("ejDropDownList");
             target.selectItemByValue('@Model.DepartmentID');
@@ -200,6 +211,14 @@
             }
             else
                 $("#WeekOffMain").css("border", "");
+
+
+            if (!$("#EmployeeShiftsCode").val()) {
+                $("#EmployeeShiftsCode").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#EmployeeShiftsCode").css("border", "");
 
             if (!$("#WeeklyOffAlternate").val()) {
                 $("#WeeklyOffAlternate").css("border", "1px solid red");

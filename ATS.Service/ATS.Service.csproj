@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>   
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -72,8 +72,9 @@
     <Compile Include="Validators\DepartmentValidator.cs" />
     <Compile Include="Validators\DesignationValidator.cs" />
     <Compile Include="Validators\EmployeeValidation.cs" />
+    <Compile Include="Validators\LeavesValidator.cs" />
   </ItemGroup>
-  <ItemGroup>  
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -61,7 +61,8 @@ namespace ATS.Service.Employees
                     OTThreshold = x.OTThreshold,       
                     Gross = x.Gross,
                     IsOTEligible = x.IsOTEligible,
-                    DORJ = x.DORJ,                    
+                    DORJ = x.DORJ             
+                    //ShiftCode =x.ShiftCode
                 }).OrderByDescending(x => x.Id).Skip(skip).Take(take).ToList();
 
                 res.Count = employee.Count();
@@ -162,6 +163,7 @@ namespace ATS.Service.Employees
                 Gross = x.Gross.Value,
                 OTThreshold = x.OTThreshold,
                 WeekOffMain = x.WeekOffMain,
+                ShiftCode = x.ShiftCode,
                 WeeklyOffAlternate= x.WeeklyOffAlternate,
                 IsOTEligible = x.IsOTEligible,
                 IsActive = x.IsActive,

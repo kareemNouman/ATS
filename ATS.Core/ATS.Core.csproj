@@ -52,13 +52,17 @@
     <Compile Include="Domain\DomainModels\Department.cs" />
     <Compile Include="Domain\DomainModels\Designation.cs" />
     <Compile Include="Domain\DomainModels\Employee.cs" />
+    <Compile Include="Domain\DomainModels\EmployeeLeave.cs" />
+    <Compile Include="Domain\DomainModels\Leaves.cs" />
     <Compile Include="Domain\DomainModels\LogException.cs" />
     <Compile Include="Domain\DomainModels\Role.cs" />
     <Compile Include="Domain\DomainModels\UserAccount.cs" />
     <Compile Include="Domain\DTO\AttendanceViewModel.cs" />
     <Compile Include="Domain\DTO\DepartmentViewModel.cs" />
     <Compile Include="Domain\DTO\DesignationViewModel.cs" />
+    <Compile Include="Domain\DTO\EmployeeLeaveViewModel.cs" />
     <Compile Include="Domain\DTO\EmployeeViewModel.cs" />
+    <Compile Include="Domain\DTO\LeavesViewModel.cs" />
     <Compile Include="Domain\DTO\PaymentViewModel.cs" />
     <Compile Include="Domain\DTO\PayToAttendanceViewModel.cs" />
     <Compile Include="Domain\DTO\UserAccountViewModel.cs" />

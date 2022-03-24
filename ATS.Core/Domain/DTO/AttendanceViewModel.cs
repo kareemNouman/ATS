@@ -33,7 +33,32 @@ namespace ATS.Core.Domain.DTO
 
         public Nullable<decimal> TotalOT { get; set; }
         public Nullable<decimal> Total { get; set; }
+
+        public Nullable<decimal> OT1Amount { get; set; }
+        public Nullable<decimal> OT2Amount { get; set; }
+        public Nullable<decimal> OT3Amount { get; set; }
+        public Nullable<decimal> OT4Amount { get; set; }
+        public Nullable<decimal> OTTotalHours { get; set; }
+        public Nullable<decimal> OTTotalAmount { get; set; }
+
+        public Nullable<decimal> OthersAmount { get; set; }
+        public Nullable<decimal> BonusAmount { get; set; }
+
+        public Nullable<decimal> GrandTotal { get; set; }
+        public Nullable<decimal> Deduction { get; set; }
+
+        public Nullable<decimal> NetAmount { get; set; }
+
         public Nullable<System.DateTime> Date { get; set; }
+
+        //public Nullable<decimal> Basic { get; set; }
+
+        //public Nullable<decimal> SplAllowance { get; set; }
+        //public Nullable<decimal> Col { get; set; }
+        //public Nullable<decimal> OthersAllowance { get; set; }
+        //public Nullable<decimal> Conveyance { get; set; }
+        //public Nullable<decimal> Housing { get; set; }
+        //public Nullable<decimal> Gross { get; set; }
         public string Status { get; set; }
         public bool? IsActive { get; set; }
 
