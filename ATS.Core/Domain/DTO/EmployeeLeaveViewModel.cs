@@ -12,7 +12,7 @@ namespace ATS.Core.Domain.DTO
         public Nullable<long> EmployeeCode { get; set; }
 
         public string Name { get; set; }
-
+        public Nullable<long> EmployeeId { get; set; }
         public Nullable<System.DateTime> LeaveStart { get; set; }
 
         public Nullable<System.DateTime> LeaveEnd { get; set; }

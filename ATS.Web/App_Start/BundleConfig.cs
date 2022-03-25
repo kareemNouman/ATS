@@ -10,9 +10,8 @@ namespace ATS.Web
         {
 
             bundles.Clear();
-            bundles.ResetAll();
-
-            BundleTable.EnableOptimizations = true;
+            bundles.ResetAll();            
+            BundleTable.EnableOptimizations = false;
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                        "~/Content/Loader.css",

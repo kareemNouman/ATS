@@ -22,7 +22,7 @@
                         <div class="example">
                             <ul class="list-unstyled">
                                 <li class="margin-bottom-20">
-                                    <a href="/Employee/AddEmployee" class="btn btn-block btn-primary">ADD EMPLOYEE</a>
+                                    <a href=@Url.Action("AddEmployee","Employee") class="btn btn-block btn-primary">ADD EMPLOYEE</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,10 +31,10 @@
 
 
                 <script type="text/x-jsrender" id="columnTemplateEdit">
-                    <a href="/Employee/Detail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
+                    <a href="Employee/Detail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
                 </script>
                 <script type="text/x-jsrender" id="columnTemplateDelete">
-                    <a href="/Employee/Delete/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
+                    <a href="Employee/Delete/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
                 </script>
 
                 @*<script type="text/x-jsrender" id="typeTemplate">

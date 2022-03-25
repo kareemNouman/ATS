@@ -7,6 +7,7 @@ using ATS.Core.Domain.DomainModels;
 using ATS.Core.Domain.DTO;
 using ATS.Core.Domain.ResponseModels;
 using ATS.Data;
+using ATS.Service.Employees;
 using ATS.Service.Messages;
 using ATS.Service.Security;
 using FluentValidation;
@@ -27,12 +28,13 @@ namespace ATS.Service.Masters
 
         private readonly IValidatorFactory _validatorFactory;
         private readonly INotify _notify;
+        private readonly IEmployeeService _employeeService;
 
         public MasterService(IGenericRepository<Department> departmentRepository,
             IGenericRepository<Designation> designationRepository,
             IGenericRepository<Role> roleRepository, IGenericRepository<UserAccount> accountRepository,
             IEncryptionService encryptionService, IGenericRepository<Leaves> leavesRepository,
-            IGenericRepository<EmployeeLeave> employeeLeaveRepository,
+            IGenericRepository<EmployeeLeave> employeeLeaveRepository, IEmployeeService employeeService,
         IUnitOfWork unitOfWrk, IValidatorFactory validatorFactory, INotify notify)
         {
 
@@ -43,6 +45,7 @@ namespace ATS.Service.Masters
             this._leavesRepository = leavesRepository;
             this._employeeLeaveRepository = employeeLeaveRepository;
             this._encryptionService = encryptionService;
+            this._employeeService = employeeService;
             this._unitOfWrk = unitOfWrk;
 
             _validatorFactory = validatorFactory;
@@ -377,10 +380,11 @@ namespace ATS.Service.Masters
         }
         public long AddEmployeeLeaves(EmployeeLeaveViewModel empLeave)
         {
+            var employeeDetails = _employeeService.GetEmployeeByID(empLeave.EmployeeId.Value);
             var emp = new EmployeeLeave
             {
-                EmployeeCode = empLeave.EmployeeCode,
-                Name = empLeave.Name,
+                EmployeeCode = employeeDetails.EmployeeCode,
+                Name = employeeDetails.Name,
                 LeaveStart = empLeave.LeaveStart,
                 LeaveEnd= empLeave.LeaveEnd,
                 ExceedingDays = empLeave.ExceedingDays,
@@ -402,10 +406,11 @@ namespace ATS.Service.Masters
 
         public long UpdateEmployeeLeave(EmployeeLeaveViewModel empLeave)
         {
+            var employeeDetails = _employeeService.GetEmployeeByID(empLeave.EmployeeId.Value);
             var emp = new EmployeeLeave
             {
-                EmployeeCode = empLeave.EmployeeCode,
-                Name = empLeave.Name,
+                EmployeeCode = employeeDetails.EmployeeCode,
+                Name = employeeDetails.Name,
                 LeaveStart = empLeave.LeaveStart,
                 LeaveEnd = empLeave.LeaveEnd,
                 ExceedingDays = empLeave.ExceedingDays,

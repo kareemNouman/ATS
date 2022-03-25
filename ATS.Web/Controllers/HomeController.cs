@@ -271,5 +271,20 @@ namespace ATS.Web.Controllers
             return Json(roles, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult LeaveTypes()
+        {
+            var leaves = _masterService.GetAllLeaves();
+            List<ATS.Core.Domain.DTO.LeavesViewModel> viewModel = new List<ATS.Core.Domain.DTO.LeavesViewModel>();
+            foreach (var item in leaves)
+            {
+                ATS.Core.Domain.DTO.LeavesViewModel model = new ATS.Core.Domain.DTO.LeavesViewModel();
+                model.ID = item.ID;
+                model.Name = item.Name;
+                model.IsDelete = item.IsDelete;
+                viewModel.Add(model);
+            }
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

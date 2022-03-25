@@ -1,0 +1,196 @@
+﻿
+@model ATS.Core.Domain.DTO.EmployeeLeaveViewModel
+@{
+    ViewBag.Title = "EmployeeLeavesDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Employee Leave Update</h1>
+</div>
+
+
+<div class="page-content">
+    @using (Html.BeginForm("EmployeeLeavesDetail", "Master", FormMethod.Post, new { id = "atsempleaveform" }))
+    {
+        @Html.HiddenFor(x => x.EmployeeId)
+        @*@Html.HiddenFor(x => x.EmployeeCode)*@
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">* Feilds are Mandatory</h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Employee Name</label> *
+                            @{
+
+                                Html.EJ()
+                                .Autocomplete("Employee").CssClass("form-control")
+                                .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                .AutocompleteFields(e => e.Text("Name").Key("Id"))
+                                .ShowPopupButton(true).WatermarkText("Search Employee").Width("100%")
+                                .ClientSideEvents(e => e.Change("EmployeeChange").FocusOut("focusOut").ActionComplete("EmployeeSelected"))
+                                .Render();
+
+                            }
+                        </div>
+                        @*<div class="form-group form-material">
+                                <label class="control-label" for="inputText">Employee Code</label> *
+                                @{
+
+                                    Html.EJ()
+                                    .Autocomplete("EmpCode").CssClass("form-control")
+                                    .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                    .AutocompleteFields(e => e.Text("EmployeeCode").Key("Id"))
+                                    .ShowPopupButton(true).WatermarkText("Search EmployeeCode").Width("100%")
+                                    .ClientSideEvents(e => e.Change("EmployeeCodeChange").FocusOut("focusOut").ActionComplete("EmployeeCodeSelected"))
+                                    .Render();
+
+                                }
+                            </div>*@
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Leave Start</label> *
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                                </span>
+                                <input type="text" class="form-control" id="LeaveStart" name="LeaveStart" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                            </div>
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Leave End</label> *
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                                </span>
+                                <input type="text" class="form-control" id="LeaveEnd" name="LeaveEnd" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                            </div>
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="select">Leave Type</label> *
+                            @(Html.EJ().DropDownList("LeaveType").Datasource(ds => ds.URL(Url.Action("LeaveTypes", "Home")))
+                        .DropDownListFields(f => f.Text("Name").Value("ID")).CssClass("").WatermarkText("Select a Type").Width("100%")
+                        .ClientSideEvents(x => x.ActionComplete("fnLeaveTypes_actioncomplete")))
+                            @Html.ValidationMessageFor(x => x.LeaveType)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Remark</label> *
+                            @Html.TextBoxFor(x => x.Remark, new { @class = "form-control empty", @placeholder = "Remark" })
+                        </div>
+                        <div class="form-group form-material" style="text-align:center">
+                            <div class="example">
+                                <button type="submit" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Save</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                                <button type="submit" value="saveandprint" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
+                                    <span class="ladda-label">Cancel</span>
+                                    <span class="ladda-spinner"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@section ejs{
+    <script>
+
+          function fnLeaveTypes_actioncomplete(sender) {
+            var target = $("#LeaveType").data("ejDropDownList");
+              target.selectItemByValue('@Model.LeaveType');
+        }
+
+
+        $("#atsempleaveform").submit(function (event) {
+
+            if (!$("#LeaveStart").val()) {
+                $("#LeaveStart").css("border-bottom", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#LeaveStart").css("border-bottom", "");
+
+            if (!$("#LeaveEnd").val()) {
+                $("#LeaveEnd").css("border-bottom", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#LeaveEnd").css("border-bottom", "");
+
+            if (!$("#LeaveType").val()) {
+                $("#LeaveType").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#LeaveType").css("border", "");
+
+
+        })
+
+        function EmployeeChange(args) {
+            var utocompleteObj = $("#Employee").data("Employee");
+            var id = args.model.selectValueByKey;
+            $("#EmployeeId").val(id);
+        };
+
+        //function EmployeeCodeChange(args) {
+        //    var utocompleteObj = $("#EmpCode").data("EmpCode");
+        //    var id = args.model.value;
+        //    $("#EmployeeCode").val(id);
+        //};
+
+
+
+    </script>
+}
+@section afterscripts{
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+    <script>
+
+        //$(document).ready(function () {
+        //    $('.input-validation-error').parents('.form-group').addClass('has-error');
+        //    $('.field-validation-error').addClass('text-danger');
+        //});
+
+        $(document).ready(function () {
+            var form = $('#atsempleaveform')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function (label, element) {
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function (label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+    </script>
+
+}
+

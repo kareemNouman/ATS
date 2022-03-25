@@ -3487,6 +3487,9 @@
     <Content Include="Views\Reports\OverTimeEmployeeReport.cshtml" />
     <Content Include="Views\Reports\EmployeePayrollReport.cshtml" />
     <Content Include="Views\Master\LeavesType.cshtml" />
+    <Content Include="Views\Master\EmployeeLeaves.cshtml" />
+    <Content Include="Views\Master\AddEmployeeLeaves.cshtml" />
+    <Content Include="Views\Master\EmployeeLeavesDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

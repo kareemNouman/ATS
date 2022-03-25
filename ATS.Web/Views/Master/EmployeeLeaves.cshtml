@@ -1,18 +1,19 @@
 ﻿
+
 @model ATS.Core.Domain.DTO.UserAccountViewModel
 
 @using Syncfusion.MVC.EJ
 @using Syncfusion.JavaScript.Web
 
 @{
-    ViewBag.Title = "Users";
+    ViewBag.Title = "EmployeeLeaves";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
 <div class="panel">
     <header class="panel-heading">
-        <h3 class="panel-title">Users</h3>
+        <h3 class="panel-title">Employee Leaves</h3>
     </header>
     <div class="panel-body">
         <div class="row">
@@ -23,7 +24,7 @@
                         <div class="example">
                             <ul class="list-unstyled">
                                 <li class="margin-bottom-20">
-                                    <a href="@Url.Action("AddUsers","Master")" class="btn btn-block btn-primary">ADD USER</a>
+                                    <a href="@Url.Action("AddEmployeeLeaves","Master")" class="btn btn-block btn-primary">ADD LEAVE</a>
                                 </li>
                             </ul>
                         </div>
@@ -32,25 +33,14 @@
 
 
                 <script type="text/x-jsrender" id="columnTemplateEdit">
-                    <a href="UserDetail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
+                    <a href="EmployeeLeavesDetail/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
                 </script>
                 <script type="text/x-jsrender" id="columnTemplateDelete">
-                    <a href="UserDelete/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
-                </script>
-                <script type="text/x-jsrender" id="typeTemplate">
-                    <a>
-                        {{if RoleID=="1"}}
-                        Admin
-                        {{/if}}
-                        {{if RoleID=="2"}}
-                        Attendance Tracker
-                        {{/if}}                      
-                    </a>
+                    <a href="EmployeeLeavesDetail/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
+                </script>                
 
-              </script>
-
-                @(Html.EJ().Grid<ATS.Core.Domain.DTO.UserAccountViewModel>("FlatGrid")
-                .Datasource(ds => ds.URL(Url.Action("UserData", "Master")).Adaptor("UrlAdaptor"))
+                @(Html.EJ().Grid<ATS.Core.Domain.DTO.EmployeeLeaveViewModel>("FlatGrid")
+                .Datasource(ds => ds.URL(Url.Action("EmployeeLeavesData", "Master")).Adaptor("UrlAdaptor"))
                  .AllowSorting()
                   .AllowPaging()
                   .PageSettings(x => x.PageSize(10))
@@ -58,8 +48,12 @@
          .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
                 .Columns(col =>
                 {
-                    col.Field("UserName").HeaderText("User Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-                    col.Field("RoleName").HeaderText("Role").Template(true).TemplateID("#typeTemplate").Width(80).Width(100).Add();
+                    col.Field("EmployeeCode").HeaderText("Employee Code").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+                    col.Field("Name").HeaderText("Name").Width(80).Width(100).Add();
+                    col.Field("LeaveStart").HeaderText("Leave Start").Width(80).Width(100).Format("{0:dd MMMM yyyy}").Add();
+                    col.Field("LeaveEnd").HeaderText("Leave End").Width(80).Width(100).Format("{0:dd MMMM yyyy}").Add();
+                    col.Field("LeaveType").HeaderText("Leave Type").Width(80).Width(100).Add();
+                    col.Field("Remark").HeaderText("Remark").Width(80).Width(100).Add();
                     col.Field("").HeaderText("Manage").Template(true).TemplateID("#columnTemplateEdit").Width(80).Add();
                     col.Field("").HeaderText("Delete").Template(true).TemplateID("#columnTemplateDelete").Width(80).Add();
                 }))
@@ -68,6 +62,7 @@
 
     </div>
 </div>
+
 
 
 

@@ -345,5 +345,110 @@ namespace ATS.Web.Controllers
         }
         #endregion
 
+        #region EmployeeLeaves
+
+        public ActionResult EmployeeLeaves()
+        {
+            return View();
+        }
+
+        // [NECAuthorize(Key = new string[] { NECPermissions.EmployeeCreate })]
+        public ActionResult AddEmployeeLeaves()
+        {
+            EmployeeLeaveViewModel viewModel = new EmployeeLeaveViewModel();
+            return View(viewModel);
+        }
+        [HttpPost]
+        //  [NECAuthorize(Key = new string[] { NECPermissions.EmployeeCreate })]
+        public ActionResult AddEmployeeLeaves(EmployeeLeaveViewModel viewmodel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewmodel);
+
+            var response = _masterService.AddEmployeeLeaves(viewmodel);
+            if (response != 0)
+            {
+                SuccessNotification(Convert.ToString("Leaves Added Successfully"));
+                return RedirectToAction("EmployeeLeaves");
+            }
+            else
+            {
+                ErrorNotification("Unable to Add Leaves for Employee.Please Tyr again");
+            }
+            return View(viewmodel);
+        }
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeUpdate })]
+        public ActionResult EmployeeLeavesDetail(long id = 0)
+        {
+            ATS.Core.Domain.DTO.EmployeeLeaveViewModel viewmodel = new ATS.Core.Domain.DTO.EmployeeLeaveViewModel();
+            if (id > 0)
+            {
+                var employeeLeave = _masterService.GetEmployeeLeave(id);
+                viewmodel.Id = employeeLeave.ID;
+                viewmodel.Name = employeeLeave.Name;
+                viewmodel.EmployeeCode= employeeLeave.EmployeeCode;
+                viewmodel.LeaveStart = employeeLeave.LeaveStart;
+                viewmodel.LeaveEnd = employeeLeave.LeaveEnd;
+                viewmodel.ExceedingDays = employeeLeave.ExceedingDays;
+                viewmodel.LeaveType = employeeLeave.LeaveType;
+                viewmodel.Remark= employeeLeave.Remark;
+            }
+            return View(viewmodel);
+        }
+
+        public ActionResult EmployeeLeavesDelete(long id = 0)
+        {
+            var result = _masterService.DeleteEmpLeave(id);
+            if (result)
+            {
+                SuccessNotification("Successfully Deleted Employee Leaves");
+            }
+            else
+                ErrorNotification("Unable to Delete Employee Leaves.Please Tyr again");
+            return View("EmployeeLeaves");
+        }
+
+        [HttpPost]
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeUpdate })]
+        public ActionResult EmployeeLeavesDetail(EmployeeLeaveViewModel viewmodel)
+        {
+            var userID = _masterService.UpdateEmployeeLeave(viewmodel);
+
+            if (userID != 0)
+            {
+                SuccessNotification("Employee Leaves Successfully Updated");
+            }
+            else
+            {
+                ErrorNotification("Something Went Wrong!Please Try Again");
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Users");
+        }
+        //    [NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
+        public JsonResult EmployeeLeavesData(DataManager dm)
+        {
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+
+            }
+            var userdata = _masterService.GetAllEmpLeaves(dm.Skip, dm.Take);
+            return Json(new { result = userdata.Data, count = userdata.Count }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult GetEmployeeLeavesDetails(string userId)
+        {
+            EmployeeLeaveViewModel model = new EmployeeLeaveViewModel();
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                model.Id = Convert.ToInt64(userId);
+            }
+            var usermodel = _masterService.GetEmployeeLeave(model.Id);
+            return Json(usermodel, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
     }
 }

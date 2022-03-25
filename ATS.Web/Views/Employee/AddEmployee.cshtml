@@ -78,8 +78,7 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="form-control" id="DORJ" name="DORJ" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
-                                @Html.ValidationMessageFor(x => x.DORJ)
+                                <input type="text" class="form-control" id="DORJ" name="DORJ" data-plugin="datepicker" data-date-format="mm/dd/yyyy">                             
                             </div>
                         </div>
                     </div>
@@ -188,7 +187,7 @@
         }
 
         function fnDesignation_actioncomplete(sender) {
-            var target = $("#DepartmentID").data("ejDropDownList");
+            var target = $("#DesignationID").data("ejDropDownList");
             target.selectItemByValue('@Model.DesignationID');
         }
 
