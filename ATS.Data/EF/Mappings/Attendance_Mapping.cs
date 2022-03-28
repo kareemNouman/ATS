@@ -18,6 +18,7 @@ namespace ATS.Data.EF.Mappings
             this.Property(x => x.EmployeeCode).HasColumnName("EmployeeCode");
             this.Property(x => x.Name).HasColumnName("Name");
             this.Property(x => x.Designation).HasColumnName("Designation");
+            this.Property(x => x.Department).HasColumnName("Department");
             this.Property(x => x.TimeIn).HasColumnName("TimeIn");
             this.Property(x => x.TimeOut).HasColumnName("TimeOut");
             this.Property(x => x.TotalHours).HasColumnName("TotalHours");

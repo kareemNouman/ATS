@@ -365,6 +365,7 @@ namespace ATS.Service.Masters
                 {
                     Id = x.ID,
                     Name = x.Name,
+                    EmployeeId = x.EmployeeID,
                     EmployeeCode = x.EmployeeCode,
                     LeaveStart = x.LeaveStart,
                     LeaveEnd = x.LeaveEnd,
@@ -383,8 +384,11 @@ namespace ATS.Service.Masters
             var employeeDetails = _employeeService.GetEmployeeByID(empLeave.EmployeeId.Value);
             var emp = new EmployeeLeave
             {
+                EmployeeID = empLeave.EmployeeId,
                 EmployeeCode = employeeDetails.EmployeeCode,
                 Name = employeeDetails.Name,
+                DepartmentID = empLeave.DepartmentID,
+                DesignationID = empLeave.DesignationID,
                 LeaveStart = empLeave.LeaveStart,
                 LeaveEnd= empLeave.LeaveEnd,
                 ExceedingDays = empLeave.ExceedingDays,
@@ -409,8 +413,11 @@ namespace ATS.Service.Masters
             var employeeDetails = _employeeService.GetEmployeeByID(empLeave.EmployeeId.Value);
             var emp = new EmployeeLeave
             {
+                EmployeeID = empLeave.EmployeeId,
                 EmployeeCode = employeeDetails.EmployeeCode,
                 Name = employeeDetails.Name,
+                DepartmentID = employeeDetails.DepartmentID,
+                DesignationID = employeeDetails.DesignationID,
                 LeaveStart = empLeave.LeaveStart,
                 LeaveEnd = empLeave.LeaveEnd,
                 ExceedingDays = empLeave.ExceedingDays,

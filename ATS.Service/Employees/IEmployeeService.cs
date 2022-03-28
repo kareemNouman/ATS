@@ -18,7 +18,7 @@ namespace ATS.Service.Employees
         ATSGridResponseModel<EmployeeViewModel> GetAllEmployee(int skip, int take);
 
         Employee GetEmployee(Int64 id);
-
+        EmployeeViewModel GetEmployeeByCode(long empCode);
 
         EmployeeViewModel GetEmployeeByID(Int64 id);      
 

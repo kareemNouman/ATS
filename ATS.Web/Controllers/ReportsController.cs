@@ -271,5 +271,63 @@ namespace ATS.Web.Controllers
             return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
         }
         #endregion
+
+
+        #region EmployeeLeaveReport
+        //[NECAuthorize(Key = new string[] { NECPermissions.SalaryReport })]
+
+        public ActionResult EmployeeLeaveReport()
+        {
+            EmployeeLeaveViewModel model = new EmployeeLeaveViewModel();
+            return View(model);
+        }
+
+        public ActionResult EmployeeLeaveReportDataSource(DataManager dm, string startdate, string enddate, string departmentid, string employeecode, string employeename, string print, string pdf)
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
+            enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;            
+            if (pdf == "true")
+            {
+                request.PageSize = 1700;
+                request.Page = 0;
+            }
+            else
+            {
+                request.PageSize = string.IsNullOrWhiteSpace(print) ? dm.Take : 1700;
+                request.Page = string.IsNullOrWhiteSpace(print) ? dm.Skip : 0;
+            }
+            request.Filters.Add("startdate", startdate);
+            request.Filters.Add("enddate", enddate);            
+
+            var response = _reportService.EmployeeLeaveReport(request);
+
+            //var responseData = response;
+            if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
+                return Json(new { result = response.Results, count = response.TotalNumberOfRecords });
+            else if (!string.IsNullOrWhiteSpace(pdf))
+            {
+                ViewBag.IsPDF = true;
+                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            }
+            return PartialView("_singleEmployeeReportsPartial", response.Results);
+        }
+
+
+        public ActionResult EmployeeLeaveReportPDF()
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            string print = "";
+
+            request.PageSize = 1000;
+            request.Page = 0;
+            var response = _reportService.EmployeeLeaveReport(request);
+
+            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+        }
+
+        #endregion
     }
 }

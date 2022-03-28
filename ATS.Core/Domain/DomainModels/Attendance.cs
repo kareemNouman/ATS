@@ -13,7 +13,7 @@ namespace ATS.Core.Domain.DomainModels
         public string Name { get; set; }
 
         public string Designation { get; set; }
-
+        public string Department { get; set; }
         public string TimeIn { get; set; }
 
         public string TimeOut { get; set; }

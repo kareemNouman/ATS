@@ -14,18 +14,22 @@ namespace ATS.Service.Employees
 {
     public class EmployeeService: IEmployeeService
     {
-        private readonly IGenericRepository<Employee> _employeeRepository;        
+        private readonly IGenericRepository<Employee> _employeeRepository;
+        private readonly IGenericRepository<Designation> _designationRepository;
+        private readonly IGenericRepository<Department> _departmentRepository;
         private readonly IUnitOfWork _unitOfWrk;
 
         private readonly IValidatorFactory _validatorFactory;
         private readonly INotify _notify;
 
-        public EmployeeService(IGenericRepository<Employee> employeeRepository, 
+        public EmployeeService(IGenericRepository<Employee> employeeRepository, IGenericRepository<Designation> designationRepository,
+            IGenericRepository<Department> departmentRepository,
             IUnitOfWork unitOfWrk,IValidatorFactory validatorFactory, INotify notify)
         {
             this._employeeRepository = employeeRepository;            
             this._unitOfWrk = unitOfWrk;
-
+            this._designationRepository = designationRepository;
+            this._departmentRepository = departmentRepository;
             _validatorFactory = validatorFactory;
             _notify = notify;
         }
@@ -172,6 +176,37 @@ namespace ATS.Service.Employees
             }).FirstOrDefault();
         }
 
+        public EmployeeViewModel GetEmployeeByCode(long empCode)
+        {
+            //var emp = _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).ToList();
+            return _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).Select(x => new EmployeeViewModel
+            {
+                Id = x.ID,
+                Name = x.Name,
+                Email = x.Email,
+                EmployeeCode = x.EmployeeCode,
+                DesignationID = x.DesignationID,
+                DepartmentID = x.DepartmentID,
+                Designation = x.DesignationID != null ? _designationRepository.GetByID(x.DesignationID).Name : string.Empty,
+                Department = x.DepartmentID != null ? _departmentRepository.GetByID(x.DepartmentID).Name : string.Empty,
+                DORJ = x.DORJ,
+                Basic = x.Basic,
+                SplAllowance = x.SplAllowance,
+                Col = x.Col,
+                OthersAllowance = x.OthersAllowance,
+                Conveyance = x.Conveyance.Value,
+                Housing = x.Housing.Value,
+                Gross = x.Gross.Value,
+                OTThreshold = x.OTThreshold,
+                WeekOffMain = x.WeekOffMain,
+                ShiftCode = x.ShiftCode,
+                WeeklyOffAlternate = x.WeeklyOffAlternate,
+                IsOTEligible = x.IsOTEligible,
+                IsActive = x.IsActive,
+                CreatedBy = x.CreatedBy,
+                CreatedOn = x.CreatedOn
+            }).FirstOrDefault();
+        }
         public bool Delete(long ID)
         {
             bool result = false;

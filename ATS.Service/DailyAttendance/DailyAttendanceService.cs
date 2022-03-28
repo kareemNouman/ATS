@@ -117,6 +117,11 @@ namespace ATS.Service.DailyAttendance
             return _attendanceRepository.FirstOrDefault(x => x.ID == id && x.IsActive == true);
         }
 
+        public Attendance GetAttendanceByDate(DateTime date)
+        {
+            return _attendanceRepository.FirstOrDefault(x => x.Date == date && x.IsActive == true);
+        }
+
         public void UpdateAttendance(Attendance attendance)
         {
             _attendanceRepository.Update(attendance);
@@ -241,5 +246,18 @@ namespace ATS.Service.DailyAttendance
             }
             return result;
         }
+
+        public bool DeleteByDate(DateTime date)
+        {
+            var attendance = _attendanceRepository.GetWithInclude(x => x.Date == date && x.IsActive == true).ToList();
+            foreach (var item in attendance)
+            {
+                _attendanceRepository.Delete(item.ID);
+            }
+            _unitOfWrk.Save();
+            return true;
+        }
+
+             
     }
 }

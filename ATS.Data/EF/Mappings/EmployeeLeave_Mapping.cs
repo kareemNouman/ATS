@@ -22,6 +22,9 @@ namespace ATS.Data.EF.Mappings
             this.Property(x => x.ExceedingDays).HasColumnName("ExceedingDays");
             this.Property(x => x.LeaveType).HasColumnName("LeaveType");
             this.Property(x => x.Remark).HasColumnName("Remark");
+            this.Property(x => x.DepartmentID).HasColumnName("DepartmentID");
+            this.Property(x => x.DesignationID).HasColumnName("DesignationID");
+            this.Property(x => x.EmployeeID).HasColumnName("EmployeeID");
             this.Property(x => x.IsActive).HasColumnName("IsActive");
             this.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
             this.Property(x => x.CreatedOn).HasColumnName("CreatedOn");

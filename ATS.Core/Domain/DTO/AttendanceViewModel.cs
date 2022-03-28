@@ -15,6 +15,8 @@ namespace ATS.Core.Domain.DTO
 
         public string Designation { get; set; }
 
+        public string Department { get; set; }
+
         public string TimeIn { get; set; }
 
         public string TimeOut { get; set; }

@@ -272,7 +272,7 @@ namespace ATS.Web.Controllers
 
         #endregion
 
-        #region Department
+        #region LeaveTypes
         //[NECAuthorize(Key = new string[] { NECPermissions.Department })]
         public ActionResult LeavesType()
 

@@ -65,32 +65,80 @@ namespace ATS.Web.Controllers
                 }
 
                 var lastRow = workSheet.Dimension.End.Row;
-
+                DeleteExistAttendance(Convert.ToDateTime(attendancedate));
                 for (int i = 7; i <= lastRow; i++)
                 {
                     var SLNo = Convert.ToInt64(workSheet.Cells[i, 1].Value);
                     if (SLNo != 0)
                     {
+                        long empCode = Convert.ToInt64(workSheet.Cells[i, 2].Value);
+                        var employee = empCode != 0 ? _employeeService.GetEmployeeByCode(empCode) : null;
                         var attendance = new ATS.Core.Domain.DTO.AttendanceViewModel
                         {
                             EmployeeCode = Convert.ToInt64(workSheet.Cells[i, 2].Value),
                             Name = Convert.ToString(workSheet.Cells[i, 3].Value),
-                            Designation = Convert.ToString(workSheet.Cells[i, 4].Value),
+                            Designation = employee.Designation,
+                            Department = employee.Department,
+                            //Designation = Convert.ToString(workSheet.Cells[i, 4].Value),
                             TimeIn = Convert.ToString(workSheet.Cells[i, 5].Value),
                             TimeOut = Convert.ToString(workSheet.Cells[i, 6].Value),
                             TotalHours = Convert.ToDouble(workSheet.Cells[i, 7].Value),
-                            OT1 = Convert.ToDecimal(workSheet.Cells[i, 8].Value),
-                            OT2 = Convert.ToDecimal(workSheet.Cells[i, 9].Value),
-                            OT3 = Convert.ToDecimal(workSheet.Cells[i, 10].Value),
-                            OT4 = Convert.ToDecimal(workSheet.Cells[i, 11].Value),
-                            Status = Convert.ToString(workSheet.Cells[i, 12].Value),
+                            OT1 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 8].Value):0,
+                            OT2 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 9].Value):0,
+                            OT3 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 10].Value):0,
+                            OT4 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 11].Value): 0,
+                            Status =  Convert.ToString(workSheet.Cells[i, 12].Value),
                             Date = Convert.ToDateTime(attendancedate),
                             CreatedBy = 1,
                             CreatedOn = DateTime.Now,
                             IsActive = true
                         };
+                        if (attendance.OT1 != 0 || attendance.OT2 != 0 || attendance.OT3 != 0 || attendance.OT4 != 0)
+                        {
 
-                        _dailyAttendanceService.AddAttendance(attendance);
+                            if (attendance.OT1 < 1)
+                                attendance.OT1 = 0;
+                            if (attendance.OT2 < 1)
+                                attendance.OT2 = 0;
+                            if (attendance.OT3 < 1)
+                                attendance.OT3 = 0;
+                            if (attendance.OT4 < 1)
+                                attendance.OT4 = 0;
+                        }
+                        //If Intime or OutTime is empty to be executed.
+                        if (string.IsNullOrWhiteSpace(attendance.TimeIn) || string.IsNullOrWhiteSpace(attendance.TimeOut))
+                        {
+                            if (!string.IsNullOrWhiteSpace(attendance.TimeIn) && string.IsNullOrWhiteSpace(attendance.TimeOut))
+                            {
+                                if (employee.ShiftCode == 1)
+                                    attendance.TimeOut = "14:00";
+                                if (employee.ShiftCode == 2)
+                                    attendance.TimeOut = "22:00";
+                                if (employee.ShiftCode == 3)
+                                    attendance.TimeOut = "06:00";
+                                if (employee.ShiftCode == 4)
+                                    attendance.TimeOut = "17:00";
+                            }
+                            if (string.IsNullOrWhiteSpace(attendance.TimeIn) && !string.IsNullOrWhiteSpace(attendance.TimeOut))
+                            {
+                                if (employee.ShiftCode == 1)
+                                    attendance.TimeIn = "06:00";
+                                if (employee.ShiftCode == 2)
+                                    attendance.TimeIn = "14:00";
+                                if (employee.ShiftCode == 3)
+                                    attendance.TimeIn = "22:00";
+                                if (employee.ShiftCode == 4)
+                                    attendance.TimeIn = "08:00";
+                            }
+                            double InTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
+                            double OutTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
+                            if (InTime == 22.00)
+                            {
+                                InTime = 22.00 - 8.00;
+                            }
+                            attendance.TotalHours = OutTime - InTime;
+                        }                       
+                        //_dailyAttendanceService.AddAttendance(attendance);
                     }
 
                 }
@@ -284,6 +332,27 @@ namespace ATS.Web.Controllers
                 viewModel.Add(model);
             }
             return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetAttendanceByDate(DateTime attendanceDate)
+        {
+            var attendance = _dailyAttendanceService.GetAttendanceByDate(attendanceDate);
+            if (attendance == null)
+                return Json(false, JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public bool DeleteExistAttendance(DateTime date)
+        {
+            var result = false;
+
+            var attendance = _dailyAttendanceService.GetAttendanceByDate(date);
+
+            if (attendance != null)
+            {
+                result = _dailyAttendanceService.DeleteByDate(date);
+            }
+            return result;
         }
 
     }

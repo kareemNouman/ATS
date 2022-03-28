@@ -15,6 +15,12 @@
             <div class="panel">
                 <div class="panel-heading">
                     <h3 class="panel-title"> ATTENDANCE GENERATION</h3>
+                    <div class="alert dark alert-icon alert-warning alert-dismissible" id="attendanceAlert" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <i class="icon wb-alert" aria-hidden="true"></i> Attendance with same date already exists. if you submit again old attendance will be reverted with New.
+                    </div>
                 </div>
                 <div class="panel-body container-fluid">
 
@@ -55,14 +61,14 @@
                                                     <span class="ladda-spinner"></span>
                                                 </button>
                                             </div>
-                                            </div>
-</form>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- End Example Vertical -->
-
+                    
                 </div>
             </div>
         </div>
@@ -106,14 +112,37 @@
         window.location.href = "@Url.Action("DownloadExcelFormat", "Billing")" + "?zoneid=" + zone;
 
     }*@
+    $(function () {
+        $("#attendanceAlert").hide();
+    })
+    
+    $("#attendancedate").change(function () {
+        var date = $("#attendancedate").val();
+        if (date != "") {
+           GetAttendanceByDate(date);
+           // alert("Date Selected");
+        }
+        //alert("No Date Selected");
+    })
+
+    function GetAttendanceByDate(date) {
+        $.post('@Url.Action("GetAttendanceByDate", "home")', { attendanceDate: date }, function (response) {
+
+            if (response) {
+                $("#attendanceAlert").show();
+            }
+            else 
+                $("#attendanceAlert").hide();
+        });
+    }
 
     $("#attendanceUploadForm").submit(function (event) {
         if (!$("#attendancedate").val()) {
-            $("#attendancedate").css("border-bottom", "1px solid red");            
+            $("#attendancedate").css("border-bottom", "1px solid red");
             event.preventDefault();
         }
         else
-            $("#attendancedate").css("border-bottom", "");     
+            $("#attendancedate").css("border-bottom", "");
     })
 
 </script>

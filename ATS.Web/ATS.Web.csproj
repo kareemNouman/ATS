@@ -3490,6 +3490,7 @@
     <Content Include="Views\Master\EmployeeLeaves.cshtml" />
     <Content Include="Views\Master\AddEmployeeLeaves.cshtml" />
     <Content Include="Views\Master\EmployeeLeavesDetail.cshtml" />
+    <Content Include="Views\Reports\EmployeeLeaveReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

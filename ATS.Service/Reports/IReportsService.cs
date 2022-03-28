@@ -15,5 +15,7 @@ namespace ATS.Service.Reports
         PagedResults<AttendanceViewModel> AllEmployeeAttendanceReport(GridRequestModel request);
         PagedResults<AttendanceViewModel> OverTimeEmployeeAttendanceReport(GridRequestModel request);
         List<EmployeeViewModel> EmployeePayrollReport(GridRequestModel request);
+
+        PagedResults<EmployeeLeaveViewModel> EmployeeLeaveReport(GridRequestModel request);
     }
 }

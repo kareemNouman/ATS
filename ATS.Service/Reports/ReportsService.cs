@@ -16,13 +16,24 @@ namespace ATS.Service.Reports
     {
         private readonly IGenericRepository<Attendance> _attendanceRepository;
         private readonly IGenericRepository<Employee> _employeeRepository;
+        private readonly IGenericRepository<EmployeeLeave> _employeeLeaveRepository;
+        private readonly IGenericRepository<Designation> _designationRepository;
+        private readonly IGenericRepository<Department> _departmentRepository;
+        private readonly IGenericRepository<Leaves> _leaveTypeRepository;
         private readonly IDailyAttendanceService _dailyAttendanceService;
 
-        public ReportsService(IGenericRepository<Attendance> attendanceRepository, IGenericRepository<Employee> employeeRepository, IDailyAttendanceService dailyAttendanceService)
+        public ReportsService(IGenericRepository<Attendance> attendanceRepository, IGenericRepository<Leaves> leaveTypeRepository,
+            IGenericRepository<Employee> employeeRepository, IGenericRepository<Department> departmentRepository,
+        IDailyAttendanceService dailyAttendanceService, IGenericRepository<Designation> designationRepository,
+          IGenericRepository<EmployeeLeave> employeeLeaveRepository)
         {
             this._attendanceRepository = attendanceRepository;
             this._dailyAttendanceService = dailyAttendanceService;
             this._employeeRepository = employeeRepository;
+            this._employeeLeaveRepository = employeeLeaveRepository;
+            this._designationRepository = designationRepository;
+            this._departmentRepository = departmentRepository;
+            this._leaveTypeRepository = leaveTypeRepository;
         }
 
         public PagedResults<AttendanceViewModel> SingleEmployeeAttendanceReport(GridRequestModel request)
@@ -289,6 +300,54 @@ namespace ATS.Service.Reports
             //    TotalOT = (x.OT1 != null ? x.OT1.Value : 0 + x.OT2 != null ? x.OT2.Value : 0
             //                + x.OT3 != null ? x.OT3.Value : 0 + x.OT4 != null ? x.OT4.Value : 0),
             //});
+
+        }
+
+        public PagedResults<EmployeeLeaveViewModel> EmployeeLeaveReport(GridRequestModel request)
+        {
+
+            var query = _employeeLeaveRepository.ReadOnly();
+            var startdate = "";
+            var enddate = "";
+            //var departmentid = "";
+            //var employeecode = "";
+            //var employeename = "";
+
+            request.Filters.TryGetValue("startdate", out startdate);
+            request.Filters.TryGetValue("enddate", out enddate);
+            //request.Filters.TryGetValue("departmentid", out departmentid);
+            //request.Filters.TryGetValue("employeecode", out employeecode);
+            //request.Filters.TryGetValue("employeename", out employeename);
+
+            DateTime startDate;
+            DateTime endDate;
+            //long departmentID;
+            //long employeeCode;
+
+            if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
+            {
+                if (startdate == enddate)
+                {
+                    query = query.Where(x => DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(endDate));
+                }
+                else
+                    query = query.Where(x => DbFunctions.TruncateTime(x.CreatedOn) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.CreatedOn) <= DbFunctions.TruncateTime(endDate));
+            }
+
+            //if (long.TryParse(departmentid, out departmentID))
+            //    query = query.Where(x => x.Designation == departmentid);
+
+            return PagedResults<EmployeeLeave, EmployeeLeaveViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new EmployeeLeaveViewModel
+            {
+                EmployeeCode = x.EmployeeCode,
+                Name = x.Name,
+                Department = x.DepartmentID != null ? _departmentRepository.GetByID(x.DepartmentID).Name : string.Empty,
+                Designation = x.DesignationID != null ? _designationRepository.GetByID(x.DesignationID).Name : string.Empty,
+                LeaveStart = x.LeaveStart,
+                LeaveEnd = x.LeaveEnd,
+                LName = x.LeaveType != null ? _leaveTypeRepository.GetByID(x.LeaveType).Name : string.Empty,
+                Remark = x.Remark        
+            });
 
         }
     }

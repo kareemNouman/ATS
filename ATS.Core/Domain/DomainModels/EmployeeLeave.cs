@@ -9,7 +9,9 @@ namespace ATS.Core.Domain.DomainModels
     public class EmployeeLeave : Entity<Int64>
     {
         public Nullable<long> EmployeeCode { get; set; }
-
+        public Nullable<long> EmployeeID { get; set; }
+        public Nullable<long> DepartmentID { get; set; }
+        public Nullable<long> DesignationID { get; set; }
         public string Name { get; set; }
 
         public Nullable<System.DateTime> LeaveStart { get; set; }

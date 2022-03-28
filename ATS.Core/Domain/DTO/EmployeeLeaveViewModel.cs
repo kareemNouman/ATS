@@ -10,8 +10,14 @@ namespace ATS.Core.Domain.DTO
     {
         public Int64 Id { get; set; }
         public Nullable<long> EmployeeCode { get; set; }
-
+        public Nullable<long> DepartmentID { get; set; }
+        public Nullable<long> DesignationID { get; set; }
         public string Name { get; set; }
+        //Name of the Leave means type of leave
+        public string LName { get; set; }
+        public string Department { get; set; }
+
+        public string Designation { get; set; }
         public Nullable<long> EmployeeId { get; set; }
         public Nullable<System.DateTime> LeaveStart { get; set; }
 

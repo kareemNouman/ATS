@@ -19,14 +19,15 @@ namespace ATS.Service.DailyAttendance
 
         Attendance GetAttendance(Int64 id);
 
-
         AttendanceViewModel GetAttendanceByID(Int64 id);
 
         void UpdateAttendance(Attendance attendance);
 
         PayToAttendanceViewModel GetPayToByEmpCode(long empCode);
         PagedResults<AttendanceViewModel> AttendanceDataRequest(GridRequestModel request);
-
+        Attendance GetAttendanceByDate(DateTime date);
         bool Delete(long ID);
+
+        bool DeleteByDate(DateTime date);
     }
 }
