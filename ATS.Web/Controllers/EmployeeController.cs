@@ -67,7 +67,7 @@ namespace ATS.Web.Controllers
             employee.WeekOffMain = employeeviewmodel.WeekOffMain;
             employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate;
             employee.ShiftCode = employeeviewmodel.ShiftCode;
-            employee.CreatedBy = employeeviewmodel.CreatedBy;
+            employee.CreatedBy = 1;
             employee.CreatedOn = DateTime.Now;
             employee.IsActive = true;
             var response = _employeeService.AddEmployee(employee);
@@ -157,7 +157,7 @@ namespace ATS.Web.Controllers
                 employee.WeekOffMain = employeeviewmodel.WeekOffMain;
                 employee.ShiftCode = employeeviewmodel.ShiftCode;
                 employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate;
-                employee.CreatedBy = employeeviewmodel.CreatedBy;
+                employee.CreatedBy = 1;
                 employee.CreatedOn = DateTime.Now;
                 employee.IsActive = true;
                 _employeeService.UpdateEmployee(employee);

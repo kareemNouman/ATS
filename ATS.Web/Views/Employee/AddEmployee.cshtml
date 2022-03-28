@@ -68,12 +68,12 @@
                         </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="select">Employee Shift Code</label> *
-                            @(Html.EJ().DropDownList("EmployeeShiftsCode").Datasource(ds => ds.URL(Url.Action("EmployeeShifts", "Home")))
+                            @(Html.EJ().DropDownList("ShiftCode").Datasource(ds => ds.URL(Url.Action("EmployeeShifts", "Home")))
 .DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Shift Code").Width("100%").ClientSideEvents(x => x.ActionComplete("fnEmployeeShiftsCode_actioncomplete")))
                             @Html.ValidationMessageFor(x => x.ShiftCode)
                         </div>
                         <div class="form-group form-material">
-                            <label class="control-label" for="select">Date of ReJoinning</label> *
+                            <label class="control-label" for="select">Date of ReJoinning</label>
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
@@ -172,7 +172,7 @@
         }
 
         function fnEmployeeShiftsCode_actioncomplete(sender) {
-            target = $("#EmployeeShiftsCode").data("ejDropDownList");
+            target = $("#ShiftCode").data("ejDropDownList");
             target.selectItemByValue(@Model.ShiftCode);
         }
 
@@ -192,12 +192,12 @@
         }
 
         $("#atsform").submit(function (event) {
-            if (!$("#DORJ").val()) {
-                $("#DORJ").css("border-bottom", "1px solid red");
-                event.preventDefault();
-            }
-            else
-                $("#DORJ").css("border-bottom", "");
+            //if (!$("#DORJ").val()) {
+            //    $("#DORJ").css("border-bottom", "1px solid red");
+            //    event.preventDefault();
+            //}
+            //else
+            //    $("#DORJ").css("border-bottom", "");
 
             if (!$("#IsOTEligible").val()) {
                 $("#IsOTEligible").css("border", "1px solid red");

@@ -110,10 +110,11 @@ namespace ATS.Service.Employees
                 Housing = employeeviewmodel.Housing,
                 Gross= employeeviewmodel.Gross,
                 OTThreshold = employeeviewmodel.OTThreshold,
+                ShiftCode = employeeviewmodel.ShiftCode,
                 IsOTEligible = employeeviewmodel.IsOTEligible,
                 WeekOffMain = employeeviewmodel.WeekOffMain,
                 WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate,
-                CreatedBy = employeeviewmodel.CreatedBy,
+                CreatedBy = 1,
                 CreatedOn = DateTime.Now,
                 IsActive = true
             };
