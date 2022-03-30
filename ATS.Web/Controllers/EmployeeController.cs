@@ -197,6 +197,11 @@ namespace ATS.Web.Controllers
             var employeemodel =  _employeeService.GetEmployeeByID(model.Id);
             return Json(employeemodel, JsonRequestBehavior.AllowGet);
         }
+        // Action added by Shoeb
+        public ActionResult GetAllEmployee()
+        {
+            return View();
+        }
       
 
       
