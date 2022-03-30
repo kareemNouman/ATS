@@ -178,11 +178,12 @@ namespace ATS.Web.Controllers
     //    [NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
         public JsonResult EmployeeData(DataManager dm)
         {
+            string empName = string.Empty;
             if (dm.Search != null && dm.Search.Count > 0)
             {
-
+                empName = dm.Search.Select(x => x.Key).FirstOrDefault();
             }
-            var employeedata = _employeeService.GetAllEmployee(dm.Skip, dm.Take);                                    
+            var employeedata = _employeeService.GetAllEmployee(dm.Skip, dm.Take,empName);                                    
             return Json(new { result = employeedata.Data, count = employeedata.Count }, JsonRequestBehavior.AllowGet);
 
         }

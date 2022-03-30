@@ -48,15 +48,16 @@ namespace ATS.Service.Employees
             });
         }
 
-        public ATSGridResponseModel<EmployeeViewModel> GetAllEmployee(int skip, int take)
+        public ATSGridResponseModel<EmployeeViewModel> GetAllEmployee(int skip, int take,string empName)
         {
             ATSGridResponseModel<EmployeeViewModel> res = new ATSGridResponseModel<EmployeeViewModel>();
+            IQueryable<Employee> employees = _employeeRepository.GetQueryable().Where(x => x.IsActive == true); ;
+            if (!string.IsNullOrEmpty(empName))            
+               employees = employees.Where(x => x.Name.Contains(empName));
 
-            var employee = _employeeRepository.GetQueryable().Where(x => x.IsActive == true);
-
-            if (employee != null)
+            if (employees != null)
             {
-                res.Data = employee.Select(x => new EmployeeViewModel
+                res.Data = employees.Select(x => new EmployeeViewModel
                 {
                     Id = x.ID,
                     EmployeeCode = x.EmployeeCode,
@@ -69,7 +70,7 @@ namespace ATS.Service.Employees
                     //ShiftCode =x.ShiftCode
                 }).OrderByDescending(x => x.Id).Skip(skip).Take(take).ToList();
 
-                res.Count = employee.Count();
+                res.Count = employees.Count();
             }
             return res;
         }
@@ -179,8 +180,11 @@ namespace ATS.Service.Employees
 
         public EmployeeViewModel GetEmployeeByCode(long empCode)
         {
+            EmployeeViewModel viewModel = new EmployeeViewModel();
             var emp = _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).FirstOrDefault();
-            var viewModel = new EmployeeViewModel {
+            if (emp != null)
+            {
+            viewModel = new EmployeeViewModel {
                 Id = emp.ID,
                 Name = emp.Name,
                 Email = emp.Email,
@@ -206,6 +210,7 @@ namespace ATS.Service.Employees
                 CreatedBy = emp.CreatedBy,
                 CreatedOn = emp.CreatedOn
             };
+            }
             return viewModel;
         }
         public bool Delete(long ID)

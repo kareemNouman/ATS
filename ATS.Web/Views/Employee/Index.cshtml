@@ -38,36 +38,52 @@
                 </script>
 
                 @*<script type="text/x-jsrender" id="typeTemplate">
-                    <a>
-                        {{if RoleID=="1"}}
-                        Admin
-                        {{/if}}
+            <a>
+                {{if RoleID=="1"}}
+                Admin
+                {{/if}}
 
-                        {{if RoleID=="2"}}
-                        Customer
-                        {{/if}}
-                        {{if RoleID=="3"}}
-                        Employee
-                        {{/if}}
-                        {{if RoleID=="4"}}
-                        MeterReader
-                        {{/if}}
-                        {{if RoleID=="7"}}
-                        Cashier
-                        {{/if}}
-                        {{if RoleID=="8"}}
-                        Accountant
-                        {{/if}}
-                    </a>
+                {{if RoleID=="2"}}
+                Customer
+                {{/if}}
+                {{if RoleID=="3"}}
+                Employee
+                {{/if}}
+                {{if RoleID=="4"}}
+                MeterReader
+                {{/if}}
+                {{if RoleID=="7"}}
+                Cashier
+                {{/if}}
+                {{if RoleID=="8"}}
+                Accountant
+                {{/if}}
+            </a>
 
-                </script>*@
-
+        </script>*@
                 @(Html.EJ().Grid<ATS.Web.Models.EmployeeViewModel>("FlatGrid")
                 .Datasource(ds => ds.URL(Url.Action("EmployeeData", "Employee")).Adaptor("UrlAdaptor"))
                  .AllowSorting()
                   .AllowPaging()
+                  .AllowSearching()
+                .SearchSettings(search =>
+                {
+                    search.Fields(field =>
+                    {
+                        field.Add("Name");
+                        //field.Add("EmployeeCode");
+                    });
+                    search.Key("");
+                })
+        .ToolbarSettings(toolbar =>
+        {
+            toolbar.ShowToolbar().ToolbarItems(items =>
+            {
+                items.AddTool(Syncfusion.JavaScript.ToolBarItems.Search);               
+            });
+        })
                   .PageSettings(x => x.PageSize(10))
-         .AllowSelection()        
+         .AllowSelection()
          .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
                 .Columns(col =>
                 {

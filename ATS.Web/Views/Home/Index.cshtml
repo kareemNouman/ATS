@@ -152,11 +152,12 @@
             $("#attendancedate").css("border-bottom", "1px solid red");
             event.preventDefault();
         }
-        else
+        else {
             $("#attendancedate").css("border-bottom", "");
-
-        $("#id_loader").removeClass("loaderhides").addClass("loadershows");
-        $("#attendanceLoad").addClass("loaderblur-filter");
+            $("#id_loader").removeClass("loaderhides").addClass("loadershows");
+            $("#attendanceLoad").addClass("loaderblur-filter");
+        }            
+      
     })
 
 </script>

@@ -15,7 +15,7 @@ namespace ATS.Service.Employees
 
         bool AddEmployee(EmployeeViewModel employee);
 
-        ATSGridResponseModel<EmployeeViewModel> GetAllEmployee(int skip, int take);
+        ATSGridResponseModel<EmployeeViewModel> GetAllEmployee(int skip, int take, string empName);
 
         Employee GetEmployee(Int64 id);
         EmployeeViewModel GetEmployeeByCode(long empCode);
