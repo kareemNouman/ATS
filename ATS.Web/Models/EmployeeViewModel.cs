@@ -32,7 +32,7 @@ namespace ATS.Web.Models
         public int WeekOffMain { get; set; }
 
         public int ShiftCode { get; set; }
-        public int WeeklyOffAlternate { get; set; }
+        public int? WeeklyOffAlternate { get; set; }
 
         public int IsOTEligible { get; set; }
         public Nullable<System.DateTime> DORJ { get; set; }

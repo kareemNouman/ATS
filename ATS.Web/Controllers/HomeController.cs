@@ -83,10 +83,10 @@ namespace ATS.Web.Controllers
                             TimeIn = Convert.ToString(workSheet.Cells[i, 5].Value),
                             TimeOut = Convert.ToString(workSheet.Cells[i, 6].Value),
                             TotalHours = Convert.ToDouble(workSheet.Cells[i, 7].Value),
-                            OT1 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 8].Value):0,
-                            OT2 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 9].Value):0,
-                            OT3 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 10].Value):0,
-                            OT4 = employee.IsOTEligible == false ? Convert.ToDecimal(workSheet.Cells[i, 11].Value): 0,
+                            OT1 = employee.IsOTEligible == true ? Convert.ToDecimal(workSheet.Cells[i, 8].Value):0,
+                            OT2 = employee.IsOTEligible == true ? Convert.ToDecimal(workSheet.Cells[i, 9].Value):0,
+                            OT3 = employee.IsOTEligible == true ? Convert.ToDecimal(workSheet.Cells[i, 10].Value):0,
+                            OT4 = employee.IsOTEligible == true ? Convert.ToDecimal(workSheet.Cells[i, 11].Value): 0,
                             Status =  Convert.ToString(workSheet.Cells[i, 12].Value),
                             Date = Convert.ToDateTime(attendancedate),
                             CreatedBy = 1,
@@ -130,7 +130,7 @@ namespace ATS.Web.Controllers
                                 if (employee.ShiftCode == 4)
                                     attendance.TimeIn = "08:00";
                             }
-                            double InTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
+                            double InTime = Convert.ToDouble(attendance.TimeIn.Replace(':', '.'));
                             double OutTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
                             if (InTime == 22.00)
                             {
@@ -138,7 +138,7 @@ namespace ATS.Web.Controllers
                             }
                             attendance.TotalHours = OutTime - InTime;
                         }                       
-                        //_dailyAttendanceService.AddAttendance(attendance);
+                        _dailyAttendanceService.AddAttendance(attendance);
                     }
 
                 }

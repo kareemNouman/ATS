@@ -111,7 +111,7 @@ namespace ATS.Web.Controllers
                 employee.IsOTEligible = employeeviewmodel.IsOTEligible == true ? 1 : 2;
                 employee.WeekOffMain = employeeviewmodel.WeekOffMain;
                 employee.ShiftCode = employeeviewmodel.ShiftCode;
-                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate;
+                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value : 0;
                 employee.CreatedBy = employeeviewmodel.CreatedBy;
                 
                 employee.IsActive = true;
@@ -156,7 +156,7 @@ namespace ATS.Web.Controllers
                 employee.IsOTEligible = employeeviewmodel.IsOTEligible == 1 ? true : false;                    
                 employee.WeekOffMain = employeeviewmodel.WeekOffMain;
                 employee.ShiftCode = employeeviewmodel.ShiftCode;
-                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate;
+                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value : 0;
                 employee.CreatedBy = 1;
                 employee.CreatedOn = DateTime.Now;
                 employee.IsActive = true;

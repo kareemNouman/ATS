@@ -33,7 +33,7 @@ namespace ATS.Core.Domain.DTO
         public Nullable<decimal> OTThreshold { get; set; }
         public int WeekOffMain { get; set; }
         public int ShiftCode { get; set; }
-        public int WeeklyOffAlternate { get; set; }
+        public int? WeeklyOffAlternate { get; set; }
 
         public bool? IsOTEligible { get; set; }
         public Nullable<System.DateTime> DORJ { get; set; }

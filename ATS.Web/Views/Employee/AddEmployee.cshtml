@@ -61,10 +61,10 @@
                             @Html.ValidationMessageFor(x => x.WeekOffMain)
                         </div>
                         <div class="form-group form-material">
-                            <label class="control-label" for="select">Weekly Off Alternate</label> *
+                            <label class="control-label" for="select">Weekly Off Alternate</label>
                             @(Html.EJ().DropDownList("WeeklyOffAlternate").Datasource(ds => ds.URL(Url.Action("WeekOffMain", "Home")))
 .DropDownListFields(f => f.Text("Text").Value("Value")).CssClass("").WatermarkText("Select a Type").Width("100%").ClientSideEvents(x => x.ActionComplete("fnWeeklyOffAlternate_actioncomplete")))
-                            @Html.ValidationMessageFor(x => x.WeeklyOffAlternate)
+                            @*@Html.ValidationMessageFor(x => x.WeeklyOffAlternate)*@
                         </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="select">Employee Shift Code</label> *
@@ -213,12 +213,12 @@
             else
                 $("#WeekOffMain").css("border", "");
 
-            if (!$("#WeeklyOffAlternate").val()) {
-                $("#WeeklyOffAlternate").css("border", "1px solid red");
-                event.preventDefault();
-            }
-            else
-                $("#WeeklyOffAlternate").css("border", "");
+            //if (!$("#WeeklyOffAlternate").val()) {
+            //    $("#WeeklyOffAlternate").css("border", "1px solid red");
+            //    event.preventDefault();
+            //}
+            //else
+            //    $("#WeeklyOffAlternate").css("border", "");
 
             if (!$("#DepartmentID").val()) {
                 $("#DepartmentID").css("border", "1px solid red");

@@ -12,7 +12,7 @@
 <div class="page-content container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel">
+            <div class="panel" id="attendanceLoad">
                 <div class="panel-heading">
                     <h3 class="panel-title"> ATTENDANCE GENERATION</h3>
                     <div class="alert dark alert-icon alert-warning alert-dismissible" id="attendanceAlert" role="alert">
@@ -68,7 +68,14 @@
                         </div>
                     </div>
                     <!-- End Example Vertical -->
-                    
+
+                </div>
+            </div>
+            <div class="row col-lg-12">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-5 loaderhides" id="id_loader">
+                        <img src="~/Images/ajax-loader.gif" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,6 +108,8 @@
             </div>
         </div>
     </div>
+
+  
 </div>
 
 <script>
@@ -114,6 +123,8 @@
     }*@
     $(function () {
         $("#attendanceAlert").hide();
+        $("#id_loader").removeClass("loadershows").addClass("loaderhides");
+        $("#attendanceLoad").removeClass("loaderblur-filter");
     })
     
     $("#attendancedate").change(function () {
@@ -143,6 +154,9 @@
         }
         else
             $("#attendancedate").css("border-bottom", "");
+
+        $("#id_loader").removeClass("loaderhides").addClass("loadershows");
+        $("#attendanceLoad").addClass("loaderblur-filter");
     })
 
 </script>

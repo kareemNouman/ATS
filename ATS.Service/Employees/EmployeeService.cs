@@ -113,7 +113,7 @@ namespace ATS.Service.Employees
                 ShiftCode = employeeviewmodel.ShiftCode,
                 IsOTEligible = employeeviewmodel.IsOTEligible,
                 WeekOffMain = employeeviewmodel.WeekOffMain,
-                WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate,
+                WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value: 0,
                 CreatedBy = 1,
                 CreatedOn = DateTime.Now,
                 IsActive = true
@@ -168,7 +168,7 @@ namespace ATS.Service.Employees
                 Gross = x.Gross.Value,
                 OTThreshold = x.OTThreshold,
                 WeekOffMain = x.WeekOffMain,
-                ShiftCode = x.ShiftCode,
+                ShiftCode = x.ShiftCode.Value,
                 WeeklyOffAlternate= x.WeeklyOffAlternate,
                 IsOTEligible = x.IsOTEligible,
                 IsActive = x.IsActive,
@@ -179,34 +179,34 @@ namespace ATS.Service.Employees
 
         public EmployeeViewModel GetEmployeeByCode(long empCode)
         {
-            //var emp = _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).ToList();
-            return _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).Select(x => new EmployeeViewModel
-            {
-                Id = x.ID,
-                Name = x.Name,
-                Email = x.Email,
-                EmployeeCode = x.EmployeeCode,
-                DesignationID = x.DesignationID,
-                DepartmentID = x.DepartmentID,
-                Designation = x.DesignationID != null ? _designationRepository.GetByID(x.DesignationID).Name : string.Empty,
-                Department = x.DepartmentID != null ? _departmentRepository.GetByID(x.DepartmentID).Name : string.Empty,
-                DORJ = x.DORJ,
-                Basic = x.Basic,
-                SplAllowance = x.SplAllowance,
-                Col = x.Col,
-                OthersAllowance = x.OthersAllowance,
-                Conveyance = x.Conveyance.Value,
-                Housing = x.Housing.Value,
-                Gross = x.Gross.Value,
-                OTThreshold = x.OTThreshold,
-                WeekOffMain = x.WeekOffMain,
-                ShiftCode = x.ShiftCode,
-                WeeklyOffAlternate = x.WeeklyOffAlternate,
-                IsOTEligible = x.IsOTEligible,
-                IsActive = x.IsActive,
-                CreatedBy = x.CreatedBy,
-                CreatedOn = x.CreatedOn
-            }).FirstOrDefault();
+            var emp = _employeeRepository.GetWithInclude(x => x.EmployeeCode == empCode && x.IsActive == true).FirstOrDefault();
+            var viewModel = new EmployeeViewModel {
+                Id = emp.ID,
+                Name = emp.Name,
+                Email = emp.Email,
+                EmployeeCode = emp.EmployeeCode,
+                DesignationID = emp.DesignationID,
+                DepartmentID = emp.DepartmentID,
+                Designation = emp.DesignationID != null ? _designationRepository.GetByID(emp.DesignationID).Name: string.Empty,
+                Department = emp.DepartmentID != null ? _departmentRepository.GetByID(emp.DepartmentID).Name : string.Empty,
+                DORJ = emp.DORJ,
+                Basic = emp.Basic,
+                SplAllowance = emp.SplAllowance,
+                Col = emp.Col,
+                OthersAllowance = emp.OthersAllowance,
+                Conveyance = emp.Conveyance.Value,
+                Housing = emp.Housing.Value,
+                Gross = emp.Gross.Value,
+                OTThreshold = emp.OTThreshold,
+                WeekOffMain = emp.WeekOffMain,
+                ShiftCode = emp.ShiftCode.Value,
+                WeeklyOffAlternate = emp.WeeklyOffAlternate,
+                IsOTEligible = emp.IsOTEligible,
+                IsActive = emp.IsActive,
+                CreatedBy = emp.CreatedBy,
+                CreatedOn = emp.CreatedOn
+            };
+            return viewModel;
         }
         public bool Delete(long ID)
         {
