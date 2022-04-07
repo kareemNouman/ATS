@@ -1,8 +1,7 @@
 ﻿
 @model ATS.Core.Domain.DTO.AttendanceViewModel
-
 @{
-    ViewBag.Title = "SingleEmployeeReport";
+    ViewBag.Title = "DailyEmployeeReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
@@ -13,7 +12,7 @@
 
 <div class="panel" id="salaryLoad">
     <header class="panel-heading">
-        <h3 class="panel-title">Single Employee Report</h3>
+        <h3 class="panel-title">Daily Employee Attendance Report</h3>
     </header>
 
     <div class="panel-body">
@@ -21,9 +20,9 @@
         <div class="row">
 
             <div class="row col-lg-6">
-                <form action="@Url.Action("SingleEmployeeReportDataSource", "Reports")" method="get" id="frmsingleEmployeeReport" target="_blank">
+                <form action="@Url.Action("DailyEmployeeReportDataSource", "Reports")" method="get" id="frmdailyEmployeeReport" target="_blank">
                     @Html.HiddenFor(x => x.Name)
-                    @Html.HiddenFor(x => x.EmployeeCode)
+                    @Html.HiddenFor(x => x.Department)
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
@@ -45,15 +44,15 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group form-material">
-                            <label class="control-label" for="select">Employee Code</label>
+                            <label class="control-label" for="select">Department Name</label>
                             @{
 
                                 Html.EJ()
-                                .Autocomplete("EmpCode").CssClass("form-control")
-                                .Datasource(ds => ds.URL(Url.Action("EmployeeCode", "Home")).Adaptor("UrlAdaptor").Offline(false))
-                                .AutocompleteFields(e => e.Text("EmployeeCode").Key("Id"))
-                                .ShowPopupButton(true).WatermarkText("Search EmployeeCode").Width("100%")
-                                .ClientSideEvents(e => e.Change("EmployeeCodeChange").FocusOut("focusOut").ActionComplete("EmployeeCodeSelected"))
+                                .Autocomplete("Dept").CssClass("form-control")
+                                .Datasource(ds => ds.URL(Url.Action("AllDepartments", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                .AutocompleteFields(e => e.Text("Name").Key("ID"))
+                                .ShowPopupButton(true).WatermarkText("Search Department").Width("100%")
+                                .ClientSideEvents(e => e.Change("DeptChange").FocusOut("focusOut").ActionComplete("DeptSelected"))
                                 .Render();
 
                             }
@@ -122,7 +121,7 @@
         <div class="row">
             @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
 
-         .Datasource(ds => ds.URL(Url.Action("SingleEmployeeReportDataSource", "Reports")).Adaptor("UrlAdaptor"))
+         .Datasource(ds => ds.URL(Url.Action("DailyEmployeeReportDataSource", "Reports")).Adaptor("UrlAdaptor"))
         .AllowSorting()
         .AllowPaging()
         .ToolbarSettings(toolbar =>
@@ -131,15 +130,16 @@
         })
         .Columns(col =>
         {
-            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("TimeIn").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("TimeOut").HeaderText("Time Out").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
-            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("EmployeeCode").HeaderText("EmployeeCode").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Add();
+            col.Field("Name").HeaderText("Employee Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("TimeIn").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("TimeOut").HeaderText("Time Out").Width(80).Add();
+            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
 
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
@@ -159,18 +159,19 @@
         $("#btnpdf").click(function () {
             $("#hdstartdate").val($("#startdate").val());
             $("#hdenddate").val($("#enddate").val());
-            $("#frmsingleEmployeeReport").submit();
+            $("#frmdailyEmployeeReport").submit();
         });
     });
 
     function fn_begin(args) {
 
         var Name = $("#Name").val();
-        var EmployeeCode = $("#EmployeeCode").val();
+        var DepartmentName = $("#Department").val();     
         this.model.query.addParams("startdate", $('#startdate').val());
         this.model.query.addParams("enddate", $('#enddate').val());
         this.model.query.addParams("employeename", Name);
-        this.model.query.addParams("employeecode", EmployeeCode);
+        this.model.query.addParams("departmentname", DepartmentName);
+
     }
 
     function complete(args) {
@@ -193,9 +194,9 @@
         $('#startdate').val('');
         $('#enddate').val('');
         $('#Employee').val('');
-        $('#EmpCode').val('');
+        $('#Dept').val('');
         $("#Name").val('');
-        $('#EmployeeCode').val('');
+        $('#Department').val('');
 
         var gridObj = $("#FlatGrid").ejGrid("instance");
         gridObj.refreshContent();
@@ -207,10 +208,10 @@
         $("#Name").val(id);
     };
 
-    function EmployeeCodeChange(args) {
-        var utocompleteObj = $("#EmpCode").data("EmpCode");
+    function DeptChange(args) {
+        var utocompleteObj = $("#Dept").data("Dept");
         var id = args.model.value;
-        $("#EmployeeCode").val(id);
+        $("#Department").val(id);
     };
 </script>
 
@@ -233,12 +234,12 @@
             data.startdate = $('#startdate').val();
             data.enddate = $('#enddate').val();
             data.employeename = $("#Name").val();
-            data.employeecode = $("#EmployeeCode").val();
+            data.departmentname = $("#Department").val();
 
 
-            var url = '@Url.Action("SingleEmployeeReportDataSource", "Reports")';
+            var url = '@Url.Action("DailyEmployeeReportDataSource", "Reports")';
 
-            url = url + "?startdate=" + $('#startdate').val() + "&enddate=" + $('#enddate').val() + "&employeename=" + $("#Name").val() + "&employeecode=" + $("#EmployeeCode").val();
+            url = url + "?startdate=" + $('#startdate').val() + "&enddate=" + $('#enddate').val() + "&employeename=" + $("#Name").val() + "&departmentname=" + $("#Department").val();
             url = url + "&skip=0&take=10&print=1";
             $.ajax({
                 url: url,
@@ -279,6 +280,7 @@
     })(window.atsApp || {})
 
 </script>
+
 
 
 

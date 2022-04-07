@@ -42,19 +42,19 @@ namespace ATS.Service.Reports
             var query = _attendanceRepository.ReadOnly();
             var startdate = "";
             var enddate = "";
-            var departmentid = "";
+            var departmentname = "";
             var employeecode = "";
             var employeename = "";
 
             request.Filters.TryGetValue("startdate", out startdate);
             request.Filters.TryGetValue("enddate", out enddate);
-            request.Filters.TryGetValue("departmentid", out departmentid);
+            request.Filters.TryGetValue("departmentname", out departmentname);
             request.Filters.TryGetValue("employeecode", out employeecode);
             request.Filters.TryGetValue("employeename", out employeename);
 
             DateTime startDate;
             DateTime endDate;
-            long departmentID;            
+            //long departmentID;            
             long employeeCode;
 
             if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
@@ -67,8 +67,8 @@ namespace ATS.Service.Reports
                     query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
             }
 
-            //if (long.TryParse(departmentid, out departmentID))
-            //    query = query.Where(x => x.Designation == departmentid);
+            if (!string.IsNullOrWhiteSpace(departmentname))
+                query = query.Where(x => x.Designation.ToLower() == departmentname.ToLower());
 
             if (long.TryParse(employeecode, out employeeCode))
                 query = query.Where(x => x.EmployeeCode == employeeCode);
@@ -95,7 +95,7 @@ namespace ATS.Service.Reports
 
         }
 
-        public PagedResults<AttendanceViewModel> AllEmployeeAttendanceReport(GridRequestModel request)
+        public List<EmployeeViewModel> AllEmployeeAttendanceReport(GridRequestModel request)
         {
 
             var query = _attendanceRepository.ReadOnly();
@@ -125,7 +125,35 @@ namespace ATS.Service.Reports
                 else
                     query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
             }
+            var result = query.ToList();
+            var employees = _employeeRepository.GetQueryable().OrderBy(x => x.EmployeeCode).Skip(request.Page.Value).Take(request.PageSize.Value).Where(x => x.IsActive == true).ToList();
+            var totalNumberOfRecords = _employeeRepository.GetQueryable().Count();            
+            List<EmployeeViewModel> viewModel = new List<EmployeeViewModel>();
+            foreach (var item in employees)
+            {
+                EmployeeViewModel employee = new EmployeeViewModel();
+                if (result.Where(x => x.EmployeeCode == item.EmployeeCode).Count() > 0)
+                {
+                    employee.Id = item.ID;
+                    employee.EmployeeCode = item.EmployeeCode;
+                    employee.Name = item.Name;                    
+                    employee.Designation = _designationRepository.GetByID(item.DesignationID).Name;
+                    employee.Department = _departmentRepository.GetByID(item.DepartmentID).Name;
+                    employee.SickLeave = 0;
+                    employee.AdjustAnnLeave = 0;
+                    employee.Absent = 0;
+                    employee.ToPay = result.Where(x => x.EmployeeCode == item.EmployeeCode).Count();                 
+                    employee.OT1 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1);
+                    employee.OT2 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT2);
+                    employee.OT3 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT3);
+                    employee.OT4 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT4);                   
+                    employee.OTTotalHours = (employee.OT1 != null ? employee.OT1.Value : 0) + (employee.OT2 != null ? employee.OT2.Value : 0) + (employee.OT3 != null ? employee.OT3.Value : 0) + (employee.OT4 != null ? employee.OT4.Value : 0);                                    
+                    employee.TotalRecords = totalNumberOfRecords;
+                    viewModel.Add(employee);
+                }
 
+            }
+            return viewModel;
             //if (long.TryParse(departmentid, out departmentID))
             //    query = query.Where(x => x.Designation == departmentid);
 
@@ -139,23 +167,24 @@ namespace ATS.Service.Reports
 
             //var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
 
-            //query = query.GroupBy(x => x.Name);        
-            return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
-            {
-               // PayToAttendance = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value),
-                EmployeeCode = x.EmployeeCode,
-                Name = x.Name,
-                Designation = x.Designation,
-                SickLeaves = 1,
-                AdjustAnnLeaves =0,
-                Absent = 0,
-                ToPay = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalPayToDays,
-                OT1 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT1,
-                OT2 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT2,
-                OT3 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT3,
-                OT4 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT4
-                //TotalOT = 
-            });
+            //query = query.GroupBy(x => x.Name);       
+
+            //return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
+            //{
+            //   // PayToAttendance = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value),
+            //    EmployeeCode = x.EmployeeCode,
+            //    Name = x.Name,
+            //    Designation = x.Designation,
+            //    SickLeaves = 1,
+            //    AdjustAnnLeaves =0,
+            //    Absent = 0,
+            //    ToPay = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalPayToDays,
+            //    OT1 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT1,
+            //    OT2 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT2,
+            //    OT3 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT3,
+            //    OT4 = _dailyAttendanceService.GetPayToByEmpCode(x.EmployeeCode.Value).TotalOT4
+            //    //TotalOT = 
+            //});
 
         }
 
@@ -165,15 +194,15 @@ namespace ATS.Service.Reports
             var query = _attendanceRepository.ReadOnly();
             var startdate = "";
             var enddate = "";
-            var departmentid = "";          
+            var departmentname = "";          
 
             request.Filters.TryGetValue("startdate", out startdate);
             request.Filters.TryGetValue("enddate", out enddate);
-            request.Filters.TryGetValue("departmentid", out departmentid);          
+            request.Filters.TryGetValue("departmentname", out departmentname);          
 
             DateTime startDate;
             DateTime endDate;
-            long departmentID;
+            //long departmentID;
 
             if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
             {
@@ -185,12 +214,13 @@ namespace ATS.Service.Reports
                     query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
             }
 
-            if (long.TryParse(departmentid, out departmentID))
-                query = query.Where(x => x.Designation == departmentid);
+            //if (long.TryParse(departmentid, out departmentID))
+            //    query = query.Where(x => x.Department == departmentid);
 
-            
+            if (!string.IsNullOrWhiteSpace(departmentname))
+                query = query.Where(x => x.Department.ToLower() == departmentname.ToLower());
 
-           // var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            // var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
             return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
             {
                 EmployeeCode= x.EmployeeCode,
@@ -198,6 +228,7 @@ namespace ATS.Service.Reports
                 Date = x.Date,
                 TimeIn = x.TimeIn,
                 TimeOut = x.TimeOut,
+                TotalHours = x.TotalHours,
                 Status = x.Status,
                 OT1 = x.OT1 != null ? x.OT1.Value : 0,
                 OT2 = x.OT2 != null ? x.OT2.Value : 0,
@@ -347,6 +378,61 @@ namespace ATS.Service.Reports
                 LeaveEnd = x.LeaveEnd,
                 LName = x.LeaveType != null ? _leaveTypeRepository.GetByID(x.LeaveType).Name : string.Empty,
                 Remark = x.Remark        
+            });
+
+        }
+
+        public PagedResults<AttendanceViewModel> DailyEmployeeAttendanceReport(GridRequestModel request)
+        {
+            var query = _attendanceRepository.ReadOnly();
+            var startdate = "";
+            var enddate = "";
+            var departmentname = "";            
+            var employeename = "";
+
+            request.Filters.TryGetValue("startdate", out startdate);
+            request.Filters.TryGetValue("enddate", out enddate);
+            request.Filters.TryGetValue("departmentname", out departmentname);            
+            request.Filters.TryGetValue("employeename", out employeename);
+
+            DateTime startDate;
+            DateTime endDate;
+            //long departmentID;
+            //long employeeCode;
+
+            if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
+            {
+                if (startdate == enddate)
+                {
+                    query = query.Where(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(endDate));
+                }
+                else
+                     query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
+            }
+
+            if (!string.IsNullOrWhiteSpace(departmentname))
+                query = query.Where(x => x.Department.ToLower() == departmentname.ToLower());
+
+            if (!string.IsNullOrWhiteSpace(employeename))
+            {
+                query = query.Where(x => x.Name.ToLower() == employeename.ToLower());
+            }
+
+            var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
+            {
+                EmployeeCode =x.EmployeeCode,
+                Name = x.Name,
+                Date = x.Date,
+                TimeIn = x.TimeIn,
+                TimeOut = x.TimeOut,
+                Status = x.Status,
+                OT1 = x.OT1,
+                OT2 = x.OT2,
+                OT3 = x.OT3,
+                OT4 = x.OT4,
+                TotalOT = x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                Total = total
             });
 
         }

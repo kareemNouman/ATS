@@ -92,6 +92,7 @@ namespace ATS.Service.DailyAttendance
                 EmployeeCode = attendanceviewmodel.EmployeeCode,
                 Name = attendanceviewmodel.Name,
                 Designation = attendanceviewmodel.Designation,
+                Department = attendanceviewmodel.Department,
                 TimeIn = attendanceviewmodel.TimeIn,
                 TimeOut = attendanceviewmodel.TimeOut,
                 TotalHours = attendanceviewmodel.TotalHours,

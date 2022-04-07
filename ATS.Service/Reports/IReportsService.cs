@@ -12,10 +12,12 @@ namespace ATS.Service.Reports
    public interface IReportsService
     {
         PagedResults<AttendanceViewModel> SingleEmployeeAttendanceReport(GridRequestModel request);
-        PagedResults<AttendanceViewModel> AllEmployeeAttendanceReport(GridRequestModel request);
+        List<EmployeeViewModel> AllEmployeeAttendanceReport(GridRequestModel request);
         PagedResults<AttendanceViewModel> OverTimeEmployeeAttendanceReport(GridRequestModel request);
         List<EmployeeViewModel> EmployeePayrollReport(GridRequestModel request);
 
         PagedResults<EmployeeLeaveViewModel> EmployeeLeaveReport(GridRequestModel request);
+
+        PagedResults<AttendanceViewModel> DailyEmployeeAttendanceReport(GridRequestModel request);
     }
 }

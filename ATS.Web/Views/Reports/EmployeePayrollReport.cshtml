@@ -97,16 +97,28 @@
         })
         .Columns(col =>
         {
-            col.Field("EmployeeCode").HeaderText("Employee Code").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy, hh:mm tt}").Add();
-            col.Field("Name").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Basic").HeaderText("Basic").Width(80).Add();
-            col.Field("SplAllowance").HeaderText("Special").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OthersAllowance").HeaderText("Others").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Conveyance").HeaderText("Conv").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Housing").HeaderText("Housing").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Gross").HeaderText("Gross").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("GrandTotal").HeaderText("Total").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-
+            col.Field("EmployeeCode").HeaderText("EC").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(40).Add();
+            col.Field("Name").HeaderText("Name").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(60).Add();
+            col.Field("Basic").HeaderText("Basic").Width(30).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Add();
+            col.Field("SplAllowance").HeaderText("Special").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OthersAllowance").HeaderText("Others").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("Conveyance").HeaderText("Conv").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("Housing").HeaderText("Housing").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("Gross").HeaderText("Gross").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OT1").HeaderText("Normal OT").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(30).Add();
+            col.Field("OT2").HeaderText("Pub Hol").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(30).Add();
+            col.Field("OT3").HeaderText("Weekly Off").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(30).Add();
+            col.Field("OT4").HeaderText("Night OT").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(30).Add();
+            col.Field("OT1Amount").HeaderText("Normal OT").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OT2Amount").HeaderText("Pub Hol").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OT3Amount").HeaderText("Weekly Off").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OT4Amount").HeaderText("Night OT").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("OTTotalHours").HeaderText("OT Hr").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(30).Add();
+            col.Field("OTTotalAmount").HeaderText("OT Amt").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("GrandTotal").HeaderText("Total").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("Deduction").HeaderText("Deduction").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("AdvanceAmount").HeaderText("Advance").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
+            col.Field("NetAmount").HeaderText("Net").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(30).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
 

@@ -60,6 +60,12 @@ namespace ATS.Core.Domain.DTO
         public Nullable<decimal> AdvanceAmount { get; set; }
         public Nullable<decimal> NetAmount { get; set; }
 
+        public double SickLeave { get; set; }
+
+        public double AdjustAnnLeave { get; set; }
+        public double Absent { get; set; }
+
+        public double ToPay { get; set; }
         public int? TotalRecords { get; set; }
         public Nullable<DateTime> CreatedOn { get; set; }
         

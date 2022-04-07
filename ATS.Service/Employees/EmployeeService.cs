@@ -190,7 +190,7 @@ namespace ATS.Service.Employees
                 Email = emp.Email,
                 EmployeeCode = emp.EmployeeCode,
                 DesignationID = emp.DesignationID,
-                DepartmentID = emp.DepartmentID,
+                DepartmentID = emp.DepartmentID,                
                 Designation = emp.DesignationID != null ? _designationRepository.GetByID(emp.DesignationID).Name: string.Empty,
                 Department = emp.DepartmentID != null ? _departmentRepository.GetByID(emp.DepartmentID).Name : string.Empty,
                 DORJ = emp.DORJ,

@@ -3491,6 +3491,7 @@
     <Content Include="Views\Master\AddEmployeeLeaves.cshtml" />
     <Content Include="Views\Master\EmployeeLeavesDetail.cshtml" />
     <Content Include="Views\Reports\EmployeeLeaveReport.cshtml" />
+    <Content Include="Views\Reports\DailyEmployeeReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,5 +1,9 @@
 ﻿
 @model ATS.Core.Domain.DTO.EmployeeLeaveViewModel
+@using Syncfusion.MVC.EJ
+@using Syncfusion.JavaScript.Web
+@using Syncfusion.JavaScript
+
 @{
     ViewBag.Title = "EmployeeLeavesDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,17 +28,12 @@
                     <div class="panel-body container-fluid">
                         <div class="form-group form-material">
                             <label class="control-label" for="inputText">Employee Name</label> *
-                            @{
-
-                                Html.EJ()
-                                .Autocomplete("Employee").CssClass("form-control")
-                                .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
-                                .AutocompleteFields(e => e.Text("Name").Key("Id"))
-                                .ShowPopupButton(true).WatermarkText("Search Employee").Width("100%")
-                                .ClientSideEvents(e => e.Change("EmployeeChange").FocusOut("focusOut").ActionComplete("EmployeeSelected"))
-                                .Render();
-
-                            }
+                            @(Html.EJ()
+                                    .AutocompleteFor(x => x.Name).CssClass("form-control")
+                                    .Datasource(ds => ds.URL(Url.Action("Employees", "Home")).Adaptor("UrlAdaptor").Offline(false))
+                                    .AutocompleteFields(e => e.Text("Name").Key("Id"))
+                                    .ShowPopupButton(true).WatermarkText("Search Employee").Width("100%")
+                                    .ClientSideEvents(e => e.Change("EmployeeChange")))                            
                         </div>
                         @*<div class="form-group form-material">
                                 <label class="control-label" for="inputText">Employee Code</label> *
@@ -56,7 +55,8 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="form-control" id="LeaveStart" name="LeaveStart" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                <input type="text" class="form-control" id="LeaveStart" value="@Model.LeaveStart" name="LeaveStart" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                @*<input type="text" class="form-control"  name="LeaveStart" data-plugin="datepicker" data-date-format="dd/mm/yyyy">*@
                             </div>
                         </div>
                         <div class="form-group form-material">
@@ -65,7 +65,8 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="form-control" id="LeaveEnd" name="LeaveEnd" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                <input type="text" class="form-control" id="LeaveEnd" value="@Model.LeaveEnd" name="LeaveEnd" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                @*<input type="text" class="form-control" id="LeaveEnd" value="@Model.LeaveEnd" name="LeaveEnd" data-plugin="datepicker" data-date-format="dd/mm/yyyy">*@
                             </div>
                         </div>
                         <div class="form-group form-material">

@@ -1,5 +1,5 @@
 ﻿
-@model ATS.Core.Domain.DTO.AttendanceViewModel
+@model ATS.Core.Domain.DTO.EmployeeViewModel
 
 @{
     ViewBag.Title = "AllEmployeesReport";
@@ -86,7 +86,7 @@
 
 
         <div class="row">
-            @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
+            @(Html.EJ().Grid<ATS.Core.Domain.DTO.EmployeeViewModel>("FlatGrid")
 
          .Datasource(ds => ds.URL(Url.Action("AllEmployeesReportDataSource", "Reports")).Adaptor("UrlAdaptor"))
         .AllowSorting()
@@ -100,14 +100,15 @@
             col.Field("EmployeeCode").HeaderText("Employee Code").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy, hh:mm tt}").Add();
             col.Field("Name").HeaderText("Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("Designation").HeaderText("Designation").Width(80).Add();
-            col.Field("SickLeaves").HeaderText("Sick Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("AdjustAnnLeaves").HeaderText("Ann Adjust Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("SickLeave").HeaderText("Sick Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("AdjustAnnLeave").HeaderText("Ann Adjust Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("Absent").HeaderText("Absent").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("ToPay").HeaderText("ToPay").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
             col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OTTotalHours").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
 

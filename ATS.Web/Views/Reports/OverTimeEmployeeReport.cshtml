@@ -21,7 +21,7 @@
 
             <div class="row col-lg-6">
                 <form action="@Url.Action("OverTimeEmployeeReportDataSource", "Reports")" method="get" id="frmovertimeEmployeeReport" target="_blank">
-                    @Html.HiddenFor(x => x.DepartmentId)                    
+                    @Html.HiddenFor(x => x.Department)                    
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
@@ -113,17 +113,18 @@
         })
         .Columns(col =>
         {
-            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("EmployeeCode").HeaderText("E/C").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Name").HeaderText("Name").Width(80).Add();
-            col.Field("TimeIn").HeaderText("Check-in").Width(80).Add();
-            col.Field("TimeOut").HeaderText("Check-out").Width(80).Add();
-            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(80).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("EmployeeCode").HeaderText("E/C").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("Name").HeaderText("Name").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("TimeIn").HeaderText("Check-in").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("TimeOut").HeaderText("Check-out").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("TotalHours").HeaderText("Total Hr").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
 
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
@@ -148,10 +149,10 @@
     });
 
     function fn_begin(args) {
-        var DepartmentId = $("#DepartmentId").val();       
+        var Department = $("#Department").val();       
         this.model.query.addParams("startdate", $('#startdate').val());
         this.model.query.addParams("enddate", $('#enddate').val());
-        this.model.query.addParams("departmentid", DepartmentId);       
+        this.model.query.addParams("departmentname", Department);       
     }
 
     function complete(args) {
@@ -173,17 +174,17 @@
     function fn_reset() {
         $('#startdate').val('');
         $('#enddate').val('');
-        $('#Departments').val('');     
-        $('#DepartmentId').val('');
+        $('#Dept').val('');     
+        $('#Department').val('');
 
         var gridObj = $("#FlatGrid").ejGrid("instance");
         gridObj.refreshContent();
     }
 
     function DeptChange(args) {
-        var utocompleteObj = $("#Departments").data("Departments");
+        var utocompleteObj = $("#Dept").data("Dept");
         var id = args.model.value;
-        $("#DepartmentId").val(id);
+        $("#Department").val(id);
     };
 
 </script>
@@ -206,11 +207,11 @@
             var data = {};
             data.startdate = $('#startdate').val();
             data.enddate = $('#enddate').val();
-            data.departmentid = $("#DepartmentId").val();
+            data.departmentname = $("#Department").val();
           
             var url = '@Url.Action("OverTimeEmployeeReportDataSource", "Reports")';
 
-            url = url + "?startdate=" + $('#startdate').val() + "&enddate=" + $('#enddate').val() + "&departmentid=" + $("#DepartmentId").val();
+            url = url + "?startdate=" + $('#startdate').val() + "&enddate=" + $('#enddate').val() + "&departmentname=" + $("#Department").val();
             url = url + "&skip=0&take=10&print=1";
             $.ajax({
                 url: url,

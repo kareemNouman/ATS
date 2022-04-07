@@ -33,13 +33,13 @@ namespace ATS.Web.Controllers
             return View(model);
         }
 
-        public ActionResult SingleEmployeeReportDataSource(DataManager dm, string startdate, string enddate, string departmentid,string employeecode,string employeename, string print, string pdf)
+        public ActionResult SingleEmployeeReportDataSource(DataManager dm, string startdate, string enddate, string departmentname,string employeecode,string employeename, string print, string pdf)
         {
             GridRequestModel request = new GridRequestModel();
 
             startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
             enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
-            departmentid = string.IsNullOrWhiteSpace(departmentid) ? null : departmentid;
+            departmentname = string.IsNullOrWhiteSpace(departmentname) ? null : departmentname;
             employeecode = string.IsNullOrWhiteSpace(employeecode) ? null : employeecode;
             employeename = string.IsNullOrWhiteSpace(employeename) ? null : employeename;
 
@@ -55,7 +55,7 @@ namespace ATS.Web.Controllers
             }
             request.Filters.Add("startdate", startdate);
             request.Filters.Add("enddate", enddate);
-            request.Filters.Add("departmentid", departmentid);
+            request.Filters.Add("departmentname", departmentname);
             request.Filters.Add("employeecode", employeecode);
             request.Filters.Add("employeename", employeename);
 
@@ -94,7 +94,7 @@ namespace ATS.Web.Controllers
 
         public ActionResult AllEmployeesReport()
         {
-            AttendanceViewModel model = new AttendanceViewModel();
+            EmployeeViewModel model = new EmployeeViewModel();
             return View(model);
         }
 
@@ -129,13 +129,13 @@ namespace ATS.Web.Controllers
 
             //var responseData = response;
             if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
-                return Json(new { result = response.Results, count = response.TotalNumberOfRecords });
+                return Json(new { result = response, count = response.Select(x => x.TotalRecords).FirstOrDefault() });
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response.Results);
+                return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response);
             }
-            return PartialView("_allEmployeeReportsPartial", response.Results);
+            return PartialView("_allEmployeeReportsPartial", response);
         }
 
 
@@ -163,13 +163,13 @@ namespace ATS.Web.Controllers
             return View(model);
         }
 
-        public ActionResult OverTimeEmployeeReportDataSource(DataManager dm, string startdate, string enddate, string departmentid, string print, string pdf)
+        public ActionResult OverTimeEmployeeReportDataSource(DataManager dm, string startdate, string enddate, string departmentname, string print, string pdf)
         {
             GridRequestModel request = new GridRequestModel();
 
             startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
             enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
-            departmentid = string.IsNullOrWhiteSpace(departmentid) ? null : departmentid;            
+            departmentname = string.IsNullOrWhiteSpace(departmentname) ? null : departmentname;            
 
             if (pdf == "true")
             {
@@ -183,7 +183,7 @@ namespace ATS.Web.Controllers
             }
             request.Filters.Add("startdate", startdate);
             request.Filters.Add("enddate", enddate);
-            request.Filters.Add("departmentid", departmentid);           
+            request.Filters.Add("departmentname", departmentname);           
 
 
             var response = _reportService.OverTimeEmployeeAttendanceReport(request);
@@ -272,7 +272,6 @@ namespace ATS.Web.Controllers
         }
         #endregion
 
-
         #region EmployeeLeaveReport
         //[NECAuthorize(Key = new string[] { NECPermissions.SalaryReport })]
 
@@ -324,6 +323,69 @@ namespace ATS.Web.Controllers
             request.PageSize = 1000;
             request.Page = 0;
             var response = _reportService.EmployeeLeaveReport(request);
+
+            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+        }
+
+        #endregion
+
+        #region DailyEmployeeAttendanceReport
+        //[NECAuthorize(Key = new string[] { NECPermissions.SalaryReport })]
+
+        public ActionResult DailyEmployeeReport()
+        {
+            AttendanceViewModel model = new AttendanceViewModel();
+            return View(model);
+        }
+
+        public ActionResult DailyEmployeeReportDataSource(DataManager dm, string startdate, string enddate, string employeename, string departmentname, string print, string pdf)
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
+            enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
+            departmentname = string.IsNullOrWhiteSpace(departmentname) ? null : departmentname;            
+            employeename = string.IsNullOrWhiteSpace(employeename) ? null : employeename;
+
+            if (pdf == "true")
+            {
+                request.PageSize = 1700;
+                request.Page = 0;
+            }
+            else
+            {
+                request.PageSize = string.IsNullOrWhiteSpace(print) ? dm.Take : 1700;
+                request.Page = string.IsNullOrWhiteSpace(print) ? dm.Skip : 0;
+            }
+            request.Filters.Add("startdate", startdate);
+            request.Filters.Add("enddate", enddate);
+            request.Filters.Add("departmentname", departmentname);            
+            request.Filters.Add("employeename", employeename);
+
+
+            var response = _reportService.DailyEmployeeAttendanceReport(request);
+
+            //var responseData = response;
+            if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
+                return Json(new { result = response.Results, count = response.TotalNumberOfRecords });
+            else if (!string.IsNullOrWhiteSpace(pdf))
+            {
+                ViewBag.IsPDF = true;
+                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            }
+            return PartialView("_singleEmployeeReportsPartial", response.Results);
+        }
+
+
+        public ActionResult DailyEmployeeReportPDF()
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            string print = "";
+
+            request.PageSize = 1000;
+            request.Page = 0;
+            var response = _reportService.SingleEmployeeAttendanceReport(request);
 
             return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
         }

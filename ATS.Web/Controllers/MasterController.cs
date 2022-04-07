@@ -385,6 +385,7 @@ namespace ATS.Web.Controllers
             {
                 var employeeLeave = _masterService.GetEmployeeLeave(id);
                 viewmodel.Id = employeeLeave.ID;
+                viewmodel.EmployeeId = employeeLeave.EmployeeID;
                 viewmodel.Name = employeeLeave.Name;
                 viewmodel.EmployeeCode= employeeLeave.EmployeeCode;
                 viewmodel.LeaveStart = employeeLeave.LeaveStart;
@@ -423,7 +424,7 @@ namespace ATS.Web.Controllers
                 ErrorNotification("Something Went Wrong!Please Try Again");
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Users");
+            return RedirectToAction("EmployeeLeaves");
         }
         //    [NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
         public JsonResult EmployeeLeavesData(DataManager dm)

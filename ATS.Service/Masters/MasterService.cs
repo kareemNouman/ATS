@@ -67,7 +67,8 @@ namespace ATS.Service.Masters
         public IEnumerable<Department> GetAllDepartments()
         {
             return _departmentRepository.GetAll().Where(x => x.IsDelete == false);
-        }
+        }        
+
 
         public Department GetDepartment(Int64 id)
         {
@@ -413,6 +414,7 @@ namespace ATS.Service.Masters
             var employeeDetails = _employeeService.GetEmployeeByID(empLeave.EmployeeId.Value);
             var emp = new EmployeeLeave
             {
+                ID = empLeave.Id,
                 EmployeeID = empLeave.EmployeeId,
                 EmployeeCode = employeeDetails.EmployeeCode,
                 Name = employeeDetails.Name,
