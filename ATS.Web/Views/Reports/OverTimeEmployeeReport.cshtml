@@ -12,7 +12,7 @@
 
 <div class="panel" id="salaryLoad">
     <header class="panel-heading">
-        <h3 class="panel-title">OverTime Employee Report</h3>
+        <h3 class="panel-title">Daily OT Approval Report</h3>
     </header>
 
     <div class="panel-body">
@@ -21,7 +21,8 @@
 
             <div class="row col-lg-6">
                 <form action="@Url.Action("OverTimeEmployeeReportDataSource", "Reports")" method="get" id="frmovertimeEmployeeReport" target="_blank">
-                    @Html.HiddenFor(x => x.Department)                    
+                    @Html.HiddenFor(x => x.Department)
+                    <input type="hidden" name="departmentname" id="hddepartmentname" />
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
@@ -40,7 +41,7 @@
 
                             }
                         </div>
-                    </div>                 
+                    </div>
                     <div class="form-group col-sm-6">
                         <label class="control-label" for="inputBasicFirstName">Start Date</label>
                         <div class="input-group">
@@ -90,10 +91,25 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            @*<div class="col-lg-12">
-                <label>Total OT Hrs:<b id="total"></b></label>
-            </div>*@
+        <div class="row" style="margin-top:30px">
+            <div class="col-lg-6">
+                <label>Total Hrs:<b id="total"></b></label>
+            </div>
+            <div class="col-lg-6">
+                <label>Total OT Hrs:<b id="totalOT"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT1 Normal Hrs:<b id="totalOT1"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT2 WeekOff Hrs:<b id="totalOT2"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT3 Holiday Hrs:<b id="totalOT3"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT4 Night Hrs:<b id="totalOT4"></b></label>
+            </div>
         </div>
 
         <div class="row height-50">
@@ -113,18 +129,20 @@
         })
         .Columns(col =>
         {
-            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("EmployeeCode").HeaderText("E/C").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("Name").HeaderText("Name").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
-            col.Field("TimeIn").HeaderText("Check-in").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
-            col.Field("TimeOut").HeaderText("Check-out").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
-            col.Field("TotalHours").HeaderText("Total Hr").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
-            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
-            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+            col.Field("Date").HeaderText("Date").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("EmployeeCode").HeaderText("E/c").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("Name").HeaderText("Name").Width(100).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("Department").HeaderText("Department").Width(80).TextAlign(Syncfusion.JavaScript.TextAlign.Left).Add();
+            col.Field("TimeIn").HeaderText("Check-in").Width(50).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Add();
+            col.Field("TimeOut").HeaderText("Check-out").Width(50).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Add();
+            col.Field("TotalHours").HeaderText("Tot.Hrs").Width(50).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Add();
+            col.Field("TotalOT").HeaderText("OT.Hrs").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("OT1").HeaderText("Normal").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("OT2").HeaderText("WeekOff").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("OT3").HeaderText("Holiday").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("OT4").HeaderText("Night").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(55).Add();
+            col.Field("Remarks").HeaderText("Remark").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            //col.Field("Status").HeaderText("Status").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
 
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
@@ -144,6 +162,7 @@
         $("#btnpdf").click(function () {
             $("#hdstartdate").val($("#startdate").val());
             $("#hdenddate").val($("#enddate").val());
+            $("#hddepartmentname").val($("#Department").val());
             $("#frmovertimeEmployeeReport").submit();
         });
     });
@@ -156,14 +175,29 @@
     }
 
     function complete(args) {
-        // var total = ej.sum(args.model.dataSource, "Amount");
-        //if (args.model.currentViewData.length > 0) {
-        //    var defaultValue = args.model.currentViewData[0].Total;
-        //    $("#total").html(defaultValue);
-        //}
-        //else {
-        //    $("#total").html(0);
-        //}
+        var total = ej.sum(args.model.dataSource, "Amount");
+        if (args.model.currentViewData.length > 0) {
+            var totalOTHrs = args.model.currentViewData[0].Total;
+            var totalOT1Hrs = args.model.currentViewData[0].TotalOT1;
+            var totalOT2Hrs = args.model.currentViewData[0].TotalOT2;
+            var totalOT3Hrs = args.model.currentViewData[0].TotalOT3;
+            var totalOT4Hrs = args.model.currentViewData[0].TotalOT4;
+            var totalHrs = args.model.currentViewData[0].SumTotalHrs;
+            $("#totalOT").html(totalOTHrs);
+            $("#totalOT1").html(totalOT1Hrs);
+            $("#totalOT2").html(totalOT2Hrs);
+            $("#totalOT3").html(totalOT3Hrs);
+            $("#totalOT4").html(totalOT4Hrs);
+            $("#total").html(totalHrs);
+        }
+        else {
+            $("#total").html(0);
+            $("#totalOT").html(0);
+            $("#totalOT1").html(0);
+            $("#totalOT2").html(0);
+            $("#totalOT3").html(0);
+            $("#totalOT4").html(0);
+        }
     }
 
     function fn_search() {

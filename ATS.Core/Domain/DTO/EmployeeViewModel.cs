@@ -16,7 +16,7 @@ namespace ATS.Core.Domain.DTO
         public string Department { get; set; }
         public string Designation { get; set; }
         public string Email { get; set; }
-
+        public string Remarks { get; set; }
         public Nullable<long> DepartmentID { get; set; }
 
         public Nullable<long> DesignationID { get; set; }

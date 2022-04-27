@@ -22,10 +22,11 @@
 
             <div class="row col-lg-6">
                 <form action="@Url.Action("SingleEmployeeReportDataSource", "Reports")" method="get" id="frmsingleEmployeeReport" target="_blank">
-                    @Html.HiddenFor(x => x.Name)
                     @Html.HiddenFor(x => x.EmployeeCode)
+                    @Html.HiddenFor(x => x.Name)
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
+                    <input type="hidden" name="employeename" id="hdemployeename" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
                     <div class="col-lg-6">
                         <div class="form-group form-material">
@@ -108,19 +109,45 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <label>Total OT Hrs:<b id="total"></b></label>
+        <div class="row" style="margin-top:30px">
+            <div class="col-lg-4">
+                <label>Name:<b id="singleEmpName"></b></label>
+            </div>
+            <div class="col-lg-4">
+                <label>Designation:<b id="singleDesignation"></b></label>
+            </div>
+            <div class="col-lg-4">
+                <label>Department:<b id="singleDepartment"></b></label>
+            </div>
+        </div>
+        <div class="row" style="margin-top:30px">
+            <div class="col-lg-6">
+                <label>Total Hrs:<b id="total"></b></label>
+            </div>
+            <div class="col-lg-6">
+                <label>Total OT Hrs:<b id="totalOT"></b></label>               
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT1 Normal Hrs:<b id="totalOT1"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT2 WeekOff Hrs:<b id="totalOT2"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT3 Holiday Hrs:<b id="totalOT3"></b></label>
+            </div>
+            <div class="col-lg-3">
+                <label>Total OT4 Night Hrs:<b id="totalOT4"></b></label>
             </div>
         </div>
 
-        <div class="row height-50">
+    <div class="row height-50">
 
-        </div>
+            </div>
 
 
-        <div class="row">
-            @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
+            <div class="row">
+                @(Html.EJ().Grid<ATS.Core.Domain.DTO.AttendanceViewModel>("FlatGrid")
 
          .Datasource(ds => ds.URL(Url.Action("SingleEmployeeReportDataSource", "Reports")).Adaptor("UrlAdaptor"))
         .AllowSorting()
@@ -131,21 +158,23 @@
         })
         .Columns(col =>
         {
-            col.Field("Date").HeaderText("Date").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("TimeIn").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("TimeOut").HeaderText("Time Out").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
-            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
-            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("Date").HeaderText("Date").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("TimeIn").HeaderText("Check-in").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("TimeOut").HeaderText("Check-out").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
+            col.Field("TotalHours").HeaderText("Tot.Hrs").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
+            col.Field("TotalOT").HeaderText("OT.Hrs").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("OT1").HeaderText("Normal").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("OT2").HeaderText("WeekOff").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("OT3").HeaderText("Holiday").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("OT4").HeaderText("Night").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            //col.Field("Status").HeaderText("Status").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
+            col.Field("Remarks").HeaderText("Remark").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(85).Add();
 
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
+            </div>
+
+
         </div>
-
-
-    </div>
 </div>
 
 <script id="print" type="text/x-jsrender">
@@ -159,6 +188,7 @@
         $("#btnpdf").click(function () {
             $("#hdstartdate").val($("#startdate").val());
             $("#hdenddate").val($("#enddate").val());
+            $("#hdemployeename").val($("#Employee").val());
             $("#frmsingleEmployeeReport").submit();
         });
     });
@@ -176,11 +206,35 @@
     function complete(args) {
          var total = ej.sum(args.model.dataSource, "Amount");
         if (args.model.currentViewData.length > 0) {
-            var defaultValue = args.model.currentViewData[0].Total;
-            $("#total").html(defaultValue);
+            var totalOTHrs = args.model.currentViewData[0].Total;
+            var totalOT1Hrs = args.model.currentViewData[0].TotalOT1;
+            var totalOT2Hrs = args.model.currentViewData[0].TotalOT2;
+            var totalOT3Hrs = args.model.currentViewData[0].TotalOT3;
+            var totalOT4Hrs = args.model.currentViewData[0].TotalOT4;
+            var totalHrs = args.model.currentViewData[0].SumTotalHrs;
+            var sigName = args.model.currentViewData[0].Name;
+            var sigDepartment = args.model.currentViewData[0].Department;
+            var sigDesignation = args.model.currentViewData[0].Designation;
+            $("#totalOT").html(totalOTHrs);
+            $("#totalOT1").html(totalOT1Hrs);
+            $("#totalOT2").html(totalOT2Hrs);
+            $("#totalOT3").html(totalOT3Hrs);
+            $("#totalOT4").html(totalOT4Hrs);
+            $("#total").html(totalHrs);
+            $("#singleEmpName").html(sigName);
+            $("#singleDepartment").html(sigDepartment);
+            $("#singleDesignation").html(sigDesignation);
         }
         else {
             $("#total").html(0);
+            $("#totalOT").html(0);
+            $("#totalOT1").html(0);
+            $("#totalOT2").html(0);
+            $("#totalOT3").html(0);
+            $("#totalOT4").html(0);
+            $("#singleEmpName").html("");
+            $("#singleDepartment").html("");
+            $("#singleDesignation").html("");
         }
     }
 

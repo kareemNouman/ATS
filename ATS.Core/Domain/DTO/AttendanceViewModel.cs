@@ -15,6 +15,8 @@ namespace ATS.Core.Domain.DTO
 
         public string Designation { get; set; }
 
+        public Nullable<long> DesignationId { get; set; }
+
         public string Department { get; set; }
 
         public string TimeIn { get; set; }
@@ -22,6 +24,8 @@ namespace ATS.Core.Domain.DTO
         public string TimeOut { get; set; }
 
         public double TotalHours { get; set; }
+
+        public string Remarks { get; set; }
         public Nullable<decimal> SickLeaves { get; set; }
         public Nullable<decimal> AdjustAnnLeaves { get; set; }
 
@@ -36,6 +40,11 @@ namespace ATS.Core.Domain.DTO
         public Nullable<decimal> TotalOT { get; set; }
         public Nullable<decimal> Total { get; set; }
 
+        public Nullable<decimal> TotalOT1 { get; set; }
+        public Nullable<decimal> TotalOT2 { get; set; }
+        public Nullable<decimal> TotalOT3 { get; set; }
+        public Nullable<decimal> TotalOT4 { get; set; }
+        public Nullable<double> SumTotalHrs { get; set; }
         public Nullable<decimal> OT1Amount { get; set; }
         public Nullable<decimal> OT2Amount { get; set; }
         public Nullable<decimal> OT3Amount { get; set; }

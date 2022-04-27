@@ -31,6 +31,7 @@ namespace ATS.Data.EF.Mappings
             this.Property(x => x.IsActive).HasColumnName("IsActive");            
             this.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
             this.Property(x => x.CreatedOn).HasColumnName("CreatedOn");
+            this.Property(x => x.Remarks).HasColumnName("Remarks");
         }
 
     }

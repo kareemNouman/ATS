@@ -12,7 +12,7 @@
 
 <div class="panel" id="salaryLoad">
     <header class="panel-heading">
-        <h3 class="panel-title">Daily Employee Attendance Report</h3>
+        <h3 class="panel-title">Daily Attendance All Employee Report</h3>
     </header>
 
     <div class="panel-body">
@@ -107,10 +107,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <label>Total OT Hrs:<b id="total"></b></label>
-            </div>
+        <div class="row">            
         </div>
 
         <div class="row height-50">
@@ -130,17 +127,19 @@
         })
         .Columns(col =>
         {
-            col.Field("EmployeeCode").HeaderText("EmployeeCode").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Add();
-            col.Field("Name").HeaderText("Employee Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("TimeIn").HeaderText("Time In").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("TimeOut").HeaderText("Time Out").Width(80).Add();
-            col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("TotalOT").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-
+            col.Field("EmployeeCode").HeaderText("EMP CODE").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Name").HeaderText("NAME").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
+            col.Field("Designation").HeaderText("DESIGNATION").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
+            col.Field("Department").HeaderText("DEPARTMENT").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
+            col.Field("TimeIn").HeaderText("TIME IN").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("TimeOut").HeaderText("TIME OUT").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("TotalHours").HeaderText("TOTAL").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Add();
+            //col.Field("Status").HeaderText("Status").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("OT1").HeaderText("OT-1").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("OT2").HeaderText("OT-2").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("OT3").HeaderText("OT-3").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("OT4").HeaderText("OT-4").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();            
+            col.Field("Status").HeaderText("STATUS").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
 

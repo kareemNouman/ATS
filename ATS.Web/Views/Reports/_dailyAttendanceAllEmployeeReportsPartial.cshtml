@@ -1,0 +1,229 @@
+﻿@model List<ATS.Core.Domain.DTO.AttendanceViewModel>
+
+@{
+    Layout = null;
+}
+@if (ViewBag.IsPDF == true)
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        table, th {
+            height: 50px;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    </style>
+
+    <div>
+        <div style="text-align:center;margin-bottom:10px;">
+            <img src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+            <h3>Daily Attendance All Employee Report</h3>
+        </div>
+        <div>
+            <label>DAILY ATTENDANCE WITH OT ON:<b>@Model.Select(x => x.Date).FirstOrDefault() </b></label>
+        </div>
+        <table cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>
+                        EMP CODE
+                    </th>
+                    <th>
+                        NAME
+                    </th>
+                    <th>
+                        DESIGNATION
+                    </th>
+                    <th>
+                        DEPARTMENT
+                    </th>
+                    <th>
+                        TIME IN
+                    </th>
+                    <th>
+                        TIME OUT
+                    </th>
+                    <th>
+                        TOTAL
+                    </th>
+                    <th>
+                        OT-1
+                    </th>
+                    <th>
+                        OT-2
+                    </th>
+                    <th>
+                        OT-3
+                    </th>
+                    <th>
+                        OT-4
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.EmployeeCode</td>
+                        <td>@item.Name</td>
+                        <td>@item.Designation</td>
+                        <td>@item.Department</td>
+                        <td>@item.TimeIn</td>
+                        <td>@item.TimeOut</td>
+                        <td>@item.TotalHours</td>
+                        <td>@item.OT1</td>
+                        <td>@item.OT2</td>
+                        <td>@item.OT3</td>
+                        <td>@item.OT4</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+
+    <link href="@Url.Content("~/Content/ej/web/Default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+
+    <style type="text/css" media="print">
+        @@page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+        }
+    </style>
+
+    <div style="text-align:center;margin-bottom:10px;">
+        <img src="~/Images/ATS.png" alt="Alternate Text" />
+        <h3>Daily Attendance All Employee Report</h3>
+    </div>    
+    <div class="e-grid e-js ">
+        <div class="e-gridheader">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 60px;">
+                        <col style="width: 80px;">
+                        <col style="width: 75px;">
+                        <col style="width: 70px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 80px;">
+                        <col style="width: 80px;">
+                        <col style="width: 80px;">
+                    </colgroup>
+                    <thead>
+                        <tr class="e-columnheader">
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="EmployeeCode" style="text-align: center;">EMP CODE</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Name" style="text-align: center;">NAME</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Designation" style="text-align: center;">DESIGNATION</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Department" style="text-align: center;">DEPARTMENT</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TimeIn" style="text-align: center;">TIME IN</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TimeOut" style="text-align: center;">TIME OUT</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="TotalHours" style="text-align: center;">TOTAL</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT1" style="text-align: center;">OT-1</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT2" style="text-align: center;">OT-2</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT3" style="text-align: center;">OT-3</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT4" style="text-align: center;">OT-4</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Status" style="text-align: center;">STATUS</div></th>
+                        </tr>
+                    </thead>
+                    <tbody class="e-hide">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="e-gridcontent">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 60px;">
+                        <col style="width: 75px;">
+                        <col style="width: 80px;">
+                        <col style="width: 80px;">
+                        <col style="width: 55px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 55px;">
+                        <col style="width: 55px;">
+                        <col style="width: 55px;">
+                    </colgroup>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                        <tr class="e-row" role="row">
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.EmployeeCode</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Name</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Designation</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Department</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.TimeIn</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.TimeOut</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.TotalHours</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT1</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT2</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT3</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT4</td>
+                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Status</td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

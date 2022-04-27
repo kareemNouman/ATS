@@ -129,14 +129,15 @@
         })
         .Columns(col =>
         {
-            col.Field("EmployeeCode").HeaderText("Employee Code").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Name").HeaderText("Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Department").HeaderText("Department").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Designation").HeaderText("Designation").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("LeaveStart").HeaderText("Leave Start").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("LeaveEnd").HeaderText("Leave End").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy}").Add();
-            col.Field("LName").HeaderText("Leave Type").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Remark").HeaderText("Remark").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("EmployeeCode").HeaderText("E/c").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Name").HeaderText("Name").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
+            col.Field("Department").HeaderText("Department").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Add();
+            col.Field("Designation").HeaderText("Designation").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Add();
+            col.Field("LeaveStart").HeaderText("Leave Start").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("LeaveEnd").HeaderText("Leave End").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(70).Format("{0:dd MMMM yyyy}").Add();
+            col.Field("ExceedingDays").HeaderText("Exceeding Days").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
+            col.Field("LName").HeaderText("Leave Type").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
+            col.Field("Remark").HeaderText("Remark").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
 

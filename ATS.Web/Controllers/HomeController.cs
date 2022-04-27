@@ -116,30 +116,31 @@ namespace ATS.Web.Controllers
                                     //If Intime or OutTime is empty to be executed.
                                     if (string.IsNullOrWhiteSpace(attendance.TimeIn) || string.IsNullOrWhiteSpace(attendance.TimeOut))
                                     {
+                                        Random rnd = new Random();
                                         bool isInTimeExits = false;
                                         bool isOutTimeExits = false;
                                         if (!string.IsNullOrWhiteSpace(attendance.TimeIn) && string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
                                             if (employee.ShiftCode == 1)
-                                                attendance.TimeOut = "14:00";
+                                                attendance.TimeOut = string.Format("14:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 2)
-                                                attendance.TimeOut = "22:00";
+                                                attendance.TimeOut = string.Format("22:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 3)
-                                                attendance.TimeOut = "06:00";
+                                                attendance.TimeOut = string.Format("06:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 4)
-                                                attendance.TimeOut = "17:00";
+                                                attendance.TimeOut = string.Format("17:{0}", rnd.Next(15));
                                             isOutTimeExits = true;
                                         }
                                         if (string.IsNullOrWhiteSpace(attendance.TimeIn) && !string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
                                             if (employee.ShiftCode == 1)
-                                                attendance.TimeIn = "06:00";
+                                                attendance.TimeIn = string.Format("06:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 2)
-                                                attendance.TimeIn = "14:00";
+                                                attendance.TimeIn = string.Format("14:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 3)
-                                                attendance.TimeIn = "22:00";
+                                                attendance.TimeIn = string.Format("22:{0}", rnd.Next(15));
                                             if (employee.ShiftCode == 4)
-                                                attendance.TimeIn = "08:00";
+                                                attendance.TimeIn = string.Format("08:{0}", rnd.Next(15));
                                             isInTimeExits = true;
                                         }
                                         if (isInTimeExits || isOutTimeExits)
@@ -148,7 +149,7 @@ namespace ATS.Web.Controllers
                                             double OutTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
                                             if (employee.ShiftCode == 3)
                                                 InTime = 22.00 - 8.00;
-                                            attendance.TotalHours = OutTime - InTime;
+                                            attendance.TotalHours = Math.Abs(OutTime - InTime);
                                         }
                                     }
                                    _dailyAttendanceService.AddAttendance(attendance);

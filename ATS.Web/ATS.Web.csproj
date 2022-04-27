@@ -91,7 +91,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rotativa.1.6.4\lib\net40\Rotativa.dll</HintPath>
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.EJ">
       <HintPath>..\ExternalDLL\Syncfusion.EJ.dll</HintPath>
@@ -2738,6 +2738,9 @@
     <Content Include="global\vendor\x-editable\x-editable.css" />
     <Content Include="global\vendor\x-editable\x-editable.min.css" />
     <Content Include="Images\ATS.png" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -3492,6 +3495,14 @@
     <Content Include="Views\Master\EmployeeLeavesDetail.cshtml" />
     <Content Include="Views\Reports\EmployeeLeaveReport.cshtml" />
     <Content Include="Views\Reports\DailyEmployeeReport.cshtml" />
+    <Content Include="Views\Reports\AllEmployeesMinistryReport.cshtml" />
+    <Content Include="Views\Reports\_allEmployeeReportsPartial.cshtml" />
+    <Content Include="Views\Reports\_dailyOTApproveReportsPartial.cshtml" />
+    <Content Include="Views\Reports\_employeeLeaveReportsPartial.cshtml" />
+    <Content Include="Views\Reports\_employeePayrollReportsPartial.cshtml" />
+    <Content Include="Views\Reports\CashIncentiveEmployeesReport.cshtml" />
+    <Content Include="Views\Reports\_cashIncentiveEmployeeReportsPartial.cshtml" />
+    <Content Include="Views\Reports\_dailyAttendanceAllEmployeeReportsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

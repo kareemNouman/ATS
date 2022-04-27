@@ -1,0 +1,231 @@
+﻿
+
+@model List<ATS.Core.Domain.DTO.EmployeeViewModel>
+
+@{
+    Layout = null;
+}
+@if (ViewBag.IsPDF == true)
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        table, th {
+            height: 50px;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    </style>
+
+    <div>
+        <div style="text-align:center;margin-bottom:10px;">
+            <img src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+            <h3>Cash Incentive Report</h3>
+        </div>
+        <div>
+               @* <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>*@
+        </div>
+        <table cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>
+                        E/c.
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Designation
+                    </th>
+                    <th>
+                        Normal Hrs
+                    </th>
+                    <th>
+                        WeekOff Hrs
+                    </th>
+                    <th>
+                        Holiday Hrs
+                    </th>
+                    <th>
+                        Night OT Hrs
+                    </th>
+                    <th>
+                        Normal Amt
+                    </th>
+                    <th>
+                        WeekOff Amt
+                    </th>
+                    <th>
+                        Holiday Amt
+                    </th>
+                    <th>
+                        Night OT Amt
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.EmployeeCode</td>
+                        <td>@item.Name</td>
+                        <td>@item.Designation</td>
+                        <td>@item.OT1</td>
+                        <td>@item.OT2</td>
+                        <td>@item.OT3</td>
+                        <td>@item.OT4</td>
+                        <td>@item.OT1Amount</td>
+                        <td>@item.OT2Amount</td>
+                        <td>@item.OT3Amount</td>
+                        <td>@item.OT4Amount</td>
+                        <td>@item.OTTotalAmount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+
+    <link href="@Url.Content("~/Content/ej/web/Default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+
+    <style type="text/css" media="print">
+        @@page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+        }
+    </style>
+
+    <div style="text-align:center;margin-bottom:10px;">
+        <img src="~/Images/ATS.png" alt="Alternate Text" />
+        <h3>Cash Incentive Report</h3>
+    </div>
+    <div class="e-grid e-js ">
+        <div class="e-gridheader">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 50px;">
+                        <col style="width: 100px;">
+                        <col style="width: 90px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 80px;">
+                    </colgroup>
+                    <thead>
+                        <tr class="e-columnheader">
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="EmployeeCode" style="text-align: center;">Employee Code</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Name" style="text-align: left;">Name</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Designation" style="text-align: center;">Designation</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT1" style="text-align: center;">Normal Hrs</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT2" style="text-align: center;">WeekOff Hrs</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT3" style="text-align: center;">Holiday Hrs</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT4" style="text-align: center;">Night OT Hrs</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT1Amount" style="text-align: center;">Normal Amt</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT2Amount" style="text-align: center;">WeekOff Amt</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT3Amount" style="text-align: center;">Holiday Amt</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OT4Amount" style="text-align: center;">Night OT Amt</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="OTTotalAmount" style="text-align: center;">Total</div></th>
+                        </tr>
+                    </thead>
+                    <tbody class="e-hide">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="e-gridcontent">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 50px;">
+                        <col style="width: 100px;">
+                        <col style="width: 80px;">
+                        <col style="width: 50px;">
+                        <col style="width: 55px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 85px;">
+                    </colgroup>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="e-row" role="row">
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.EmployeeCode</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: left;">@item.Name</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Designation</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT1</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT2</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT3</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT4</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT1Amount</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT2Amount</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT3Amount</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT4Amount</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OTTotalAmount</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+

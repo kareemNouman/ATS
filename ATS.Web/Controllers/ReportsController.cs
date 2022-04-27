@@ -59,8 +59,18 @@ namespace ATS.Web.Controllers
             request.Filters.Add("employeecode", employeecode);
             request.Filters.Add("employeename", employeename);
 
-
-            var response =  _reportService.SingleEmployeeAttendanceReport(request);
+            PagedResults<AttendanceViewModel> response = new PagedResults<AttendanceViewModel>();
+            if (startdate != null || enddate != null || departmentname != null ||
+                employeecode != null || employeename != null)
+            {
+                response = _reportService.SingleEmployeeAttendanceReport(request);
+            }
+            else
+            {
+                request.Filters.Add("noemployeename", "NoEmployee");
+                response = _reportService.SingleEmployeeAttendanceReport(request);
+            }
+            
 
             //var responseData = response;
             if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
@@ -149,7 +159,7 @@ namespace ATS.Web.Controllers
             request.Page = 0;
             var response = _reportService.SingleEmployeeAttendanceReport(request);
 
-            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            return new Rotativa.PartialViewAsPdf("_allEmployeeReportsPartial", response.Results);
         }
 
         #endregion
@@ -193,9 +203,9 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+                return new Rotativa.ViewAsPdf("_dailyOTApproveReportsPartial", response.Results);
             }
-            return PartialView("_singleEmployeeReportsPartial", response.Results);
+            return PartialView("_dailyOTApproveReportsPartial", response.Results);
         }
 
 
@@ -209,7 +219,7 @@ namespace ATS.Web.Controllers
             request.Page = 0;
             var response = _reportService.SingleEmployeeAttendanceReport(request);
 
-            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            return new Rotativa.PartialViewAsPdf("_dailyOTApproveReportsPartial", response.Results);
         }
 
         #endregion
@@ -252,9 +262,9 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response);
+                return new Rotativa.ViewAsPdf("_employeePayrollReportsPartial", response);
             }
-            return PartialView("_singleEmployeeReportsPartial", response);
+            return PartialView("_employeePayrollReportsPartial", response);
         }
 
 
@@ -268,7 +278,7 @@ namespace ATS.Web.Controllers
             request.Page = 0;
             var response = _reportService.SingleEmployeeAttendanceReport(request);
 
-            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            return new Rotativa.PartialViewAsPdf("_employeePayrollReportsPartial", response.Results);
         }
         #endregion
 
@@ -308,9 +318,9 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+                return new Rotativa.ViewAsPdf("_employeeLeaveReportsPartial", response.Results);
             }
-            return PartialView("_singleEmployeeReportsPartial", response.Results);
+            return PartialView("_employeeLeaveReportsPartial", response.Results);
         }
 
 
@@ -324,7 +334,7 @@ namespace ATS.Web.Controllers
             request.Page = 0;
             var response = _reportService.EmployeeLeaveReport(request);
 
-            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+            return new Rotativa.PartialViewAsPdf("_employeeLeaveReportsPartial", response.Results);
         }
 
         #endregion
@@ -371,11 +381,10 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+                return new Rotativa.ViewAsPdf("_dailyAttendanceAllEmployeeReportsPartial", response.Results);
             }
-            return PartialView("_singleEmployeeReportsPartial", response.Results);
+            return PartialView("_dailyAttendanceAllEmployeeReportsPartial", response.Results);
         }
-
 
         public ActionResult DailyEmployeeReportPDF()
         {
@@ -388,6 +397,173 @@ namespace ATS.Web.Controllers
             var response = _reportService.SingleEmployeeAttendanceReport(request);
 
             return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+        }
+
+        #endregion
+
+        #region AllEmployeeAttendanceReport
+        //[NECAuthorize(Key = new string[] { NECPermissions.SalaryReport })]
+
+        public ActionResult AllEmployeesMinistryReport()
+        {
+            EmployeeViewModel model = new EmployeeViewModel();
+            return View(model);
+        }
+
+        public ActionResult AllEmployeesMinistryReportDataSource(DataManager dm, string startdate, string enddate, string print, string pdf)
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
+            enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
+            //departmentid = string.IsNullOrWhiteSpace(departmentid) ? null : departmentid;
+            //employeecode = string.IsNullOrWhiteSpace(employeecode) ? null : employeecode;
+            //employeename = string.IsNullOrWhiteSpace(employeename) ? null : employeename;
+
+            if (pdf == "true")
+            {
+                request.PageSize = 1700;
+                request.Page = 0;
+            }
+            else
+            {
+                request.PageSize = string.IsNullOrWhiteSpace(print) ? dm.Take : 1700;
+                request.Page = string.IsNullOrWhiteSpace(print) ? dm.Skip : 0;
+            }
+            request.Filters.Add("startdate", startdate);
+            request.Filters.Add("enddate", enddate);
+            //request.Filters.Add("departmentid", departmentid);
+            //request.Filters.Add("employeecode", employeecode);
+            //request.Filters.Add("employeename", employeename);
+
+
+            var response = _reportService.AllEmployeeAttendanceReport(request);
+
+            //var responseData = response;
+            if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
+                return Json(new { result = response, count = response.Select(x => x.TotalRecords).FirstOrDefault() });
+            else if (!string.IsNullOrWhiteSpace(pdf))
+            {
+                ViewBag.IsPDF = true;
+                return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response);
+            }
+            return PartialView("_allEmployeeReportsPartial", response);
+        }
+
+
+        public ActionResult AllEmployeesMinistryReportPDF()
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            string print = "";
+
+            request.PageSize = 1000;
+            request.Page = 0;
+            var response = _reportService.SingleEmployeeAttendanceReport(request);
+
+            return new Rotativa.PartialViewAsPdf("_singleEmployeeReportsPartial", response.Results);
+        }
+
+        #endregion
+
+        #region CashOvertimeReport
+        public ActionResult CashIncentiveEmployeesReport()
+        {
+            EmployeeViewModel model = new EmployeeViewModel();
+            return View(model);
+        }
+
+        public ActionResult CashIncentiveEmployeesReportDataSource(DataManager dm, string startdate, string enddate, string print, string pdf)
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
+            enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
+            //departmentid = string.IsNullOrWhiteSpace(departmentid) ? null : departmentid;
+            //employeecode = string.IsNullOrWhiteSpace(employeecode) ? null : employeecode;
+            //employeename = string.IsNullOrWhiteSpace(employeename) ? null : employeename;
+
+            if (pdf == "true")
+            {
+                request.PageSize = 1700;
+                request.Page = 0;
+            }
+            else
+            {
+                request.PageSize = string.IsNullOrWhiteSpace(print) ? dm.Take : 1700;
+                request.Page = string.IsNullOrWhiteSpace(print) ? dm.Skip : 0;
+            }
+            request.Filters.Add("startdate", startdate);
+            request.Filters.Add("enddate", enddate);
+            //request.Filters.Add("departmentid", departmentid);
+            //request.Filters.Add("employeecode", employeecode);
+            //request.Filters.Add("employeename", employeename);
+
+
+            var response = _reportService.CashIncentivesReport(request);
+
+            //var responseData = response;
+            if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
+                return Json(new { result = response, count = response.Select(x => x.TotalRecords).FirstOrDefault() });
+            else if (!string.IsNullOrWhiteSpace(pdf))
+            {
+                ViewBag.IsPDF = true;
+                return new Rotativa.ViewAsPdf("_cashIncentiveEmployeeReportsPartial", response);
+            }
+            return PartialView("_cashIncentiveEmployeeReportsPartial", response);
+        }
+
+
+        public ActionResult CashIncentiveEmployeesReportPDF()
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            string print = "";
+
+            request.PageSize = 1000;
+            request.Page = 0;
+            var response = _reportService.CashIncentivesReport(request);
+
+            return new Rotativa.PartialViewAsPdf("_cashIncentiveEmployeeReportsPartial", response);
+        }
+
+
+        #endregion
+
+        #region Payslip
+
+        public ActionResult GeneratePaySlip(DataManager dm, string startdate, string enddate)
+        {
+            GridRequestModel request = new GridRequestModel();
+
+            startdate = string.IsNullOrWhiteSpace(startdate) ? null : startdate;
+            enddate = string.IsNullOrWhiteSpace(enddate) ? null : enddate;
+
+
+            //if (pdf == "true")
+            //{
+            //    request.PageSize = 1700;
+            //    request.Page = 0;
+            //}
+            //else
+            //{
+            //    request.PageSize = string.IsNullOrWhiteSpace(print) ? dm.Take : 1700;
+            //    request.Page = string.IsNullOrWhiteSpace(print) ? dm.Skip : 0;
+            //}
+            request.Filters.Add("startdate", startdate);
+            request.Filters.Add("enddate", enddate);
+
+
+            var response = _reportService.EmployeePayrollReport(request);
+
+            //if (string.IsNullOrWhiteSpace(print) && string.IsNullOrWhiteSpace(pdf))
+            //    return Json(new { result = response, count = response.Select(x => x.TotalRecords).FirstOrDefault() });
+            //else if (!string.IsNullOrWhiteSpace(pdf))
+            //{
+            //    ViewBag.IsPDF = true;
+            //    return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response);
+            //}
+            return PartialView("_singleEmployeeReportsPartial", response);
         }
 
         #endregion

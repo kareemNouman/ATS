@@ -97,18 +97,19 @@
         })
         .Columns(col =>
         {
-            col.Field("EmployeeCode").HeaderText("Employee Code").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Format("{0:dd MMMM yyyy, hh:mm tt}").Add();
-            col.Field("Name").HeaderText("Name").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Designation").HeaderText("Designation").Width(80).Add();
-            col.Field("SickLeave").HeaderText("Sick Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("AdjustAnnLeave").HeaderText("Ann Adjust Leaves").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("Absent").HeaderText("Absent").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("ToPay").HeaderText("ToPay").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT1").HeaderText("Normal (OT1)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT2").HeaderText("Weekly Off (OT2)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT3").HeaderText("Public Holiday (OT3)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OT4").HeaderText("Night OT (OT4)").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
-            col.Field("OTTotalHours").HeaderText("Total OT").IsPrimaryKey(true).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(75).Add();
+            col.Field("EmployeeCode").HeaderText("E/c.").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Name").HeaderText("Name").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(100).Add();
+            col.Field("Designation").HeaderText("Designation").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(90).Add();
+            col.Field("SickLeave").HeaderText("Sick Leaves").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("AdjustAnnLeave").HeaderText("Ann Adjust Leaves").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Absent").HeaderText("Absent").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("ToPay").HeaderText("ToPay").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("OT1").HeaderText("Normal").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("OT2").HeaderText("WeekOff").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("OT3").HeaderText("Holiday").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("OT4").HeaderText("Night OT").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            col.Field("Remarks").HeaderText("Remark").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
+            // col.Field("OTTotalHours").HeaderText("Total OT").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(75).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>
 

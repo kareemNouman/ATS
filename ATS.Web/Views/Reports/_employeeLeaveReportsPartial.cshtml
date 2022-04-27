@@ -1,0 +1,201 @@
+﻿
+@model List<ATS.Core.Domain.DTO.EmployeeLeaveViewModel>
+
+@{
+    Layout = null;
+}
+@if (ViewBag.IsPDF == true)
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        table, th {
+            height: 50px;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    </style>
+
+    <div>
+        <div style="text-align:center;margin-bottom:10px;">
+            <img src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+            <h3>Employee Leave Report</h3>
+        </div>      
+        <table cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>
+                        E/c
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Designation
+                    </th>
+                    <th>
+                        Leave Start
+                    </th>
+                    <th>
+                        Leave End
+                    </th>
+                    <th>
+                        Exceeding Days
+                    </th>
+                    <th>
+                        Leave Type
+                    </th>
+                    <th>
+                        Remark
+                    </th>                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.EmployeeCode</td>                    
+                    <td>@item.Name</td>
+                    <td>@item.Department</td>
+                    <td>@item.Designation</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.LeaveStart)</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.LeaveEnd)</td>
+                    <td>@item.ExceedingDays</td>
+                    <td>@item.LName</td>
+                    <td>@item.Remark</td>                    
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+
+    <link href="@Url.Content("~/Content/ej/web/Default-theme/ej.widgets.all.min.css")" rel="stylesheet" />
+
+    <style type="text/css" media="print">
+        @@page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+        }
+    </style>
+
+    <div style="text-align:center;margin-bottom:10px;">
+        <img src="~/Images/ATS.png" alt="Alternate Text" />
+        <h3>Employee Leave Report</h3>
+    </div>
+    
+
+    <div class="e-grid e-js ">
+        <div class="e-gridheader">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col style="width: 70px;">
+                        <col style="width: 75px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 50px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">                        
+                    </colgroup>
+                    <thead>
+                        <tr class="e-columnheader">
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="EmployeeCode" style="text-align: right;">E/c</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Name" style="text-align: right;">Name</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Department" style="text-align: left;">Department</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Designation" style="text-align: right;">Designation</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="LeaveStart" style="text-align: right;">Leave Start</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="LeaveEnd" style="text-align: right;">Leave End</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="ExceedingDays" style="text-align: right;">Exceeding Days</div></th>
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="LName" style="text-align: right;">Leave Type</div></th>                            
+                            <th class="e-headercell e-default" role="columnheader"><div class="e-headercelldiv" ej-mappingname="Remarks" style="text-align: right;">Remark</div></th>
+                        </tr>
+                    </thead>
+                    <tbody class="e-hide">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>                          
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="e-gridcontent">
+            <div>
+                <table class="e-table" cellspacing="0.25px" role="grid">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col style="width: 75px;">
+                        <col style="width: 80px;">
+                        <col style="width: 80px;">
+                        <col style="width: 75px;">
+                        <col style="width: 50px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">                     
+                    </colgroup>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="e-row" role="row">
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.EmployeeCode</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Name</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Department</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Designation</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.LeaveStart</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.LeaveEnd</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.ExceedingDays</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.LName</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Remark</td>                               
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

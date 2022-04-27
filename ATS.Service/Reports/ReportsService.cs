@@ -45,13 +45,14 @@ namespace ATS.Service.Reports
             var departmentname = "";
             var employeecode = "";
             var employeename = "";
+            var noemployeename = "";
 
             request.Filters.TryGetValue("startdate", out startdate);
             request.Filters.TryGetValue("enddate", out enddate);
             request.Filters.TryGetValue("departmentname", out departmentname);
             request.Filters.TryGetValue("employeecode", out employeecode);
             request.Filters.TryGetValue("employeename", out employeename);
-
+            request.Filters.TryGetValue("noemployeename", out noemployeename);            
             DateTime startDate;
             DateTime endDate;
             //long departmentID;            
@@ -77,20 +78,41 @@ namespace ATS.Service.Reports
             {
                 query = query.Where(x => x.Name.ToLower() == employeename.ToLower());
             }
-
-            var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            if (!string.IsNullOrWhiteSpace(noemployeename))
+            {
+                query = query.Where(x => x.Name.ToLower() == noemployeename.ToLower());
+            }
+            query = query.OrderByDescending(x => x.Date);
+            var isTotalHrExits = query.Sum(x => (double?)x.TotalHours);
+            var totalHrs = isTotalHrExits != null ? query.Sum(x => x.TotalHours) : 0;
+            var totalOTHrs = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            var totalOT1 = query.Sum(x => x.OT1);
+            var totalOT2 = query.Sum(x => x.OT2);
+            var totalOT3 = query.Sum(x => x.OT3);
+            var totalOT4 = query.Sum(x => x.OT4);
             return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
             {
                 Date = x.Date,
                 TimeIn = x.TimeIn,
                 TimeOut = x.TimeOut,
                 Status = x.Status,
+                TotalHours = Math.Round(x.TotalHours,1),
                 OT1 = x.OT1,
                 OT2 = x.OT2,
                 OT3= x.OT3,
                 OT4 =x.OT4,
-                TotalOT = x.OT1 + x.OT2 + x.OT3 + x.OT4,
-                Total = total
+                //TotalOT = Convert.ToDecimal(Math.Round(x.TotalHours, 1)) + x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                TotalOT =  x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                Total = totalOTHrs,
+                TotalOT1 = totalOT1,
+                TotalOT2 = totalOT2,
+                TotalOT3 = totalOT3,
+                TotalOT4 = totalOT4,
+                SumTotalHrs = Math.Round(totalHrs,1),
+                Remarks = x.Remarks,
+                Name = x.Name,
+                Department = x.Department,
+                Designation = x.Designation
             });
 
         }
@@ -125,6 +147,12 @@ namespace ATS.Service.Reports
                 else
                     query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
             }
+            else
+            {
+                DateTime minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month -1, 20);
+                DateTime maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 21);
+                query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(minDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(maxDate));
+            }
             var result = query.ToList();
             var employees = _employeeRepository.GetQueryable().OrderBy(x => x.EmployeeCode).Skip(request.Page.Value).Take(request.PageSize.Value).Where(x => x.IsActive == true).ToList();
             var totalNumberOfRecords = _employeeRepository.GetQueryable().Count();            
@@ -149,6 +177,7 @@ namespace ATS.Service.Reports
                     employee.OT4 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT4);                   
                     employee.OTTotalHours = (employee.OT1 != null ? employee.OT1.Value : 0) + (employee.OT2 != null ? employee.OT2.Value : 0) + (employee.OT3 != null ? employee.OT3.Value : 0) + (employee.OT4 != null ? employee.OT4.Value : 0);                                    
                     employee.TotalRecords = totalNumberOfRecords;
+                    employee.Remarks = result.Select(x => x.Remarks).FirstOrDefault();
                     viewModel.Add(employee);
                 }
 
@@ -187,7 +216,16 @@ namespace ATS.Service.Reports
             //});
 
         }
-
+        public DateTime GetBillDate()
+        {
+            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 22);
+            var billdate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            if (DateTime.Now < minDate)
+            {
+                billdate = billdate.AddMonths(-1);
+            }
+            return billdate;
+        }
         public PagedResults<AttendanceViewModel> OverTimeEmployeeAttendanceReport(GridRequestModel request)
         {
 
@@ -219,27 +257,42 @@ namespace ATS.Service.Reports
 
             if (!string.IsNullOrWhiteSpace(departmentname))
                 query = query.Where(x => x.Department.ToLower() == departmentname.ToLower());
-
-            // var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+           
+            query = query.OrderByDescending(x => x.Date);
+            var isTotalHrExits = query.Sum(x => (double?)x.TotalHours);
+            var totalHrs = isTotalHrExits != null ? query.Sum(x => x.TotalHours) : 0;
+            var totalOTHrs = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            var totalOT1 = query.Sum(x => x.OT1);
+            var totalOT2 = query.Sum(x => x.OT1);
+            var totalOT3 = query.Sum(x => x.OT1);
+            var totalOT4 = query.Sum(x => x.OT1);
             return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
             {
-                EmployeeCode= x.EmployeeCode,
-                Name = x.Name,
                 Date = x.Date,
+                EmployeeCode = x.EmployeeCode,
+                Name =x.Name,
                 TimeIn = x.TimeIn,
                 TimeOut = x.TimeOut,
-                TotalHours = x.TotalHours,
+                Department = x.Department,
                 Status = x.Status,
-                OT1 = x.OT1 != null ? x.OT1.Value : 0,
-                OT2 = x.OT2 != null ? x.OT2.Value : 0,
-                OT3 = x.OT3 != null ? x.OT3.Value : 0,
-                OT4 = x.OT4 != null ? x.OT4.Value : 0,
-                TotalOT =  (x.OT1 != null ? x.OT1.Value : 0  + x.OT2 != null ? x.OT2.Value : 0
-                            + x.OT3  != null ? x.OT3.Value : 0 + x.OT4 != null ? x.OT4.Value : 0),      
+                TotalHours = Math.Round(x.TotalHours, 1),
+                OT1 = x.OT1,
+                OT2 = x.OT2,
+                OT3 = x.OT3,
+                OT4 = x.OT4,
+                //TotalOT = Convert.ToDecimal(Math.Round(x.TotalHours, 1)) + x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                TotalOT = x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                Total = totalOTHrs,
+                TotalOT1 = totalOT1,
+                TotalOT2 = totalOT2,
+                TotalOT3 = totalOT3,
+                TotalOT4 = totalOT4,
+                SumTotalHrs = Math.Round(totalHrs,1),
+                Remarks = x.Remarks
             });
 
-        }
 
+        }
         public List<EmployeeViewModel> EmployeePayrollReport(GridRequestModel request)
         {                         
             var query = _attendanceRepository.ReadOnly();
@@ -283,7 +336,7 @@ namespace ATS.Service.Reports
                     employee.DepartmentID = item.DepartmentID;
                     employee.DesignationID = item.DesignationID;
                     employee.Basic = item.Basic;
-                    employee.SplAllowance = item.SplAllowance;
+                    employee.SplAllowance = item.SplAllowance;                    
                     employee.Col = item.Col;
                     employee.OthersAllowance = item.OthersAllowance;
                     //employee.OthersAmount = item
@@ -376,12 +429,13 @@ namespace ATS.Service.Reports
                 Designation = x.DesignationID != null ? _designationRepository.GetByID(x.DesignationID).Name : string.Empty,
                 LeaveStart = x.LeaveStart,
                 LeaveEnd = x.LeaveEnd,
+                ExceedingDays = x.ExceedingDays,
                 LName = x.LeaveType != null ? _leaveTypeRepository.GetByID(x.LeaveType).Name : string.Empty,
                 Remark = x.Remark        
             });
 
         }
-
+        //Overtime Employee Report Replica
         public PagedResults<AttendanceViewModel> DailyEmployeeAttendanceReport(GridRequestModel request)
         {
             var query = _attendanceRepository.ReadOnly();
@@ -418,23 +472,101 @@ namespace ATS.Service.Reports
                 query = query.Where(x => x.Name.ToLower() == employeename.ToLower());
             }
 
-            var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            //var total = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
+            var isTotalHrsNull = query.Sum(x =>(double?) x.TotalHours);
             return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
             {
                 EmployeeCode =x.EmployeeCode,
                 Name = x.Name,
                 Date = x.Date,
+                Designation = _designationRepository.GetByID(_employeeRepository.FirstOrDefault(y=>y.EmployeeCode == x.EmployeeCode).DesignationID).Name,
+                Department = _departmentRepository.GetByID(_employeeRepository.FirstOrDefault(y => y.EmployeeCode == x.EmployeeCode).DepartmentID).Name,
                 TimeIn = x.TimeIn,
-                TimeOut = x.TimeOut,
-                Status = x.Status,
-                OT1 = x.OT1,
-                OT2 = x.OT2,
+                TimeOut = x.TimeOut,               
+                TotalHours = isTotalHrsNull != null ?  Math.Round(x.TotalHours,1) : 0,                
+                Status = x.Status.ToUpper() != "L" ? x.Status : "",
+                //Added need to add in server as well.
+                Remarks = x.Remarks,
+                OT1 = x.OT1 > 2 ? 2 : x.OT1,
+                OT2 = 0,
+                //OT2 = x.Status.ToUpper() == "WO" && x.TotalHours != 0 && x.TotalHours >= 4  ? x.OT2 = 4 : x.OT4,
                 OT3 = x.OT3,
                 OT4 = x.OT4,
-                TotalOT = x.OT1 + x.OT2 + x.OT3 + x.OT4,
-                Total = total
+                //TotalOT =  Convert.ToDecimal(Math.Round(x.TotalHours, 1)) + x.OT1 + x.OT2 + x.OT3 + x.OT4,
+                //Total = total,
             });
 
+        }
+
+        public List<EmployeeViewModel> CashIncentivesReport(GridRequestModel request)
+        {
+
+            var query = _attendanceRepository.ReadOnly();
+            var startdate = "";
+            var enddate = "";
+            //var departmentid = "";
+            //var employeecode = "";
+            //var employeename = "";
+
+            request.Filters.TryGetValue("startdate", out startdate);
+            request.Filters.TryGetValue("enddate", out enddate);
+            //request.Filters.TryGetValue("departmentid", out departmentid);
+            //request.Filters.TryGetValue("employeecode", out employeecode);
+            //request.Filters.TryGetValue("employeename", out employeename);
+
+            DateTime startDate;
+            DateTime endDate;
+            //long departmentID;
+            //long employeeCode;
+
+            if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
+            {
+                if (startdate == enddate)
+                {
+                    query = query.Where(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(endDate));
+                }
+                else
+                    query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
+            }
+            else
+            {
+                DateTime minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 20);
+                DateTime maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 21);
+                query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(minDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(maxDate));
+            }
+            var result = query.ToList();
+            var employees = _employeeRepository.GetQueryable().OrderBy(x => x.EmployeeCode).Skip(request.Page.Value).Take(request.PageSize.Value).Where(x => x.IsActive == true).ToList();
+            var totalNumberOfRecords = _employeeRepository.GetQueryable().Count();
+            List<EmployeeViewModel> viewModel = new List<EmployeeViewModel>();
+            foreach (var item in employees)
+            {
+                EmployeeViewModel employee = new EmployeeViewModel();
+                if (result.Where(x => x.EmployeeCode == item.EmployeeCode).Count() > 0)
+                {
+                    employee.Id = item.ID;
+                    employee.EmployeeCode = item.EmployeeCode;
+                    employee.Name = item.Name;
+                    employee.Designation = _designationRepository.GetByID(item.DesignationID).Name;
+                   // employee.Department = _departmentRepository.GetByID(item.DepartmentID).Name;                   
+                    //employee.ToPay = result.Where(x => x.EmployeeCode == item.EmployeeCode).Count();
+                    employee.OT1 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1);
+                    employee.OT2 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT2);
+                    employee.OT3 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT3);
+                    employee.OT4 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT4);
+                    var totalOT1 = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT1;
+                    employee.OT1Amount = totalOT1 * Convert.ToDecimal(0.005138);
+                    employee.OT2Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT2 * Convert.ToDecimal(0.006164);
+                    employee.OT3Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT3 * Convert.ToDecimal(0.006164);
+                    employee.OT4Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT4 * Convert.ToDecimal(0.006164);
+                    employee.OTTotalHours = (employee.OT1 != null ? employee.OT1.Value : 0) + (employee.OT2 != null ? employee.OT2.Value : 0) + (employee.OT3 != null ? employee.OT3.Value : 0) + (employee.OT4 != null ? employee.OT4.Value : 0);
+                    employee.OTTotalAmount = (employee.OT1Amount != null ? employee.OT1Amount.Value : 0) + (employee.OT2Amount != null ? employee.OT2Amount.Value : 0) + (employee.OT3Amount != null ? employee.OT3Amount.Value : 0) + (employee.OT4Amount != null ? employee.OT4Amount.Value : 0);                       
+                    employee.TotalRecords = totalNumberOfRecords;
+                    employee.Remarks = result.Select(x => x.Remarks).FirstOrDefault();
+                    viewModel.Add(employee);
+                }
+
+            }
+            return viewModel;          
         }
     }
 }
