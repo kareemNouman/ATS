@@ -118,25 +118,12 @@ namespace ATS.Web.Controllers
             }
             return View(employee);
         }
-
-        public ActionResult Delete(long id = 0)
-        {
-            var result = _employeeService.Delete(id);
-            if (result)
-            {            
-                SuccessNotification("Successfully Deleted Employee");
-            }
-            else
-                ErrorNotification("Unable to Delete Employee.Please Tyr again");
-            return View("Index");
-        }
-
         [HttpPost]
         //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeUpdate })]
         public ActionResult Detail(EmployeeViewModel employeeviewmodel)
         {
             var employee = _employeeService.GetEmployee(employeeviewmodel.Id);
-        
+
             if (employee != null)
             {
                 employee.EmployeeCode = employeeviewmodel.EmployeeCode;
@@ -144,16 +131,16 @@ namespace ATS.Web.Controllers
                 employee.Email = employeeviewmodel.Email;
                 employee.DepartmentID = employeeviewmodel.DepartmentID;
                 employee.DesignationID = employeeviewmodel.DesignationID;
-                employee.Basic = employeeviewmodel.Basic;
-                employee.SplAllowance = employeeviewmodel.SplAllowance;
-                employee.Col = employeeviewmodel.Col;
-                employee.OthersAllowance = employeeviewmodel.OthersAllowance;
-                employee.Conveyance = employeeviewmodel.Conveyance;
+                //employee.Basic = employeeviewmodel.Basic;
+                //employee.SplAllowance = employeeviewmodel.SplAllowance;
+                //employee.Col = employeeviewmodel.Col;
+                //employee.OthersAllowance = employeeviewmodel.OthersAllowance;
+                //employee.Conveyance = employeeviewmodel.Conveyance;
                 employee.DORJ = employeeviewmodel.DORJ;
-                employee.Housing = employeeviewmodel.Housing;
-                employee.Gross = employeeviewmodel.Gross;
+                //employee.Housing = employeeviewmodel.Housing;
+                //employee.Gross = employeeviewmodel.Gross;
                 employee.OTThreshold = employeeviewmodel.OTThreshold;
-                employee.IsOTEligible = employeeviewmodel.IsOTEligible == 1 ? true : false;                    
+                employee.IsOTEligible = employeeviewmodel.IsOTEligible == 1 ? true : false;
                 employee.WeekOffMain = employeeviewmodel.WeekOffMain;
                 employee.ShiftCode = employeeviewmodel.ShiftCode;
                 employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value : 0;
@@ -175,7 +162,19 @@ namespace ATS.Web.Controllers
 
             return RedirectToAction("Index");
         }
-    //    [NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
+        public ActionResult Delete(long id = 0)
+        {
+            var result = _employeeService.Delete(id);
+            if (result)
+            {            
+                SuccessNotification("Successfully Deleted Employee");
+            }
+            else
+                ErrorNotification("Unable to Delete Employee.Please Tyr again");
+            return View("Index");
+        }
+        
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
         public JsonResult EmployeeData(DataManager dm)
         {
             string empName = string.Empty;
@@ -203,8 +202,170 @@ namespace ATS.Web.Controllers
         {
             return View();
         }
-      
 
-      
+
+        #region EmployeeSalary
+
+        public ActionResult EmployeeSal()
+        {
+            return View();
+        }
+
+        // [NECAuthorize(Key = new string[] { NECPermissions.EmployeeCreate })]
+        public ActionResult AddEmployeeSal()
+        {
+            EmployeeViewModel viewModel = new EmployeeViewModel();
+            return View(viewModel);
+        }
+        [HttpPost]
+        //  [NECAuthorize(Key = new string[] { NECPermissions.EmployeeCreate })]
+        public ActionResult AddEmployeeSal(EmployeeViewModel employeeviewmodel, HttpPostedFileBase profile)
+        {
+            if (!ModelState.IsValid)
+                return View(employeeviewmodel);
+
+            var employee = new ATS.Core.Domain.DTO.EmployeeViewModel();
+
+            employee.EmployeeCode = employeeviewmodel.EmployeeCode;
+            employee.Name = employeeviewmodel.Name;
+            employee.Email = employeeviewmodel.Email;
+            employee.DepartmentID = employeeviewmodel.DepartmentID;
+            employee.DesignationID = employeeviewmodel.DesignationID;
+            employee.Basic = employeeviewmodel.Basic;
+            employee.SplAllowance = employeeviewmodel.SplAllowance;
+            employee.Col = employeeviewmodel.Col;
+            employee.OthersAllowance = employeeviewmodel.OthersAllowance;
+            employee.Conveyance = employeeviewmodel.Conveyance;
+            employee.DORJ = employeeviewmodel.DORJ;
+            employee.Housing = employeeviewmodel.Housing;
+            employee.Gross = employeeviewmodel.Gross;
+            employee.OTThreshold = employeeviewmodel.OTThreshold;
+            employee.IsOTEligible = employeeviewmodel.IsOTEligible == 1 ? true : false;
+            employee.WeekOffMain = employeeviewmodel.WeekOffMain;
+            employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate;
+            employee.ShiftCode = employeeviewmodel.ShiftCode;
+            employee.CreatedBy = 1;
+            employee.CreatedOn = DateTime.Now;
+            employee.IsActive = true;
+            var response = _employeeService.AddEmployee(employee);
+            if (response)
+            {
+                SuccessNotification(Convert.ToString("Employee Added Successfully"));
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ErrorNotification("Unable to Add Employee.Please Tyr again");
+            }
+
+
+            //ErrorNotification(response.Message);
+
+            return View(employeeviewmodel);
+        }
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeUpdate })]
+        public ActionResult DetailEmpSal(long id = 0)
+        {
+            ATS.Core.Domain.DTO.EmployeeViewModel employeeviewmodel = new ATS.Core.Domain.DTO.EmployeeViewModel();
+            EmployeeViewModel employee = new EmployeeViewModel();
+            if (id > 0)
+            {
+                employeeviewmodel = _employeeService.GetEmployeeByID(id);
+                employee.EmployeeCode = employeeviewmodel.EmployeeCode;
+                employee.Name = employeeviewmodel.Name;
+                employee.Email = employeeviewmodel.Email;
+                employee.DepartmentID = employeeviewmodel.DepartmentID;
+                employee.DesignationID = employeeviewmodel.DesignationID;
+                employee.Basic = employeeviewmodel.Basic;
+                employee.SplAllowance = employeeviewmodel.SplAllowance;
+                employee.Col = employeeviewmodel.Col;
+                employee.OthersAllowance = employeeviewmodel.OthersAllowance;
+                employee.Conveyance = employeeviewmodel.Conveyance;
+                employee.DORJ = employeeviewmodel.DORJ;
+                employee.Housing = employeeviewmodel.Housing;
+                employee.Gross = employeeviewmodel.Gross;
+                employee.OTThreshold = employeeviewmodel.OTThreshold;
+                employee.IsOTEligible = employeeviewmodel.IsOTEligible == true ? 1 : 2;
+                employee.WeekOffMain = employeeviewmodel.WeekOffMain;
+                employee.ShiftCode = employeeviewmodel.ShiftCode;
+                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value : 0;
+                employee.CreatedBy = employeeviewmodel.CreatedBy;
+
+                employee.IsActive = true;
+            }
+            return View(employee);
+        }
+        [HttpPost]
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeUpdate })]
+        public ActionResult DetailEmpSal(EmployeeViewModel employeeviewmodel)
+        {
+            var employee = _employeeService.GetEmployee(employeeviewmodel.Id);
+
+            if (employee != null)
+            {
+                employee.EmployeeCode = employeeviewmodel.EmployeeCode;
+                employee.Name = employeeviewmodel.Name;
+                employee.Email = employeeviewmodel.Email;
+                employee.DepartmentID = employeeviewmodel.DepartmentID;
+                employee.DesignationID = employeeviewmodel.DesignationID;
+                employee.Basic = employeeviewmodel.Basic;
+                employee.SplAllowance = employeeviewmodel.SplAllowance;
+                employee.Col = employeeviewmodel.Col;
+                employee.OthersAllowance = employeeviewmodel.OthersAllowance;
+                employee.Conveyance = employeeviewmodel.Conveyance;
+                employee.DORJ = employeeviewmodel.DORJ;
+                employee.Housing = employeeviewmodel.Housing;
+                employee.Gross = employeeviewmodel.Gross;
+                employee.OTThreshold = employeeviewmodel.OTThreshold;
+                employee.IsOTEligible = employeeviewmodel.IsOTEligible == 1 ? true : false;
+                employee.WeekOffMain = employeeviewmodel.WeekOffMain;
+                employee.ShiftCode = employeeviewmodel.ShiftCode;
+                employee.WeeklyOffAlternate = employeeviewmodel.WeeklyOffAlternate != null ? employeeviewmodel.WeeklyOffAlternate.Value : 0;
+                employee.CreatedBy = 1;
+                employee.CreatedOn = DateTime.Now;
+                employee.IsActive = true;
+                _employeeService.UpdateEmployee(employee);
+                SuccessNotification("Employee Salary Successfully Updated");
+            }
+            else
+            {
+                ErrorNotification("Something Went Wrong!Please Try Again");
+                return RedirectToAction("EmployeeSal");
+            }
+            //if (!_notify.HasErrors)
+            //{                
+            //    return RedirectToAction("Index");
+            //}
+
+            return RedirectToAction("EmployeeSal");
+        }
+        public ActionResult DeleteEmpSal(long id = 0)
+        {
+            var result = _employeeService.Delete(id);
+            if (result)
+            {
+                SuccessNotification("Successfully Deleted Employee");
+            }
+            else
+                ErrorNotification("Unable to Delete Employee.Please Tyr again");
+            return View("Index");
+        }
+
+        //[NECAuthorize(Key = new string[] { NECPermissions.EmployeeRead })]
+        public JsonResult EmployeeSalData(DataManager dm)
+        {
+            string empName = string.Empty;
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                empName = dm.Search.Select(x => x.Key).FirstOrDefault();
+            }
+            var employeedata = _employeeService.GetAllEmployee(dm.Skip, dm.Take, empName);
+            return Json(new { result = employeedata.Data, count = employeedata.Count }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        #endregion
+
+
     }
 }

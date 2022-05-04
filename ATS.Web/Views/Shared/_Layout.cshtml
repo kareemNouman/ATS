@@ -2,7 +2,7 @@
 <html>
 @{
     //NECRole role = User.Identity.GetRole();
-    // var username= User.Identity.Name;
+    var username = User.Identity.Name;
 }
 <head>
     <style>
@@ -119,7 +119,7 @@
                                 }*@
 
                             <li role="presentation">
-                                <a href="@Url.Action("index","Account")" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
+                                <a href="@Url.Action("index", "Account")" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
                             </li>
 
                         </ul>
@@ -176,6 +176,22 @@
                                                         <span class="site-menu-title">Employees</span>
                                                     </a>
                                                 </li>
+                                                @{
+                                                    if (User.Identity.Name.ToLower() == "superuser")
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("EmployeeSal", "Employee")">
+                                                                <span class="site-menu-title">Employees Salary</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("Users", "Master")">
+                                                                <span class="site-menu-title">Users</span>
+                                                            </a>
+                                                        </li>
+                                                        //superuser@2455
+                                                    }
+                                                }
                                                 <li class="site-menu-item">
                                                     <a class="animsition-link" href="@Url.Action("Departments", "Master")">
                                                         <span class="site-menu-title">Departments</span>
@@ -185,11 +201,6 @@
                                                 <li class="site-menu-item">
                                                     <a class="animsition-link" href="@Url.Action("Designations", "Master")">
                                                         <span class="site-menu-title">Designations</span>
-                                                    </a>
-                                                </li>
-                                                <li class="site-menu-item">
-                                                    <a class="animsition-link" href="@Url.Action("Users", "Master")">
-                                                        <span class="site-menu-title">Users</span>
                                                     </a>
                                                 </li>
                                                 <li class="site-menu-item">
@@ -240,19 +251,25 @@
                                                         <span class="site-menu-title">Daily OT Approval Report</span>
                                                     </a>
                                                 </li>
-                                                <li class="site-menu-item">
-                                                    <a class="animsition-link" href="@Url.Action("EmployeePayrollReport", "Reports")">
-                                                        <span class="site-menu-title">Employee Payroll Report</span>
-                                                    </a>
-                                                </li>
+                                                @{
+                                                    if (User.Identity.Name.ToLower() == "superuser")
+                                                    {
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("EmployeePayrollReport", "Reports")">
+                                                                <span class="site-menu-title">Employee Payroll Report</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="site-menu-item">
+                                                            <a class="animsition-link" href="@Url.Action("CashIncentiveEmployeesReport", "Reports")">
+                                                                <span class="site-menu-title">Cash Incentive Report</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+
                                                 <li class="site-menu-item">
                                                     <a class="animsition-link" href="@Url.Action("EmployeeLeaveReport", "Reports")">
                                                         <span class="site-menu-title">Employee Leave Report</span>
-                                                    </a>
-                                                </li>
-                                                <li class="site-menu-item">
-                                                    <a class="animsition-link" href="@Url.Action("CashIncentiveEmployeesReport", "Reports")">
-                                                        <span class="site-menu-title">Cash Incentive Report</span>
                                                     </a>
                                                 </li>
                                                 <li class="site-menu-item">

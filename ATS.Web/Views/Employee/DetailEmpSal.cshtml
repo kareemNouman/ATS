@@ -1,18 +1,17 @@
-﻿
-@model ATS.Web.Models.EmployeeViewModel
+﻿@model ATS.Web.Models.EmployeeViewModel
 @{
-    ViewBag.Title = "AddEmployee";
+    ViewBag.Title = "DetailEmpSal";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-header">
-    <h1 class="page-title">Employee Registration</h1>
+    <h1 class="page-title">Edit Employee</h1>
 </div>
 
 
 <div class="page-content">
-    @using (Html.BeginForm("AddEmployee", "Employee", FormMethod.Post, new { @autocomplete = "off", enctype = "multipart/form-data", id = "atsform" }))
-    {       
+    @using (Html.BeginForm("DetailEmpSal", "Employee", FormMethod.Post, new { @autocomplete = "off", enctype = "multipart/form-data", id = "atssalform" }))
+    {
         <div class="row">
             <div class="col-sm-6">
                 <div class="panel">
@@ -47,18 +46,7 @@
                         .DropDownListFields(f => f.Text("Name").Value("ID")).CssClass("").WatermarkText("Select a Type").Width("100%")
                         .ClientSideEvents(x => x.ActionComplete("fnDesignation_actioncomplete")))
                             @Html.ValidationMessageFor(x => x.DesignationID)
-                        </div>                     
-                    </div>
-                </div>               
-            </div>
-
-            <div class="col-sm-6">
-
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
-                    </div>
-                    <div class="panel-body container-fluid">
+                        </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="select">OT Eligible</label> *
                             @(Html.EJ().DropDownList("IsOTEligible").Datasource(ds => ds.URL(Url.Action("OTEligible", "Home")))
@@ -84,13 +72,60 @@
                             @Html.ValidationMessageFor(x => x.ShiftCode)
                         </div>
                         <div class="form-group form-material">
-                            <label class="control-label" for="select">Date of ReJoinning</label>
+                            <label class="control-label" for="select">Date of ReJoinning</label> *
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" class="form-control" id="DORJ" name="DORJ" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                                @*@Html.ValidationMessageFor(x => x.DORJ)*@
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body container-fluid">
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Basic</label> *
+                            @Html.TextBoxFor(x => x.Basic, new { @class = "form-control empty", @placeholder = "Basic" })
+                            @Html.ValidationMessageFor(x => x.Basic)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Spl Allowance</label> *
+                            @Html.TextBoxFor(x => x.SplAllowance, new { @class = "form-control empty", @placeholder = "Spl Allowance" })
+                            @Html.ValidationMessageFor(x => x.SplAllowance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Col</label> *
+                            @Html.TextBoxFor(x => x.Col, new { @class = "form-control empty", @placeholder = "Col" })
+                            @Html.ValidationMessageFor(x => x.Col)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Other Allowance</label> *
+                            @Html.TextBoxFor(x => x.OthersAllowance, new { @class = "form-control empty", @placeholder = "Other Allowance" })
+                            @Html.ValidationMessageFor(x => x.OthersAllowance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Conveyance</label> *
+                            @Html.TextBoxFor(x => x.Conveyance, new { @class = "form-control empty", @placeholder = "Conveyance" })
+                            @Html.ValidationMessageFor(x => x.Conveyance)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Housing</label> *
+                            @Html.TextBoxFor(x => x.Housing, new { @class = "form-control empty", @placeholder = "Housing" })
+                            @Html.ValidationMessageFor(x => x.Housing)
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Gross</label> *
+                            @Html.TextBoxFor(x => x.Gross, new { @class = "form-control empty", @placeholder = "Gross" })
+                            @Html.ValidationMessageFor(x => x.Gross)
                         </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="inputText">OT Threshold</label> *
@@ -100,18 +135,15 @@
                         <div class="form-group form-material" style="text-align:center">
                             <div class="example">
                                 <button type="submit" value="save" name="SubmitType" class="btn btn-primary ladda-button" data-style="expand-left" data-plugin="ladda">
-                                    <span class="ladda-label">Save</span>
+                                    <span class="ladda-label">Update</span>
                                     <span class="ladda-spinner"></span>
                                 </button>
-                                <a href="@Url.Action("Index","Employee")" class="btn btn-primary ladda-button">Cancel</a>
+                                <a href="@Url.Action("EmployeeSal","Employee")" class="btn btn-primary ladda-button">Cancel</a>
                             </div>
                         </div>
-                    </div>                                      
+                    </div>
                 </div>
-                
-            </div>
-            <div class="col-sm-12">
-              
+
             </div>
         </div>
     }
@@ -133,14 +165,15 @@
             target.selectItemByValue(@Model.WeekOffMain);
         }
 
-        function fnEmployeeShiftsCode_actioncomplete(sender) {
-            target = $("#ShiftCode").data("ejDropDownList");
-            target.selectItemByValue(@Model.ShiftCode);
-        }
 
         function fnWeeklyOffAlternate_actioncomplete(sender) {
             target = $("#WeeklyOffAlternate").data("ejDropDownList");
             target.selectItemByValue(@Model.WeeklyOffAlternate);
+        }
+
+         function fnEmployeeShiftsCode_actioncomplete(sender) {
+             target = $("#ShiftCode").data("ejDropDownList");
+            target.selectItemByValue(@Model.ShiftCode);
         }
 
         function fnDepertment_actioncomplete(sender) {
@@ -153,7 +186,7 @@
             target.selectItemByValue('@Model.DesignationID');
         }
 
-        $("#atsform").submit(function (event) {
+        $("#atssalform").submit(function (event) {
             //if (!$("#DORJ").val()) {
             //    $("#DORJ").css("border-bottom", "1px solid red");
             //    event.preventDefault();
@@ -175,6 +208,14 @@
             else
                 $("#WeekOffMain").css("border", "");
 
+
+            if (!$("#ShiftCode").val()) {
+                $("#ShiftCode").css("border", "1px solid red");
+                event.preventDefault();
+            }
+            else
+                $("#ShiftCode").css("border", "");
+
             //if (!$("#WeeklyOffAlternate").val()) {
             //    $("#WeeklyOffAlternate").css("border", "1px solid red");
             //    event.preventDefault();
@@ -194,14 +235,8 @@
                 event.preventDefault();
             }
             else
-                $("#ShiftCode").css("border", "");
+                $("#DesignationID").css("border", "");
 
-            if (!$("#ShiftCode").val()) {
-                $("#ShiftCode").css("border", "1px solid red");
-                event.preventDefault();
-            }
-            else
-                $("#ShiftCode").css("border", "");
         })
 
 
@@ -220,7 +255,7 @@
         //});
 
         $(document).ready(function () {
-            var form = $('#atsform')
+            var form = $('#atssalform')
                 , formData = $.data(form[0])
                 , settings = formData.validator.settings
                 // Store existing event handlers in local variables
@@ -249,3 +284,4 @@
     </script>
 
 }
+

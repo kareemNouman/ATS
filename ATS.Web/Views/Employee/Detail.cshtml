@@ -47,7 +47,18 @@
                         .DropDownListFields(f => f.Text("Name").Value("ID")).CssClass("").WatermarkText("Select a Type").Width("100%")
                         .ClientSideEvents(x => x.ActionComplete("fnDesignation_actioncomplete")))
                             @Html.ValidationMessageFor(x => x.DesignationID)
-                        </div>
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body container-fluid">
                         <div class="form-group form-material">
                             <label class="control-label" for="select">OT Eligible</label> *
                             @(Html.EJ().DropDownList("IsOTEligible").Datasource(ds => ds.URL(Url.Action("OTEligible", "Home")))
@@ -81,52 +92,6 @@
                                 <input type="text" class="form-control" id="DORJ" name="DORJ" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
                                 @*@Html.ValidationMessageFor(x => x.DORJ)*@
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
-                    </div>
-                    <div class="panel-body container-fluid">
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Basic</label> *
-                            @Html.TextBoxFor(x => x.Basic, new { @class = "form-control empty", @placeholder = "Basic" })
-                            @Html.ValidationMessageFor(x => x.Basic)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Spl Allowance</label> *
-                            @Html.TextBoxFor(x => x.SplAllowance, new { @class = "form-control empty", @placeholder = "Spl Allowance" })
-                            @Html.ValidationMessageFor(x => x.SplAllowance)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Col</label> *
-                            @Html.TextBoxFor(x => x.Col, new { @class = "form-control empty", @placeholder = "Col" })
-                            @Html.ValidationMessageFor(x => x.Col)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Other Allowance</label> *
-                            @Html.TextBoxFor(x => x.OthersAllowance, new { @class = "form-control empty", @placeholder = "Other Allowance" })
-                            @Html.ValidationMessageFor(x => x.OthersAllowance)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Conveyance</label> *
-                            @Html.TextBoxFor(x => x.Conveyance, new { @class = "form-control empty", @placeholder = "Conveyance" })
-                            @Html.ValidationMessageFor(x => x.Conveyance)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Housing</label> *
-                            @Html.TextBoxFor(x => x.Housing, new { @class = "form-control empty", @placeholder = "Housing" })
-                            @Html.ValidationMessageFor(x => x.Housing)
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Gross</label> *
-                            @Html.TextBoxFor(x => x.Gross, new { @class = "form-control empty", @placeholder = "Gross" })
-                            @Html.ValidationMessageFor(x => x.Gross)
                         </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="inputText">OT Threshold</label> *

@@ -65,6 +65,8 @@ namespace ATS.Service.Employees
                     Email = x.Email,
                     OTThreshold = x.OTThreshold,       
                     Gross = x.Gross,
+                    Housing = x.Housing,
+                    Basic = x.Basic,
                     IsOTEligible = x.IsOTEligible,
                     DORJ = x.DORJ             
                     //ShiftCode =x.ShiftCode

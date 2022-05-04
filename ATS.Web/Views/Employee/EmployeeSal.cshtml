@@ -1,0 +1,102 @@
+﻿@model ATS.Web.Models.EmployeeViewModel
+
+@using Syncfusion.MVC.EJ
+@using Syncfusion.JavaScript.Web
+
+@{
+    ViewBag.Title = "EmployeeSal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel">
+    <header class="panel-heading">
+        <h3 class="panel-title">Employee Salary</h3>
+    </header>
+    <div class="panel-body">
+        <div class="row">
+            <div class="example-wrap">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-4 col-lg-2">
+                        <div class="example">
+                            <ul class="list-unstyled">
+                                @*<li class="margin-bottom-20">
+                                    <a href=@Url.Action("AddEmployeeSal","Employee") class="btn btn-block btn-primary">ADD EMPLOYEE</a>
+                                </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script type="text/x-jsrender" id="columnTemplateEdit">
+                    <a href="DetailEmpSal/{{:Id}}"><button type="submit" class="btn btn-primary">Edit </button></a>
+                </script>
+                @*<script type="text/x-jsrender" id="columnTemplateDelete">
+                    <a href="Employee/Delete/{{:Id}}"><button type="submit" class="btn btn-primary">Delete </button></a>
+                </script>*@
+
+                @*<script type="text/x-jsrender" id="typeTemplate">
+                        <a>
+                            {{if RoleID=="1"}}
+                            Admin
+                            {{/if}}
+
+                            {{if RoleID=="2"}}
+                            Customer
+                            {{/if}}
+                            {{if RoleID=="3"}}
+                            Employee
+                            {{/if}}
+                            {{if RoleID=="4"}}
+                            MeterReader
+                            {{/if}}
+                            {{if RoleID=="7"}}
+                            Cashier
+                            {{/if}}
+                            {{if RoleID=="8"}}
+                            Accountant
+                            {{/if}}
+                        </a>
+
+                    </script>*@
+                @(Html.EJ().Grid<ATS.Web.Models.EmployeeViewModel>("FlatGrid")
+                .Datasource(ds => ds.URL(Url.Action("EmployeeSalData", "Employee")).Adaptor("UrlAdaptor"))
+                 .AllowSorting()
+                  .AllowPaging()
+                  .AllowSearching()
+                .SearchSettings(search =>
+                {
+                    search.Fields(field =>
+                    {
+                        field.Add("Name");
+                        //field.Add("EmployeeCode");
+                    });
+                    search.Key("");
+                })
+        .ToolbarSettings(toolbar =>
+        {
+            toolbar.ShowToolbar().ToolbarItems(items =>
+            {
+                items.AddTool(Syncfusion.JavaScript.ToolBarItems.Search);
+            });
+        })
+                  .PageSettings(x => x.PageSize(10))
+         .AllowSelection()
+         .SelectionType(Syncfusion.JavaScript.SelectionType.Multiple)
+                .Columns(col =>
+                {
+                    col.Field("Name").HeaderText("EmployeeName").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(75).Add();
+                    col.Field("EmployeeCode").HeaderText("EmployeeCode").TextAlign(Syncfusion.JavaScript.TextAlign.Left).Width(100).Add();
+                    col.Field("Basic").HeaderText("Basic").Width(50).TextAlign(Syncfusion.JavaScript.TextAlign.Right).Add();
+                    col.Field("Housing").HeaderText("Housing").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(80).Add();
+                    col.Field("Gross").HeaderText("Gross").TextAlign(Syncfusion.JavaScript.TextAlign.Right).Width(50).Add();
+                    col.Field("").HeaderText("Manage").Template(true).TemplateID("#columnTemplateEdit").Width(80).Add();
+                    //col.Field("").HeaderText("Delete").Template(true).TemplateID("#columnTemplateDelete").Width(80).Add();
+                }))
+            </div>
+        </div>
+
+    </div>
+</div>
