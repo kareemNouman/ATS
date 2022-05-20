@@ -15,6 +15,8 @@ namespace ATS.Core.Domain.DTO
 
         public string Designation { get; set; }
 
+        public string ShiftCode { get; set; }
+
         public Nullable<long> DesignationId { get; set; }
 
         public string Department { get; set; }

@@ -530,7 +530,13 @@ namespace ATS.Web.Controllers
 
         #endregion
 
-        #region Payslip
+        #region PayslipGeneration
+
+
+        public ActionResult PaySlip()
+        {
+            return View();
+        }
 
         public ActionResult GeneratePaySlip(DataManager dm, string startdate, string enddate)
         {

@@ -104,6 +104,8 @@ namespace ATS.Service.DailyAttendance
                 Status = attendanceviewmodel.Status,
                 CreatedBy = attendanceviewmodel.CreatedBy,
                 CreatedOn = DateTime.Now,
+                Remarks = attendanceviewmodel.Remarks,       
+                ShiftCode = attendanceviewmodel.ShiftCode,
                 IsActive = true
             };
 
@@ -149,7 +151,9 @@ namespace ATS.Service.DailyAttendance
                 Status = x.Status,
                 IsActive = x.IsActive,
                 CreatedBy = x.CreatedBy,
-                CreatedOn = x.CreatedOn
+                CreatedOn = x.CreatedOn,
+                Remarks = x.Remarks,
+                ShiftCode = x.ShiftCode,
             }).FirstOrDefault();
         }
 

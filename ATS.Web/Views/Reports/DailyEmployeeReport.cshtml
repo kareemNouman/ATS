@@ -25,6 +25,8 @@
                     @Html.HiddenFor(x => x.Department)
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
+                    <input type="hidden" name="employeename" id="hdemployeename" />
+                    <input type="hidden" name="departmentname" id="hddepartmentname" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
                     <div class="col-lg-6">
                         <div class="form-group form-material">
@@ -158,6 +160,8 @@
         $("#btnpdf").click(function () {
             $("#hdstartdate").val($("#startdate").val());
             $("#hdenddate").val($("#enddate").val());
+            $("#hdemployeename").val($("#Employee").val());
+            $("#hddepartmentname").val($("#Dept").val());   
             $("#frmdailyEmployeeReport").submit();
         });
     });

@@ -16,6 +16,7 @@ namespace ATS.Core.Domain.DomainModels
         public string Department { get; set; }
         public string TimeIn { get; set; }
 
+        public string ShiftCode { get; set; }
         public string TimeOut { get; set; }
 
         public double TotalHours { get; set; }

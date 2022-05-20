@@ -27,6 +27,7 @@
                     <input type="hidden" name="startdate" id="hdstartdate" />
                     <input type="hidden" name="enddate" id="hdenddate" />
                     <input type="hidden" name="employeename" id="hdemployeename" />
+                    <input type="hidden" name="employeecode" id="hdemployeecode" />
                     <input type="hidden" id="pdf" name="pdf" value="true" />
                     <div class="col-lg-6">
                         <div class="form-group form-material">
@@ -110,13 +111,16 @@
             </div>
         </div>
         <div class="row" style="margin-top:30px">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <label>Name:<b id="singleEmpName"></b></label>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
+                <label>Emp Code:<b id="singleEmpCode"></b></label>
+            </div>
+            <div class="col-lg-3">
                 <label>Designation:<b id="singleDesignation"></b></label>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <label>Department:<b id="singleDepartment"></b></label>
             </div>
         </div>
@@ -189,6 +193,7 @@
             $("#hdstartdate").val($("#startdate").val());
             $("#hdenddate").val($("#enddate").val());
             $("#hdemployeename").val($("#Employee").val());
+            $("#hdemployeecode").val($("#EmployeeCode").val());            
             $("#frmsingleEmployeeReport").submit();
         });
     });
@@ -213,6 +218,7 @@
             var totalOT4Hrs = args.model.currentViewData[0].TotalOT4;
             var totalHrs = args.model.currentViewData[0].SumTotalHrs;
             var sigName = args.model.currentViewData[0].Name;
+            var sigCode = args.model.currentViewData[0].EmployeeCode;
             var sigDepartment = args.model.currentViewData[0].Department;
             var sigDesignation = args.model.currentViewData[0].Designation;
             $("#totalOT").html(totalOTHrs);
@@ -221,6 +227,7 @@
             $("#totalOT3").html(totalOT3Hrs);
             $("#totalOT4").html(totalOT4Hrs);
             $("#total").html(totalHrs);
+            $("#singleEmpCode").html(sigCode);
             $("#singleEmpName").html(sigName);
             $("#singleDepartment").html(sigDepartment);
             $("#singleDesignation").html(sigDesignation);
@@ -232,6 +239,7 @@
             $("#totalOT2").html(0);
             $("#totalOT3").html(0);
             $("#totalOT4").html(0);
+            $("#singleEmpCode").html("");
             $("#singleEmpName").html("");
             $("#singleDepartment").html("");
             $("#singleDesignation").html("");

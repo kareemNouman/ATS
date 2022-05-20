@@ -111,6 +111,7 @@ namespace ATS.Service.Reports
                 SumTotalHrs = Math.Round(totalHrs,1),
                 Remarks = x.Remarks,
                 Name = x.Name,
+                EmployeeCode = x.EmployeeCode,
                 Department = x.Department,
                 Designation = x.Designation
             });
@@ -476,14 +477,14 @@ namespace ATS.Service.Reports
             var isTotalHrsNull = query.Sum(x =>(double?) x.TotalHours);
             return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
             {
-                EmployeeCode =x.EmployeeCode,
+                EmployeeCode = x.EmployeeCode,
                 Name = x.Name,
                 Date = x.Date,
-                Designation = _designationRepository.GetByID(_employeeRepository.FirstOrDefault(y=>y.EmployeeCode == x.EmployeeCode).DesignationID).Name,
+                Designation = _designationRepository.GetByID(_employeeRepository.FirstOrDefault(y => y.EmployeeCode == x.EmployeeCode).DesignationID).Name,
                 Department = _departmentRepository.GetByID(_employeeRepository.FirstOrDefault(y => y.EmployeeCode == x.EmployeeCode).DepartmentID).Name,
                 TimeIn = x.TimeIn,
-                TimeOut = x.TimeOut,               
-                TotalHours = isTotalHrsNull != null ?  Math.Round(x.TotalHours,1) : 0,                
+                TimeOut = !string.IsNullOrEmpty(x.TimeOut) ? x.OT1 > 2 ? Convert.ToString(Convert.ToDecimal(x.TimeOut.Replace(':', '.')) - x.OT1 + 2) : x.TimeOut : "",                               
+                TotalHours = isTotalHrsNull != null ? Math.Round(x.TotalHours, 1) : 0,
                 Status = x.Status.ToUpper() != "L" ? x.Status : "",
                 //Added need to add in server as well.
                 Remarks = x.Remarks,

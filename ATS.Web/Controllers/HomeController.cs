@@ -67,7 +67,7 @@ namespace ATS.Web.Controllers
                 }
 
                 var lastRow = workSheet.Dimension.End.Row;
-                DeleteExistAttendance(Convert.ToDateTime(attendancedate));               
+                DeleteExistAttendance(Convert.ToDateTime(attendancedate));
                 for (int i = 14; i <= lastRow; i++)
                 {
                     if (i != lastRow)
@@ -88,6 +88,7 @@ namespace ATS.Web.Controllers
                                         Designation = employee.Designation,
                                         Department = employee.Department,
                                         //Designation = Convert.ToString(workSheet.Cells[i, 4].Value),
+                                        ShiftCode = Convert.ToString(workSheet.Cells[i, 5].Value),
                                         TimeIn = Convert.ToString(workSheet.Cells[i, 7].Value),
                                         TimeOut = Convert.ToString(workSheet.Cells[i, 8].Value),
                                         TotalHours = Convert.ToDouble(workSheet.Cells[i, 16].Value),
@@ -101,9 +102,17 @@ namespace ATS.Web.Controllers
                                         CreatedOn = DateTime.Now,
                                         IsActive = true
                                     };
+                                    if (attendance.Status.ToUpper() == "AL")
+                                        attendance.Remarks = "Annual leave";
+                                    if (attendance.Status.ToUpper() == "A")
+                                        attendance.Remarks = "Absent";
+                                    if (attendance.Status.ToUpper() == "WO")
+                                        attendance.Remarks = "Weekly Off";
+                                    if (attendance.Status.ToUpper() == "UL")
+                                        attendance.Remarks = "Unplanned Leave";
+
                                     if (attendance.OT1 != 0 || attendance.OT2 != 0 || attendance.OT3 != 0 || attendance.OT4 != 0)
                                     {
-
                                         if (attendance.OT1 < 1)
                                             attendance.OT1 = 0;
                                         if (attendance.OT2 < 1)
@@ -121,38 +130,90 @@ namespace ATS.Web.Controllers
                                         bool isOutTimeExits = false;
                                         if (!string.IsNullOrWhiteSpace(attendance.TimeIn) && string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
-                                            if (employee.ShiftCode == 1)
-                                                attendance.TimeOut = string.Format("14:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 2)
-                                                attendance.TimeOut = string.Format("22:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 3)
-                                                attendance.TimeOut = string.Format("06:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 4)
-                                                attendance.TimeOut = string.Format("17:{0}", rnd.Next(15));
+                                            if (!string.IsNullOrEmpty(attendance.ShiftCode))
+                                            {
+                                                if (attendance.ShiftCode.ToUpper() == "A")
+                                                    attendance.TimeOut = string.Format("14:{0}", rnd.Next(15));
+                                                if (attendance.ShiftCode.ToUpper() == "B")
+                                                    attendance.TimeOut = string.Format("22:{0}", rnd.Next(15));
+                                                if (attendance.ShiftCode.ToUpper() == "C")
+                                                    attendance.TimeOut = string.Format("06:{0}", rnd.Next(15));
+                                                if (attendance.ShiftCode.ToUpper() == "G")
+                                                    attendance.TimeOut = string.Format("17:{0}", rnd.Next(15));
+                                            }
+                                            else
+                                            {
+                                                double inTime = double.Parse(attendance.TimeIn.Replace(":", "."));
+                                                //if (attendance.ShiftCode == "A") //
+                                                attendance.TimeOut = Convert.ToString(inTime + 8.0).Replace(".", ":");
+                                                //if (attendance.ShiftCode == "B")
+                                                //attendance.TimeOut = Convert.ToString(inTime + 8.0).Replace(".", ":");
+                                                //string.Format("22:{0}", rnd.Next(15));
+                                                if (inTime > 20)
+                                                {
+                                                    double shift3Time = inTime - 8.0;
+                                                    attendance.TimeOut = Convert.ToString(shift3Time - 8.0).Replace(".", ":");
+                                                }
+                                                //string.Format("06:{0}", rnd.Next(15));
+                                                //if (employee.ShiftCode == 4)
+                                                //attendance.TimeOut = Convert.ToString(inTime + 8.0).Replace(".", ":");
+                                                //string.Format("17:{0}", rnd.Next(15));
+                                            }
+
                                             isOutTimeExits = true;
                                         }
                                         if (string.IsNullOrWhiteSpace(attendance.TimeIn) && !string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
-                                            if (employee.ShiftCode == 1)
-                                                attendance.TimeIn = string.Format("06:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 2)
-                                                attendance.TimeIn = string.Format("14:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 3)
-                                                attendance.TimeIn = string.Format("22:{0}", rnd.Next(15));
-                                            if (employee.ShiftCode == 4)
-                                                attendance.TimeIn = string.Format("08:{0}", rnd.Next(15));
+                                            if (!string.IsNullOrEmpty(attendance.ShiftCode))
+                                            {
+                                                // double outTime = double.Parse(attendance.TimeOut.Replace(":", "."));
+                                                if (attendance.ShiftCode.ToUpper() == "A") //A shift (6am to 2pm)
+                                                    attendance.TimeIn = attendance.TimeIn = string.Format("06:{0}", rnd.Next(15));
+                                                //Convert.ToString(outTime - 8.0).Replace(".", ":");
+                                                //attendance.TimeIn = string.Format("06:{0}", rnd.Next(15));
+                                                if (attendance.ShiftCode.ToUpper() == "B") //B shift (2pm to 10pm)
+                                                    attendance.TimeIn = string.Format("14:{0}", rnd.Next(15));
+                                                //
+                                                if (attendance.ShiftCode.ToUpper() == "C") //C shift (10pm to 6am)
+                                                {
+                                                    attendance.TimeIn = string.Format("22:{0}", rnd.Next(15));
+                                                }
+                                                //
+                                                if (attendance.ShiftCode.ToUpper() == "G") //G shift (8am to 5pm)
+                                                    attendance.TimeIn = string.Format("08:{0}", rnd.Next(15));
+                                                //attendance.TimeIn = string.Format("08:{0}", rnd.Next(15));
+                                            }
+                                            else
+                                            {
+                                                double outTime = double.Parse(attendance.TimeOut.Replace(":", "."));
+                                                //if (employee.ShiftCode == 1) //A shift (6am to 2pm)
+                                                attendance.TimeIn = Convert.ToString(outTime - 8.0).Replace(".", ":");
+                                                //attendance.TimeIn = string.Format("06:{0}", rnd.Next(15));
+                                                //if (employee.ShiftCode == 2) //B shift (2pm to 10pm)
+                                                // attendance.TimeIn = Convert.ToString(outTime - 8.0).Replace(".", ":");
+                                                //string.Format("14:{0}", rnd.Next(15));
+                                                if (outTime < 7) //C shift (10pm to 6am)
+                                                {
+                                                    double shift3OutTime = outTime + 8.0;
+                                                    attendance.TimeIn = Convert.ToString(shift3OutTime + 8.0).Replace(".", ":");
+                                                }
+                                                //string.Format("22:{0}", rnd.Next(15));
+                                                //if (employee.ShiftCode == 4) //G shift (8am to 5pm)
+                                                //  attendance.TimeIn = Convert.ToString(outTime - 8.0).Replace(".", ":");
+                                                //attendance.TimeIn = string.Format("08:{0}", rnd.Next(15));
+                                            }
                                             isInTimeExits = true;
                                         }
                                         if (isInTimeExits || isOutTimeExits)
                                         {
                                             double InTime = Convert.ToDouble(attendance.TimeIn.Replace(':', '.'));
                                             double OutTime = Convert.ToDouble(attendance.TimeOut.Replace(':', '.'));
-                                            if (employee.ShiftCode == 3)
-                                                InTime = 22.00 - 8.00;
+                                            if (OutTime < 7)
+                                                InTime = Convert.ToDouble(attendance.TimeIn.Replace(':', '.')) - 8.00;
                                             attendance.TotalHours = Math.Abs(OutTime - InTime);
                                         }
                                     }
-                                   _dailyAttendanceService.AddAttendance(attendance);
+                                    _dailyAttendanceService.AddAttendance(attendance);
                                     countAdd++;
                                 }
                                 else
@@ -179,7 +240,7 @@ namespace ATS.Web.Controllers
             }
             else
             {
-                string message = string.Format("Attendance Save Successfully for Date: {0}, Added: {1}, NotAdded: {2}", attendancedate,countAdd, countNotAdd);
+                string message = string.Format("Attendance Save Successfully for Date: {0}, Added: {1}, NotAdded: {2}", attendancedate, countAdd, countNotAdd);
                 SuccessNotification(message, true);
                 return RedirectToAction("Index");
             }
@@ -235,7 +296,7 @@ namespace ATS.Web.Controllers
 
             if (dm.Where == null ? false : dm.Where.Count > 0)
                 searchText = Convert.ToString(dm.Where[0].value);
-            var departments = _masterService.GetAllDepartmentsForAutoSearch();          
+            var departments = _masterService.GetAllDepartmentsForAutoSearch();
 
             if (string.IsNullOrWhiteSpace(searchText))
                 return Json(departments, JsonRequestBehavior.AllowGet);
@@ -272,7 +333,7 @@ namespace ATS.Web.Controllers
             }).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
-        }      
+        }
 
         public ActionResult EmployeeCode(DataManager dm)
         {
@@ -287,7 +348,7 @@ namespace ATS.Web.Controllers
                 return Json(employees, JsonRequestBehavior.AllowGet);
 
             var list = employees.Where(x =>
-            {                
+            {
                 return x.EmployeeCode == searchText;
             }).ToList();
 
@@ -327,16 +388,16 @@ namespace ATS.Web.Controllers
         public ActionResult OTEligible()
         {
             var isOTEligible = new List<SelectListItem>
-                                    {                              
+                                    {
                             new SelectListItem{ Text="Applicable", Value = "1" },
-                            new SelectListItem{ Text="Not Applicable", Value = "2" },                            
+                            new SelectListItem{ Text="Not Applicable", Value = "2" },
                                     };
             return Json(isOTEligible, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AttendanceData(DataManager dm)
         {
-            if (dm.Search  != null &&  dm.Search.Count > 0)
+            if (dm.Search != null && dm.Search.Count > 0)
             {
 
             }
@@ -352,7 +413,7 @@ namespace ATS.Web.Controllers
                             new SelectListItem{ Text="A shift (6am to 2pm)", Value = "1" },
                             new SelectListItem{ Text="B shift (2pm to 10pm)", Value = "2" },
                             new SelectListItem{ Text="C shift (10pm to 6am)", Value = "3" },
-                            new SelectListItem{ Text="G shift (8am to 5pm)", Value = "4" },                            
+                            new SelectListItem{ Text="G shift (8am to 5pm)", Value = "4" },
                                     };
             return Json(weekOffMain, JsonRequestBehavior.AllowGet);
         }
