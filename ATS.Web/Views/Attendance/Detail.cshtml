@@ -31,26 +31,27 @@
                             <label class="control-label" for="inputText">Employee Code</label> *
                             @Html.TextBoxFor(x => x.EmployeeCode, new { @class = "form-control empty", @placeholder = "Employee Code", @readonly = true })
                             @Html.ValidationMessageFor(x => x.EmployeeCode)
-                        </div>
+                        </div>                        
+                        @*@Html.EJ().DateTimePicker("DateTime").StartLevel(Syncfusion.JavaScript.Period.Month).DepthLevel(Syncfusion.JavaScript.Period.Year).Width("175px").Render()*@
                         @*<div class="form-group form-material">
                                 <label class="control-label">In Time</label>
-                                @Html.EJ().TimePicker("TimeInPicker").TimeFormat("HH:mm tt").Interval(5).Value(Model.TimeIn).Width("100%").ClientSideEvents(e => e.Change("TimeInChange"))
+                                @Html.EJ().TimePicker("TimeInPicker").TimeFormat("mm yyyy").Interval(5).Value(Model.TimeIn).Width("100%").ClientSideEvents(e => e.Change("TimeInChange"))
                             </div>
                             <div class="form-group form-material">
                                 <label class="control-label">Out Time</label>
-                                @Html.EJ().TimePicker("TimeOutPicker").TimeFormat("HH:mm tt").Interval(5).Value(Model.TimeOut).Width("100%").ClientSideEvents(e => e.Change("TimeOutChange"))
+                                @Html.EJ().TimePicker("TimeOutPicker").TimeFormat("HH:mm").Interval(5).Value(Model.TimeOut).Width("100%").ClientSideEvents(e => e.Change("TimeOutChange"))
                             </div>*@
                         <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Total Hours</label> *
-                            @Html.TextBoxFor(x => x.TimeIn, new { @class = "form-control empty", @placeholder = "TimeIn"})
+                            <label class="control-label" for="inputText">In Time</label> *
+                            @Html.TextBoxFor(x => x.TimeIn, new { @class = "form-control empty", @placeholder = "TimeIn" })
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Out Time</label> *
+                            @Html.TextBoxFor(x => x.TimeOut, new { @class = "form-control empty", @placeholder = "TimeOut" })
                         </div>
                         <div class="form-group form-material">
                             <label class="control-label" for="inputText">Total Hours</label> *
-                            @Html.TextBoxFor(x => x.TimeOut, new { @class = "form-control empty", @placeholder = "TimeOut"})
-                        </div>
-                        <div class="form-group form-material">
-                            <label class="control-label" for="inputText">Total Hours</label> *
-                            @Html.TextBoxFor(x => x.TotalHours, new { @class = "form-control empty", @placeholder = "Total"})
+                            @Html.TextBoxFor(x => x.TotalHours, new { @class = "form-control empty", @placeholder = "Total" })
                         </div>
                     </div>
                 </div>
@@ -135,6 +136,7 @@
             @Model.TimeOut = TimeOut;*@
         })
 
+
         //function TimeInChange(args) {
         //    var utocompleteObj = $("#TimeInPicker").data("TimeInPicker");
         //    var id = args.model.value.split(" ")[0].replace(':', '.');
@@ -169,7 +171,6 @@
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
 
     <script>
-
         //$(document).ready(function () {
         //    $('.input-validation-error').parents('.form-group').addClass('has-error');
         //    $('.field-validation-error').addClass('text-danger');

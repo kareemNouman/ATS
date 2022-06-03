@@ -34,17 +34,26 @@
     </style>
 
     <div>
-        <div style="text-align:center;margin-bottom:10px;">
+        <div style="text-align:left;margin-bottom:10px;">
             <img src="@Server.MapPath("~/Images/ATS.png")" alt="" />
-            <h3>Daily OT Approval Report</h3>
+            <h3 style="text-align:center">Daily OT Approval Report</h3>
         </div>
         <div>
-            <label>Total Hrs:<b>@Model.Select(x => x.SumTotalHrs).FirstOrDefault()</b></label>
-            <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault()</b></label>
-            <label>Total OT1 Hrs:<b>@Model.Select(x => x.TotalOT1).FirstOrDefault()</b></label>
-            <label>Total OT2 Hrs:<b>@Model.Select(x => x.TotalOT2).FirstOrDefault()</b></label>
-            <label>Total OT3 Hrs:<b>@Model.Select(x => x.TotalOT3).FirstOrDefault()</b></label>
-            <label>Total OT4 Hrs:<b>@Model.Select(x => x.TotalOT4).FirstOrDefault()</b></label>           
+            @*<div>
+                <label>Date&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>@Model.Select(x => x.Date).FirstOrDefault()</b></label>
+            </div>*@            
+            @*<div>
+                <label>Department&nbsp;:&nbsp;&nbsp;&nbsp;<b>@Model.Select(x => x.Department).FirstOrDefault()</b></label>
+            </div>*@
+        </div>
+        <br />
+        <div>
+            <label>Total Hrs:-&nbsp;&nbsp;<b>@Model.Select(x => x.SumTotalHrs).FirstOrDefault()</b>&nbsp;&nbsp;</label>
+            <label>Total OT Hrs:-&nbsp;&nbsp;<b>@Model.Select(x => x.Total).FirstOrDefault()</b>&nbsp;&nbsp;</label>
+            <label>Normal OT:-&nbsp;&nbsp;<b>@Model.Select(x => x.TotalOT1).FirstOrDefault()</b>&nbsp;&nbsp;</label>
+            <label>Weekly Off OT:-&nbsp;&nbsp;<b>@Model.Select(x => x.TotalOT2).FirstOrDefault()</b>&nbsp;&nbsp;</label>
+            <label>Public Holiday OT:-&nbsp;&nbsp;<b>@Model.Select(x => x.TotalOT3).FirstOrDefault()</b>&nbsp;&nbsp;</label>
+            <label>Night OT:-&nbsp;&nbsp;<b>@Model.Select(x => x.TotalOT4).FirstOrDefault()</b>&nbsp;&nbsp;</label>
         </div>
         <table cellpadding="5" cellspacing="5">
             <thead>
@@ -93,21 +102,21 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
-                    <td>@item.EmployeeCode</td>
-                    <td>@item.Name</td>
-                    <td>@item.Department</td>
-                    <td>@item.TimeIn</td>
-                    <td>@item.TimeOut</td>
-                    <td>@item.TotalHours</td>
-                    <td>@item.TotalOT</td>
-                    <td>@item.OT1</td>
-                    <td>@item.OT2</td>
-                    <td>@item.OT3</td>
-                    <td>@item.OT4</td>
-                    <td>@item.Remarks</td>
-                </tr>
+                    <tr>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                        <td>@item.EmployeeCode</td>
+                        <td>@item.Name</td>
+                        <td>@item.Department</td>
+                        <td>@item.TimeIn</td>
+                        <td>@item.TimeOut</td>
+                        <td>@item.TotalHours</td>
+                        <td>@item.TotalOT</td>
+                        <td>@item.OT1</td>
+                        <td>@item.OT2</td>
+                        <td>@item.OT3</td>
+                        <td>@item.OT4</td>
+                        <td>@item.Remarks</td>
+                    </tr>
                 }
             </tbody>
         </table>

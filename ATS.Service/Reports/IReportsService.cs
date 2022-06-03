@@ -21,5 +21,7 @@ namespace ATS.Service.Reports
         PagedResults<AttendanceViewModel> DailyEmployeeAttendanceReport(GridRequestModel request);
 
         List<EmployeeViewModel> CashIncentivesReport(GridRequestModel request);
+
+        List<EmployeeViewModel> GeneratePayslipsReport(GridRequestModel request);
     }
 }

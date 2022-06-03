@@ -82,7 +82,7 @@ namespace ATS.Service.Reports
             {
                 query = query.Where(x => x.Name.ToLower() == noemployeename.ToLower());
             }
-            query = query.OrderByDescending(x => x.Date);
+            //query = query.OrderBy(x => x.Date);
             var isTotalHrExits = query.Sum(x => (double?)x.TotalHours);
             var totalHrs = isTotalHrExits != null ? query.Sum(x => x.TotalHours) : 0;
             var totalOTHrs = query.Sum(x => x.OT1 + x.OT2 + x.OT3 + x.OT4);
@@ -90,7 +90,7 @@ namespace ATS.Service.Reports
             var totalOT2 = query.Sum(x => x.OT2);
             var totalOT3 = query.Sum(x => x.OT3);
             var totalOT4 = query.Sum(x => x.OT4);
-            return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "ID", false, x => new AttendanceViewModel
+            return PagedResults<Attendance, AttendanceViewModel>(query, request.Page.Value, request.PageSize, "Date", true, x => new AttendanceViewModel
             {
                 Date = x.Date,
                 TimeIn = x.TimeIn,
@@ -568,6 +568,77 @@ namespace ATS.Service.Reports
 
             }
             return viewModel;          
+        }
+
+        public List<EmployeeViewModel> GeneratePayslipsReport(GridRequestModel request)
+        {
+
+            var query = _attendanceRepository.ReadOnly();
+            var startdate = "";
+            var enddate = "";
+            //var departmentid = "";
+            //var employeecode = "";
+            //var employeename = "";
+
+            request.Filters.TryGetValue("startdate", out startdate);
+            request.Filters.TryGetValue("enddate", out enddate);
+            //request.Filters.TryGetValue("departmentid", out departmentid);
+            //request.Filters.TryGetValue("employeecode", out employeecode);
+            //request.Filters.TryGetValue("employeename", out employeename);
+
+            DateTime startDate;
+            DateTime endDate;
+            //long departmentID;
+            //long employeeCode;
+
+            if (DateTime.TryParse(startdate, out startDate) && DateTime.TryParse(enddate, out endDate))
+            {
+                if (startdate == enddate)
+                {
+                    query = query.Where(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(endDate));
+                }
+                else
+                    query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(endDate));
+            }
+            else
+            {
+                DateTime minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 20);
+                DateTime maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 21);
+                query = query.Where(x => DbFunctions.TruncateTime(x.Date) >= DbFunctions.TruncateTime(minDate) && DbFunctions.TruncateTime(x.Date) <= DbFunctions.TruncateTime(maxDate));
+            }
+            var result = query.ToList();
+            var employees = _employeeRepository.GetQueryable().OrderBy(x => x.EmployeeCode).Skip(request.Page.Value).Take(request.PageSize.Value).Where(x => x.IsActive == true).ToList();
+            var totalNumberOfRecords = _employeeRepository.GetQueryable().Count();
+            List<EmployeeViewModel> viewModel = new List<EmployeeViewModel>();
+            foreach (var item in employees)
+            {
+                EmployeeViewModel employee = new EmployeeViewModel();
+                if (result.Where(x => x.EmployeeCode == item.EmployeeCode).Count() > 0)
+                {
+                    employee.Id = item.ID;
+                    employee.EmployeeCode = item.EmployeeCode;
+                    employee.Name = item.Name;
+                    employee.Designation = _designationRepository.GetByID(item.DesignationID).Name;
+                    // employee.Department = _departmentRepository.GetByID(item.DepartmentID).Name;                   
+                    //employee.ToPay = result.Where(x => x.EmployeeCode == item.EmployeeCode).Count();
+                    employee.OT1 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1);
+                    employee.OT2 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT2);
+                    employee.OT3 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT3);
+                    employee.OT4 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT4);
+                    var totalOT1 = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT1;
+                    employee.OT1Amount = totalOT1 * Convert.ToDecimal(0.005138);
+                    employee.OT2Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT2 * Convert.ToDecimal(0.006164);
+                    employee.OT3Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT3 * Convert.ToDecimal(0.006164);
+                    employee.OT4Amount = (employee.Gross != null ? employee.Gross.Value : 0) * (employee.OthersAllowance != null ? employee.OthersAllowance.Value : 0) * employee.OT4 * Convert.ToDecimal(0.006164);
+                    employee.OTTotalHours = (employee.OT1 != null ? employee.OT1.Value : 0) + (employee.OT2 != null ? employee.OT2.Value : 0) + (employee.OT3 != null ? employee.OT3.Value : 0) + (employee.OT4 != null ? employee.OT4.Value : 0);
+                    employee.OTTotalAmount = (employee.OT1Amount != null ? employee.OT1Amount.Value : 0) + (employee.OT2Amount != null ? employee.OT2Amount.Value : 0) + (employee.OT3Amount != null ? employee.OT3Amount.Value : 0) + (employee.OT4Amount != null ? employee.OT4Amount.Value : 0);
+                    employee.TotalRecords = totalNumberOfRecords;
+                    employee.Remarks = result.Select(x => x.Remarks).FirstOrDefault();
+                    viewModel.Add(employee);
+                }
+
+            }
+            return viewModel;
         }
     }
 }

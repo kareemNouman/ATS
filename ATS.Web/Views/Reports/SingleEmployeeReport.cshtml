@@ -68,6 +68,10 @@
                                 <i class="icon wb-calendar" aria-hidden="true"></i>
                             </span>
                             <input type="text" id="startdate" class="form-control" name="ConnectionDate" data-plugin="datepicker" data-date-format="mm/dd/yyyy">
+                            <br />
+                            @*<input type="text" id="date">*@
+                            @*@Html.EJ().DatePicker("TimeInPicker").DateFormat("MMMM y").Value(DateTime.Now).Width("100%").ClientSideEvents(e => e.Change("TimeInChange"))*@
+                            @*@Html.EJ().DatePicker("datepicker").Value(DateTime.Now).Format("MMMM y").Start(Syncfusion.EJ.Calendars.CalendarView.Year).Depth(Syncfusion.EJ.Calendars.CalendarView.Year).Render()*@
                         </div>
                     </div>
 
@@ -158,7 +162,7 @@
         .AllowPaging()
         .ToolbarSettings(toolbar =>
         {
-            toolbar.ShowToolbar(true).CustomToolbarItems(new List<object>() { new Syncfusion.JavaScript.Models.CustomToolbarItem() { TemplateID = "#print" } });
+            //toolbar.ShowToolbar(true).CustomToolbarItems(new List<object>() { new Syncfusion.JavaScript.Models.CustomToolbarItem() { TemplateID = "#print" } });
         })
         .Columns(col =>
         {
@@ -274,10 +278,16 @@
         var id = args.model.value;
         $("#EmployeeCode").val(id);
     };
+
+    
+
+
+
 </script>
 
 
 <script>
+ 
 
     function onToolBarClick(sender) {
         $("#id_loader").removeClass("loaderhides").addClass("loadershows");

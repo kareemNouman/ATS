@@ -3505,6 +3505,8 @@
     <Content Include="Views\Reports\_dailyAttendanceAllEmployeeReportsPartial.cshtml" />
     <Content Include="Views\Employee\EmployeeSal.cshtml" />
     <Content Include="Views\Employee\DetailEmpSal.cshtml" />
+    <Content Include="Views\Reports\GenerateMonthlySlips.cshtml" />
+    <Content Include="Views\Reports\_generatePayslipsReportsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

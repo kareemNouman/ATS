@@ -533,12 +533,12 @@ namespace ATS.Web.Controllers
         #region PayslipGeneration
 
 
-        public ActionResult PaySlip()
+        public ActionResult GenerateMonthlySlips()
         {
             return View();
         }
 
-        public ActionResult GeneratePaySlip(DataManager dm, string startdate, string enddate)
+        public ActionResult GeneratePaySlip(string startdate, string enddate, string pdf)
         {
             GridRequestModel request = new GridRequestModel();
 
@@ -569,7 +569,8 @@ namespace ATS.Web.Controllers
             //    ViewBag.IsPDF = true;
             //    return new Rotativa.ViewAsPdf("_singleEmployeeReportsPartial", response);
             //}
-            return PartialView("_singleEmployeeReportsPartial", response);
+            return new Rotativa.ViewAsPdf("_generatePayslipsReportsPartial", response);
+            //return PartialView("_singleEmployeeReportsPartial", response);
         }
 
         #endregion

@@ -130,7 +130,8 @@ namespace ATS.Web.Controllers
                                         bool isOutTimeExits = false;
                                         if (!string.IsNullOrWhiteSpace(attendance.TimeIn) && string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
-                                            if (!string.IsNullOrEmpty(attendance.ShiftCode))
+                                            if (attendance.ShiftCode.ToUpper() == "A" || attendance.ShiftCode.ToUpper() == "B"
+                                                || attendance.ShiftCode.ToUpper() == "C" || attendance.ShiftCode.ToUpper() == "G")
                                             {
                                                 if (attendance.ShiftCode.ToUpper() == "A")
                                                     attendance.TimeOut = string.Format("14:{0}", rnd.Next(15));
@@ -164,7 +165,8 @@ namespace ATS.Web.Controllers
                                         }
                                         if (string.IsNullOrWhiteSpace(attendance.TimeIn) && !string.IsNullOrWhiteSpace(attendance.TimeOut))
                                         {
-                                            if (!string.IsNullOrEmpty(attendance.ShiftCode))
+                                            if (attendance.ShiftCode.ToUpper() == "A" || attendance.ShiftCode.ToUpper() == "B"
+                                               || attendance.ShiftCode.ToUpper() == "C" || attendance.ShiftCode.ToUpper() == "G")
                                             {
                                                 // double outTime = double.Parse(attendance.TimeOut.Replace(":", "."));
                                                 if (attendance.ShiftCode.ToUpper() == "A") //A shift (6am to 2pm)
