@@ -129,6 +129,7 @@
         })
         .Columns(col =>
         {
+            col.Field("Date").HeaderText("Date").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(80).Format("{0:dd/MM/yy}").Add();
             col.Field("EmployeeCode").HeaderText("EMP CODE").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(50).Add();
             col.Field("Name").HeaderText("NAME").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
             col.Field("Designation").HeaderText("DESIGNATION").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(120).Add();
@@ -140,7 +141,7 @@
             col.Field("OT1").HeaderText("OT-1").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
             col.Field("OT2").HeaderText("OT-2").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
             col.Field("OT3").HeaderText("OT-3").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
-            col.Field("OT4").HeaderText("OT-4").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();            
+            col.Field("OT4").HeaderText("OT-4").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
             col.Field("Status").HeaderText("STATUS").TextAlign(Syncfusion.JavaScript.TextAlign.Center).Width(60).Add();
         }).ClientSideEvents(x => x.ActionBegin("fn_begin").ActionComplete("complete").ToolbarClick("onToolBarClick")))
         </div>

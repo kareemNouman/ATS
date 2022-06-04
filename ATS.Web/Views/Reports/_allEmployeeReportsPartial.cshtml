@@ -34,10 +34,12 @@
     </style>
 
     <div>
-        <div style="text-align:center;margin-bottom:10px;">
-            <img style="float:left" src="@Server.MapPath("~/Images/ATS.png")" alt="" />
-            <h3>All Employee Report</h3>
-        </div>
+        <div>
+            <div style="text-align:left;">
+                <img style="width:10%" src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+                <h3>All Employee Report</h3>
+            </div>
+        </div>      
         @*<div>
             <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>
         </div>*@
@@ -56,9 +58,9 @@
                     <th>
                         Sick Leaves
                     </th>
-                    <th>
+                    @*<th>
                         Ann Adjust Leaves
-                    </th>
+                    </th>*@
                     <th>
                         Absent
                     </th>
@@ -85,20 +87,20 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>@item.EmployeeCode</td>
-                    <td>@item.Name</td>
-                    <td>@item.Designation</td>
-                    <td>@item.SickLeave</td>
-                    <td>@item.AdjustAnnLeave</td>
-                    <td>@item.Absent</td>
-                    <td>@item.ToPay</td>
-                    <td>@item.OT1</td>
-                    <td>@item.OT2</td>
-                    <td>@item.OT3</td>
-                    <td>@item.OT4</td>
-                    <td>@item.Remarks</td>
-                </tr>
+                    <tr>
+                        <td>@item.EmployeeCode</td>
+                        <td>@item.Name</td>
+                        <td>@item.Designation</td>
+                        <td>@item.SickLeave</td>
+                       @* <td>@item.AdjustAnnLeave</td>*@
+                        <td>@item.Absent</td>
+                        <td>@item.ToPay</td>
+                        <td>@item.OT1</td>
+                        <td>@item.OT2</td>
+                        <td>@item.OT3</td>
+                        <td>@item.OT4</td>
+                        <td>@item.Remarks</td>
+                    </tr>
                 }
             </tbody>
         </table>
