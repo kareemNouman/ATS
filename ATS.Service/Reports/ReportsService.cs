@@ -163,22 +163,24 @@ namespace ATS.Service.Reports
                 EmployeeViewModel employee = new EmployeeViewModel();
                 if (result.Where(x => x.EmployeeCode == item.EmployeeCode).Count() > 0)
                 {
-                    employee.Id = item.ID;
+                    employee.Id = item.ID;                    
                     employee.EmployeeCode = item.EmployeeCode;
                     employee.Name = item.Name;                    
                     employee.Designation = _designationRepository.GetByID(item.DesignationID).Name;
                     employee.Department = _departmentRepository.GetByID(item.DepartmentID).Name;
                     employee.SickLeave = 0;
                     employee.AdjustAnnLeave = 0;
-                    employee.Absent = 0;
-                    employee.ToPay = result.Where(x => x.EmployeeCode == item.EmployeeCode).Count();                 
-                    employee.OT1 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1);
-                    employee.OT2 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT2);
-                    employee.OT3 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT3);
-                    employee.OT4 = result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT4);                   
+                    employee.Absent = result.Where(x => x.EmployeeCode == item.EmployeeCode && x.Remarks == "Absent").Count();
+                    employee.ToPay = result.Where(x => x.EmployeeCode == item.EmployeeCode).Count() - employee.Absent;                 
+                    employee.OT1 = item.OTThreshold > result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1) ? result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT1) : item.OTThreshold;
+                    employee.OT2 = 0;//result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT2);
+                    employee.OT3 = 0;//result.Where(x => x.EmployeeCode == item.EmployeeCode).Sum(x => x.OT3);
+                    employee.OT4 = 0;            
                     employee.OTTotalHours = (employee.OT1 != null ? employee.OT1.Value : 0) + (employee.OT2 != null ? employee.OT2.Value : 0) + (employee.OT3 != null ? employee.OT3.Value : 0) + (employee.OT4 != null ? employee.OT4.Value : 0);                                    
                     employee.TotalRecords = totalNumberOfRecords;
-                    employee.Remarks = result.Select(x => x.Remarks).FirstOrDefault();
+                    employee.Remarks = "";
+                    employee.MonthDate = result.Select(x => x.Date).FirstOrDefault();
+                    // employee.Month = result.Select(x => x.Date).FirstOrDefault().ToString("MMMM");
                     viewModel.Add(employee);
                 }
 

@@ -67,6 +67,7 @@ namespace ATS.Core.Domain.DTO
 
         public double ToPay { get; set; }
         public int? TotalRecords { get; set; }
+        public DateTime? MonthDate { get; set; }        
         public Nullable<DateTime> CreatedOn { get; set; }
         
         public Nullable<long> CreatedBy { get; set; }

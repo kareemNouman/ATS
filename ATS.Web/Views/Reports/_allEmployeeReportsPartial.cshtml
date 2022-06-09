@@ -37,15 +37,18 @@
         <div>
             <div style="text-align:left;">
                 <img style="width:10%" src="@Server.MapPath("~/Images/ATS.png")" alt="" />
-                <h3>All Employee Report</h3>
+                <h3>Attendance for ADPMCL Employees for the month of @string.Format("{0:MMMM}", Model.Select(x => x.MonthDate).FirstOrDefault()) year  @string.Format("{0:yyyy}", Model.Select(x => x.MonthDate).FirstOrDefault())</h3>
             </div>
-        </div>      
+        </div>
         @*<div>
             <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>
         </div>*@
         <table cellpadding="5" cellspacing="5">
             <thead>
                 <tr>
+                    <th>
+                        S.No.
+                    </th>
                     <th>
                         Employee No.
                     </th>
@@ -85,23 +88,28 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.EmployeeCode</td>
-                        <td>@item.Name</td>
-                        <td>@item.Designation</td>
-                        <td>@item.SickLeave</td>
-                       @* <td>@item.AdjustAnnLeave</td>*@
-                        <td>@item.Absent</td>
-                        <td>@item.ToPay</td>
-                        <td>@item.OT1</td>
-                        <td>@item.OT2</td>
-                        <td>@item.OT3</td>
-                        <td>@item.OT4</td>
-                        <td>@item.Remarks</td>
-                    </tr>
-                }
+                @*@foreach (var item in Model)
+                {*@
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        int count = i + 1;
+                        <tr>
+                            <td>@count</td>
+                            <td>@Model[i].EmployeeCode</td>
+                            <td>@Model[i].Name</td>
+                            <td>@Model[i].Designation</td>
+                            <td>@Model[i].SickLeave</td>
+                            @* <td>@item.AdjustAnnLeave</td>*@
+                            <td>@Model[i].Absent</td>
+                            <td>@Model[i].ToPay</td>
+                            <td>@Model[i].OT1</td>
+                            <td>@Model[i].OT2</td>
+                            <td>@Model[i].OT3</td>
+                            <td>@Model[i].OT4</td>
+                            <td>@Model[i].Remarks</td>
+                        </tr>
+                    }
+               @* }*@
             </tbody>
         </table>
     </div>

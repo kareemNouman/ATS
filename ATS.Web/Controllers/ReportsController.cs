@@ -143,7 +143,13 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response);
+                
+                return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response) 
+                {
+                    PageOrientation =Rotativa.Options.Orientation.Landscape,
+                    PageSize = Rotativa.Options.Size.A4
+                    
+                };
             }
             return PartialView("_allEmployeeReportsPartial", response);
         }
