@@ -17,6 +17,7 @@ namespace ATS.Service.Masters
     public class MasterService : IMasterService
     {
         private readonly IGenericRepository<Department> _departmentRepository;
+        private readonly IGenericRepository<PublicHolidays> _publicHolidayRepository;
         private readonly IGenericRepository<Designation> _designationRepository;
         private readonly IGenericRepository<Role> _roleRepository;
         private readonly IGenericRepository<UserAccount> _accountRepository;
@@ -34,11 +35,13 @@ namespace ATS.Service.Masters
             IGenericRepository<Designation> designationRepository,
             IGenericRepository<Role> roleRepository, IGenericRepository<UserAccount> accountRepository,
             IEncryptionService encryptionService, IGenericRepository<Leaves> leavesRepository,
+            IGenericRepository<PublicHolidays> publicHolidayRepository,
             IGenericRepository<EmployeeLeave> employeeLeaveRepository, IEmployeeService employeeService,
-        IUnitOfWork unitOfWrk, IValidatorFactory validatorFactory, INotify notify)
+            IUnitOfWork unitOfWrk, IValidatorFactory validatorFactory, INotify notify)
         {
 
             this._departmentRepository = departmentRepository;
+            this._publicHolidayRepository = publicHolidayRepository;
             this._designationRepository = designationRepository;
             this._roleRepository = roleRepository;
             this._accountRepository = accountRepository;
@@ -448,6 +451,71 @@ namespace ATS.Service.Masters
 
             }
             return result;
+        }
+
+        #endregion
+
+
+        #region PublicHolidays
+
+        public IEnumerable<PublicHolidaysViewModel> GetAllPublicHolidaysForAutoSearch()
+        {
+            return _publicHolidayRepository.GetAll().Where(x => x.IsDelete == false).Select(x => new PublicHolidaysViewModel
+            {
+                ID = x.ID,
+                Name = x.Name,
+                Date = x.Date
+            });
+        }
+
+        public IEnumerable<PublicHolidays> GetAllPublicHolidays()
+        {
+            return _publicHolidayRepository.GetAll().Where(x => x.IsDelete== false);
+        }
+
+
+        public PublicHolidays GetPublicHolidays(Int64 id)
+        {
+            return _publicHolidayRepository.FirstOrDefault(x => x.ID == id);
+        }
+
+        public PublicHolidays GetPublicHolidays(string name)
+        {
+            return _publicHolidayRepository.GetQueryable().FirstOrDefault(x => x.Name.ToLower() == name.ToLower() && x.IsDelete == false);
+        }
+        public long AddPublicHolidays(PublicHolidays publicHolidays)
+        {
+            var validator = _validatorFactory.GetValidator<PublicHolidays>();
+            //validator.ValidateAndThrow(state);
+
+            var res = validator.Validate(publicHolidays, ruleSet: "Add");
+            if (!res.IsValid)
+            {
+                foreach (var item in res.Errors)
+                    _notify.AddMessage(item.ErrorMessage);
+                return 0;
+            }
+
+            _publicHolidayRepository.Insert(publicHolidays);
+            _unitOfWrk.Save();
+
+            return publicHolidays.ID;
+        }
+
+        public long UpdatePublicHolidays(PublicHolidays publicHolidays)
+        {
+            var validator = _validatorFactory.GetValidator<PublicHolidays>();
+
+            var res = validator.Validate(publicHolidays, ruleSet: "Update");
+            if (!res.IsValid)
+            {
+                foreach (var item in res.Errors)
+                    _notify.AddMessage(item.ErrorMessage);
+                return 0;
+            }
+            _publicHolidayRepository.Update(publicHolidays);
+            _unitOfWrk.Save();
+            return publicHolidays.ID;
         }
 
         #endregion

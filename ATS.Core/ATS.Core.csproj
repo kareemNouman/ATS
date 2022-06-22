@@ -55,6 +55,7 @@
     <Compile Include="Domain\DomainModels\EmployeeLeave.cs" />
     <Compile Include="Domain\DomainModels\Leaves.cs" />
     <Compile Include="Domain\DomainModels\LogException.cs" />
+    <Compile Include="Domain\DomainModels\PublicHolidays.cs" />
     <Compile Include="Domain\DomainModels\Role.cs" />
     <Compile Include="Domain\DomainModels\UserAccount.cs" />
     <Compile Include="Domain\DTO\AttendanceViewModel.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Domain\DTO\LeavesViewModel.cs" />
     <Compile Include="Domain\DTO\PaymentViewModel.cs" />
     <Compile Include="Domain\DTO\PayToAttendanceViewModel.cs" />
+    <Compile Include="Domain\DTO\PublicHolidaysViewModel.cs" />
     <Compile Include="Domain\DTO\UserAccountViewModel.cs" />
     <Compile Include="Domain\ResponseModels\ATSGridResponseModel.cs" />
     <Compile Include="Enums\ATSRole.cs" />

@@ -197,6 +197,7 @@
     <Compile Include="Models\DepartmentViewModel.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\PermissionViewModel.cs" />
+    <Compile Include="Models\PublicHolidaysViewModel.cs" />
     <Compile Include="Models\UserAccountViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -3507,6 +3508,8 @@
     <Content Include="Views\Employee\DetailEmpSal.cshtml" />
     <Content Include="Views\Reports\GenerateMonthlySlips.cshtml" />
     <Content Include="Views\Reports\_generatePayslipsReportsPartial.cshtml" />
+    <Content Include="Views\Master\PublicHolidays.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

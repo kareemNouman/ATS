@@ -143,12 +143,21 @@ namespace ATS.Web.Controllers
             else if (!string.IsNullOrWhiteSpace(pdf))
             {
                 ViewBag.IsPDF = true;
-                
+
+                //string header = Url.Action("Header","Reports", Request.Url.Scheme);
+                    //Url.Action("Header","Reports",new { date = response.Select(x => x.MonthDate).FirstOrDefault() }); //Server.MapPath("~/bin/PrintHeader.html");//Path of PrintHeader.html File
+                //string footer = Server.MapPath("~/Views/Shared/Footer.html");//Server.MapPath("~/bin/PrintFooter.html");//Path of PrintFooter.html File
+
+                //string customSwitches = string.Format("--header-html  \"{0}\" " +
+                //                       "--header-spacing \"0\" " +                                       
+                //                       "--header-font-size \"10\" ", header);
+
                 return new Rotativa.ViewAsPdf("_allEmployeeReportsPartial", response) 
                 {
                     PageOrientation =Rotativa.Options.Orientation.Landscape,
-                    PageSize = Rotativa.Options.Size.A4
-                    
+                    //CustomHeaders = Rotativa.Options.
+                    PageSize = Rotativa.Options.Size.A4,
+                    //CustomSwitches = customSwitches
                 };
             }
             return PartialView("_allEmployeeReportsPartial", response);
@@ -577,6 +586,12 @@ namespace ATS.Web.Controllers
             //}
             return new Rotativa.ViewAsPdf("_generatePayslipsReportsPartial", response);
             //return PartialView("_singleEmployeeReportsPartial", response);
+        }
+
+        public ActionResult Header()
+        {
+            //ViewBag.Date = date;
+            return PartialView("_Header");
         }
 
         #endregion

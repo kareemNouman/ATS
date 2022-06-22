@@ -62,6 +62,7 @@ namespace ATS.Web.App_Start
             builder.RegisterType<AutofacValidatorFactory>().As<IValidatorFactory>().InstancePerRequest();
            
             builder.RegisterType<DepartmentValidator>().As<IValidator<Department>>().InstancePerRequest();
+            builder.RegisterType<PublicHolidaysValidator>().As<IValidator<PublicHolidays>>().InstancePerRequest();
             builder.RegisterType<LeavesValidator>().As<IValidator<Leaves>>().InstancePerRequest();
             builder.RegisterType<DesignationValidator>().As<IValidator<Designation>>().InstancePerRequest();
             builder.RegisterType<EmployeeValidation>().As<IValidator<EmployeeViewModel>>().InstancePerRequest();

@@ -57,6 +57,7 @@
     <Compile Include="EF\Mappings\EmployeeLeave_Mapping.cs" />
     <Compile Include="EF\Mappings\Employee_Mapping.cs" />
     <Compile Include="EF\Mappings\Leaves_Mapping.cs" />
+    <Compile Include="EF\Mappings\PublicHolidays_Mapping.cs" />
     <Compile Include="EF\Mappings\UserAccount_Mapping.cs" />
     <Compile Include="GenericRepository\GenericRepository.cs" />
     <Compile Include="GenericRepository\IGenericRepository.cs" />

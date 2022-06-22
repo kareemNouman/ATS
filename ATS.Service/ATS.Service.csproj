@@ -73,6 +73,7 @@
     <Compile Include="Validators\DesignationValidator.cs" />
     <Compile Include="Validators\EmployeeValidation.cs" />
     <Compile Include="Validators\LeavesValidator.cs" />
+    <Compile Include="Validators\PublicHolidaysValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

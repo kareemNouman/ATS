@@ -80,5 +80,17 @@ namespace ATS.Service.Masters
         ATSGridResponseModel<EmployeeLeaveViewModel> GetAllEmpLeaves(int skip, int take);
         IEnumerable<EmployeeLeave> GetAllEmpLeaves();
         #endregion
+
+        #region PublicHolidays
+
+        IEnumerable<PublicHolidaysViewModel> GetAllPublicHolidaysForAutoSearch();
+        IEnumerable<PublicHolidays> GetAllPublicHolidays();
+        PublicHolidays GetPublicHolidays(Int64 id);
+        PublicHolidays GetPublicHolidays(string name);
+
+        long AddPublicHolidays(PublicHolidays publicHolidays);
+
+        long UpdatePublicHolidays(PublicHolidays publicHolidays);
+        #endregion
     }
 }

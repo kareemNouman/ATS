@@ -36,13 +36,13 @@
     <div>
         <div>
             <div style="text-align:left;">
-                <img style="width:10%" src="@Server.MapPath("~/Images/ATS.png")" alt="" />
-                <h3>Attendance for ADPMCL Employees for the month of @string.Format("{0:MMMM}", Model.Select(x => x.MonthDate).FirstOrDefault()) year  @string.Format("{0:yyyy}", Model.Select(x => x.MonthDate).FirstOrDefault())</h3>
+                <img style="width:80px;height:80px" src="@Server.MapPath("~/Images/ATS.png")" alt="" />
+                <h3 style="text-align:center">Attendance for ADPMCL Employees for the month of @string.Format("{0:MMMM}", Model.Select(x => x.MonthDate).FirstOrDefault()) @string.Format("{0:yyyy}", Model.Select(x => x.MonthDate).FirstOrDefault())</h3>
             </div>
         </div>
         @*<div>
-            <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>
-        </div>*@
+                <label>Total OT Hrs:<b>@Model.Select(x => x.Total).FirstOrDefault() </b></label>
+            </div>*@
         <table cellpadding="5" cellspacing="5">
             <thead>
                 <tr>
@@ -56,14 +56,17 @@
                         Name
                     </th>
                     <th>
+                        Department
+                    </th>
+                    <th>
                         Designation
                     </th>
                     <th>
                         Sick Leaves
                     </th>
                     @*<th>
-                        Ann Adjust Leaves
-                    </th>*@
+                            Ann Adjust Leaves
+                        </th>*@
                     <th>
                         Absent
                     </th>
@@ -89,27 +92,28 @@
             </thead>
             <tbody>
                 @*@foreach (var item in Model)
-                {*@
-                    @for (int i = 0; i < Model.Count; i++)
-                    {
-                        int count = i + 1;
-                        <tr>
-                            <td>@count</td>
-                            <td>@Model[i].EmployeeCode</td>
-                            <td>@Model[i].Name</td>
-                            <td>@Model[i].Designation</td>
-                            <td>@Model[i].SickLeave</td>
-                            @* <td>@item.AdjustAnnLeave</td>*@
-                            <td>@Model[i].Absent</td>
-                            <td>@Model[i].ToPay</td>
-                            <td>@Model[i].OT1</td>
-                            <td>@Model[i].OT2</td>
-                            <td>@Model[i].OT3</td>
-                            <td>@Model[i].OT4</td>
-                            <td>@Model[i].Remarks</td>
-                        </tr>
-                    }
-               @* }*@
+                    {*@
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    int count = i + 1;
+                    <tr>
+                        <td>@count</td>
+                        <td>@Model[i].EmployeeCode</td>
+                        <td>@Model[i].Name</td>
+                        <td>@Model[i].Department</td>
+                        <td>@Model[i].Designation</td>
+                        <td>@Model[i].SickLeave</td>
+                        @* <td>@item.AdjustAnnLeave</td>*@
+                        <td>@Model[i].Absent</td>
+                        <td>@Model[i].ToPay</td>
+                        <td>@Model[i].OT1</td>
+                        <td>@Model[i].OT2</td>
+                        <td>@Model[i].OT3</td>
+                        <td>@Model[i].OT4</td>
+                        <td>@Model[i].Remarks</td>
+                    </tr>
+                }
+                @* }*@
             </tbody>
         </table>
     </div>
@@ -134,7 +138,7 @@ else
     <div style="text-align:center;margin-bottom:10px;">
         <img style="float:left" src="~/Images/ATS.png" alt="Alternate Text" />
         <h3>All Employee Report</h3>
-    </div>   
+    </div>
     <div class="e-grid e-js ">
         <div class="e-gridheader">
             <div>
@@ -210,20 +214,20 @@ else
 
                         @foreach (var item in Model)
                         {
-                        <tr class="e-row" role="row">
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.EmployeeCode</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: left;">@item.Name</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Designation</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.SickLeave</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.AdjustAnnLeave</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Absent</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.ToPay</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT1</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT2</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT3</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT4</td>
-                            <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Remarks</td>
-                        </tr>
+                            <tr class="e-row" role="row">
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.EmployeeCode</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: left;">@item.Name</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Designation</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.SickLeave</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.AdjustAnnLeave</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Absent</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.ToPay</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT1</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT2</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT3</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.OT4</td>
+                                <td class="e-rowcell" role="gridcell" style="text-align: center;">@item.Remarks</td>
+                            </tr>
                         }
 
                     </tbody>

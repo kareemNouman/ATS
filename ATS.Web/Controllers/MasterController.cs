@@ -451,5 +451,82 @@ namespace ATS.Web.Controllers
 
         #endregion
 
+
+        #region PublicHolidays
+        //[NECAuthorize(Key = new string[] { NECPermissions.Department })]
+        public ActionResult PublicHolidays()
+        {
+            var departments = _masterService.GetAllPublicHolidays();
+            List<ATS.Web.Models.PublicHolidaysViewModel> departmentViewModel = new List<ATS.Web.Models.PublicHolidaysViewModel>();
+            foreach (var item in departments)
+            {
+                ATS.Web.Models.PublicHolidaysViewModel model = new ATS.Web.Models.PublicHolidaysViewModel();
+                model.ID = item.ID;
+                model.Date = string.Format("{0:dd-mm-yyyy}", item.Date);
+                model.Name = item.Name;
+                model.IsDelete = item.IsDelete;
+                departmentViewModel.Add(model);
+            }
+            return View(departmentViewModel);
+        }
+
+        public ActionResult PublicHolidaysAdd(PublicHolidaysViewModel value)
+        {
+            var publicHoliday = new PublicHolidays
+            {
+                Name = value.Name,
+                //string.Format(, Model.Select(x => x.Date)
+                Date = value.Date,
+                IsDelete = false
+            };
+            var data = _masterService.AddPublicHolidays(publicHoliday);
+            if (data != 0)
+            {
+                //var department = data;
+                value.ID = publicHoliday.ID;
+                return Json(value, JsonRequestBehavior.AllowGet);
+            }
+
+            //Response.AddHeader("exception", "Error");
+                         
+            Response.StatusCode = 404;
+            Response.TrySkipIisCustomErrors = true;
+            return Json(new ATSServiceResponse { IsSuccess = false, Errors = _notify.GetMessage() });
+        }
+
+
+        public ActionResult PublicHolidaysUpdate(PublicHolidaysViewModel value)
+        {
+            var publicHoliday = new PublicHolidays
+            {
+                ID = value.ID,
+                Name = value.Name,
+                Date= value.Date,
+                IsDelete = false,
+            };
+            var data = _masterService.UpdatePublicHolidays(publicHoliday);
+            if (data == 0)
+            {
+                Response.StatusCode = 404;
+                Response.TrySkipIisCustomErrors = true;
+                return Json(new ATSServiceResponse { IsSuccess = false, Errors = _notify.GetMessage() });
+            }
+            return Json(data);
+        }
+
+        public ActionResult PublicHolidaysDelete(Int64 key)
+        {
+            var dbDepartment = _masterService.GetPublicHolidays(key);
+            dbDepartment.IsDelete = true;
+            var data = _masterService.UpdatePublicHolidays(dbDepartment);
+            if (data == 0)
+            {
+                Response.StatusCode = 404;
+                Response.TrySkipIisCustomErrors = true;
+            }
+            return Json(dbDepartment, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
     }
 }
